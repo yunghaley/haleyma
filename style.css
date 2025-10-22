@@ -23,14 +23,14 @@
 .dm-sans {
   font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 400;
   font-style: normal;
 }
 
 .space-grotesk {
   font-family: "Space Grotesk", sans-serif;
   font-optical-sizing: auto;
-  font-weight: <weight>;
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -68,17 +68,31 @@ p {
   inset: 0;                     /* top:0; right:0; bottom:0; left:0 */
   pointer-events: none;
   z-index: -1;
-  opacity: 25%;
+  opacity: 1;
   mix-blend-mode: normal;                  /* your content should be z-index: 1 (or auto if content appears after this in DOM) */
   overflow: hidden;
+}
+
+.bg-texture {
+  --dot-color: rgb(0, 0, 0);
+  --dot-size: 0.2px;    /* dot radius/diameter tweak */
+  --dot-gap: 3rem;    /* spacing between dots */
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--dot-color) var(--dot-size), transparent calc(var(--dot-size) + 1px));
+  background-size: var(--dot-gap) var(--dot-gap);
+  background-repeat: repeat;
   mix-blend-mode: normal;
+  opacity: 0.5;
 }
 
 /* Header */
 .header {
   z-index: 1;
   display: flex;
-  margin: var(--page-vertical) var(--page-gutter);
+  /* margin: var(--page-vertical) var(--page-gutter); */
   border-bottom: 1px solid rgb(39, 39, 39);
   justify-content: space-between;
   align-items: flex-start;
@@ -89,7 +103,6 @@ p {
 .header h1 {
   font-size: 1.5rem;
   font-weight: 300;
-  margin-bottom: 30px;
   letter-spacing: 0.5px;
   font-family: "Xanh Mono", monospace;
 }
@@ -97,13 +110,16 @@ p {
 .header p {
   font-size: 0.85rem;
   color: rgb(39, 39, 39);
-  margin-bottom: 4px;
   font-family: "DM Sans", monospace;
 }
 
 .header .date {
   font-size: 12px;
   color: #999;
+}
+
+.header .logo-container {
+  background-color: blueviolet;
 }
 
 .header .logo {
@@ -302,7 +318,7 @@ p {
   .header,
   .body,
   .contact {
-    padding: 30px 20px;
+    /* padding: 30px 20px; */
   }
   
   .container {
