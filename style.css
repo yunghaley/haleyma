@@ -1,37 +1,26 @@
-/* Global layout variables */
+/* --- mobile-first :root --- */
 :root {
-  --page-gutter: 15px;         /* left/right outer margin */
-  --page-vertical: 15px;       /* top/bottom margin for header/section/footer */
-  --container-vertical: 30px;  /* vertical spacing around the main grid */
-  --content-gap: 20px;         /* grid/gap default */
-  --header-spacer: 360px;      /* existing header spacer preserved here */
-}
+  /* baseline & rhythm */
+  --baseline: 6px;                        /* mobile base rhythm */
+  --space-1: calc(var(--baseline) * 1);
+  --space-2: calc(var(--baseline) * 2);
+  --space-3: calc(var(--baseline) * 3);
+  --space-4: calc(var(--baseline) * 4);
 
-/* Base Style */
-.xanh-mono-regular {
-  font-family: "Xanh Mono", monospace;
-  font-weight: 400;
-  font-style: normal;
-}
+  /* card / box */
+  --card-padding: calc(var(--baseline) * 3);
+  --card-radius: 6px;
+  --card-border: 1px solid rgba(39,39,39,0.08);
+  --card-bg: #ffffff;
 
-.xanh-mono-regular-italic {
-  font-family: "Xanh Mono", monospace;
-  font-weight: 400;
-  font-style: italic;
-}
+  /* global layout (mobile defaults) */
+  --page-gutter: 12px;         /* left/right outer margin (mobile) */
+  --page-vertical: 12px;       /* top/bottom margin for header/section/footer */
+  --container-vertical: 12px;  /* vertical spacing around the main grid */
+  --content-gap: 12px;         /* grid/gap default */
+  --header-spacer: 16px;       /* spacer used in header (mobile small) */
 
-.dm-sans {
-  font-family: "DM Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.space-grotesk {
-  font-family: "Space Grotesk", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+  --content-width: calc(100% - (var(--page-gutter) * 2));
 }
 
 * {
@@ -44,7 +33,7 @@
 }
 
 body {
-  background: #e9e9e9;
+  background: #191919;
   color: rgb(39, 39, 39);
   line-height: 1.4;
   font-size: medium;
@@ -68,7 +57,7 @@ p {
   inset: 0;                     /* top:0; right:0; bottom:0; left:0 */
   pointer-events: none;
   z-index: -1;
-  opacity: 1;
+  opacity: 0.25;
   mix-blend-mode: normal;                  /* your content should be z-index: 1 (or auto if content appears after this in DOM) */
   overflow: hidden;
 }
@@ -88,17 +77,15 @@ p {
   opacity: 0.5;
 }
 
-/* Header */
+/* mobile-first defaults (stacked header, single column content) */
 .header {
-  z-index: 1;
   display: flex;
-  /* margin: var(--page-vertical) var(--page-gutter); */
-  border-bottom: 1px solid rgb(39, 39, 39);
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0px;
-  --header-spacer: var(--header-spacer);
+  flex-direction: column;
+  gap: 0;
+  align-items: stretch;
+  margin: var(--page-vertical) var(--page-gutter);
 }
+
 
 .header h1 {
   font-size: 1.5rem;
@@ -113,37 +100,30 @@ p {
   font-family: "DM Sans", monospace;
 }
 
-.header .date {
-  font-size: 12px;
-  color: #999;
-}
-
-.header .logo-container {
-  background-color: blueviolet;
-}
-
-.header .logo {
-  text-align: right;
+.logo {
+  order: -1;
+  text-align: left;
   white-space: nowrap;
 }
 
+.bio {
+  order: 0;
+  width: 100%;
+}
+
 .spacer {
-  flex: 0 0 var(--header-spacer);
-  width: var(--header-spacer);
-  height: 1px;
-  pointer-events: none;
-  user-select: none;
+  display: none;
 }
 
 /* Container */
 .container {
-  z-index: 1;  
   display: grid;
   grid-template-areas:
-  "left right";
-  grid-template-columns: 0.5fr 1fr;
-  margin-top: 30px;
-  margin-bottom: 30px;
+    "left"
+    "right";
+  grid-template-columns: 1fr;
+  gap: var(--content-gap);
+  margin: var(--container-vertical) var(--page-gutter);
 }
 
 .container div.left {
@@ -156,26 +136,24 @@ p {
 
 /* Slideshow */
 .slideshow {
-  z-index: 1;
-  width: 100%;
-  max-width: 600px;
-  min-height: 600px;
-  margin-left: auto;
+  max-width: 100%;
+  min-height: 0;
+  height: auto;
   overflow: hidden;
   position: relative;
 }
 
-.slides {
-  z-index: 1;  
+.slides { 
+  max-width: 100%;
+  min-height: 0;
+  height: auto;
   display: flex;
-  width: 100%;
-  height: 600px;
 }
 
 .slide {
-  z-index: 1;  
-  width: 100%;
-  height: 600px;
+  max-width: 100%;
+  min-height: 0;
+  height: auto;
   flex-shrink: 0;
   display: flex;
   justify-content: center;
@@ -191,22 +169,25 @@ p {
 /* Accordion */
 .accordion {
   width: 100%;
-  max-width: 520px;
+  max-width: none;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   display: block;
 }
 
-.accordion-item + .accordion-item {
+.accordion-item {
   margin-top: 12px;
 }
 
 .accordion-trigger {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
   all: unset;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
   padding: 5px 5px;
   border-bottom: 1px solid #000000;
   cursor: pointer;
@@ -233,16 +214,16 @@ p {
 
 /* Panel uses max-height to animate; keep overflow hidden */
 .accordion-panel {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  width: 100%;
   transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
-  padding: 0 16px;
 }
 
 .accordion-panel p {
-  padding: 12px 0;
   margin: 0;
   color: rgb(39,39,39);
   font-weight: 300;
@@ -263,30 +244,6 @@ p {
   columns: auto;
   column-gap: normal;
   column-count: 2;
-}
-
-/* Container */
-.container {
-  z-index: 1;
-  display: grid;
-  grid-template-areas:
-    "left right";
-  grid-template-columns: 0.5fr 1fr;
-  margin: var(--container-vertical) var(--page-gutter);
-  gap: var(--content-gap);
-}
-
-.grid-item {
-  z-index: 1;  
-  background: #ffffff;
-  border: 1px solid rgb(39, 39, 39);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  color: #666;
-  font-weight: 300;
-  letter-spacing: 0.5px;
 }
 
 /* Footer */
@@ -313,56 +270,103 @@ p {
   font-weight: 100;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .header,
-  .body,
-  .contact {
-    /* padding: 30px 20px; */
-  }
-  
-  .container {
-    grid-template-areas:
-    "left"
-    "right";
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .grid-item {
-    font-size: 11px;
-  }
+/* --- universal box / card --- */
+.box,
+.card {
+  box-sizing: border-box;
+  width: 100%;
+  display: block;
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  color: inherit;
+  margin: 0;                    /* spacing should be controlled by parent grid/gap */
+  min-width: 0;                 /* avoid overflow in flex/grid children */
+  max-width: none;
 }
 
-@media (max-width: 480px) {
+/* variants */
+.box--tight { padding: var(--space-2); }
+.box--flush { padding: var(--space-1); }
+.box--accent {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+  border-color: rgba(39,39,39,0.06);
+}
+
+/* align internal content to baseline rhythm */
+.box > * {
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+}
+.box > *:last-child { margin-bottom: 0; }
+
+/* utilities for grid column spanning (optional, useful when using CSS grid) */
+.box--span-1 { grid-column: span 1; }
+.box--span-2 { grid-column: span 2; }
+
+/* make interactive elements inside boxes stretch to edges */
+.box .accordion-trigger,
+.box .accordion-panel,
+.box .slides {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* --- consolidated breakpoint: tablet and up --- */
+@media (min-width: 769px) {
+  /* adjust rhythm/spacing for larger screens */
+  :root {
+    --baseline: 8px;
+    --card-padding: calc(var(--baseline) * 3);
+    --page-gutter: 24px;
+    --container-vertical: 30px;
+    --content-gap: 20px;
+    --header-spacer: 120px;
+  }
+
+  /* header becomes horizontal with spacer */
   .header {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: var(--page-vertical) var(--page-gutter);
+  }
+  .spacer { display: block; flex: 0 0 var(--header-spacer); width: var(--header-spacer); height: 1px; }
+
+  /* two-column layout */
+  .container {
+    grid-template-areas: "left right";
+    grid-template-columns: 0.5fr 1fr;
+    gap: var(--content-gap);
+    margin: var(--container-vertical) var(--page-gutter);
   }
 
-  .logo {
-    order: 0;
-  }
+  /* reintroduce a desktop slideshow height */
+  .slideshow { max-width: 600px; min-height: 600px; margin-left: auto; }
+  .slides, .slide { height: 600px; }
 
-  .bio {
-    order: 1;
-  }
+  /* boxes slightly larger radius on tablet/desktop */
+  .box, .card { border-radius: 6px; }
+}
 
-  .header .logo h1 {
-    margin-bottom: 12px; /* small spacing when stacked */
+/* --- wide screens --- */
+@media (min-width: 1200px) {
+  :root {
+    --page-gutter: 60px;
+    --container-vertical: 40px;
+    --content-gap: 28px;
+    --header-spacer: 360px;
   }
 
   .container {
-    grid-template-areas:
-    "left"
-    "right";
-    grid-template-columns: 1fr;
-    gap: 15px;
+    grid-template-columns: 0.5fr 1fr;
+    margin: var(--container-vertical) var(--page-gutter);
+    gap: var(--content-gap);
   }
 
-  .slideshow,
-  .slides,
-  .slide {
-    min-height: 0;
-    height: auto;
-  }
+  .slideshow { max-width: 800px; min-height: 600px; }
+  .slides, .slide { height: 600px; }
+  .box, .card { padding: var(--card-padding); }
 }
