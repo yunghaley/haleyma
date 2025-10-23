@@ -8,9 +8,9 @@
   --space-4: calc(var(--baseline) * 4);
 
   /* card / box */
-  --card-padding: calc(var(--baseline) * 3);
+  --card-padding: calc(var(--baseline) * 2);
   --card-radius: 6px;
-  --card-border: 1px solid rgba(39,39,39,0.08);
+  --card-border: 0px solid rgba(39,39,39,0.08);
   --card-bg: #ffffff;
 
   /* global layout (mobile defaults) */
@@ -33,7 +33,7 @@
 }
 
 body {
-  background: #191919;
+  background: #bfbfbf;
   color: rgb(39, 39, 39);
   line-height: 1.4;
   font-size: medium;
@@ -95,9 +95,9 @@ p {
 }
 
 .header p {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: rgb(39, 39, 39);
-  font-family: "DM Sans", monospace;
+  font-family: "DM Sans", sans-serif;
 }
 
 .logo {
@@ -106,13 +106,19 @@ p {
   white-space: nowrap;
 }
 
-.bio {
+.spacer {
   order: 0;
+  height: var(--page-vertical);
+}
+
+.bio {
+  order: 1;
   width: 100%;
 }
 
-.spacer {
-  display: none;
+/* Section */
+.section {
+  margin: var(--container-vertical) var(--page-gutter);
 }
 
 /* Container */
@@ -123,7 +129,7 @@ p {
     "right";
   grid-template-columns: 1fr;
   gap: var(--content-gap);
-  margin: var(--container-vertical) var(--page-gutter);
+  
 }
 
 .container div.left {
@@ -171,13 +177,11 @@ p {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   display: block;
 }
 
 .accordion-item {
-  margin-top: 12px;
+  margin-top: 6px;
 }
 
 .accordion-trigger {
@@ -188,7 +192,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 5px;
+  padding: 3px 0px;
   border-bottom: 1px solid #000000;
   cursor: pointer;
   text-align: left;
@@ -234,10 +238,7 @@ p {
   opacity: 1;
 }
 
-/* Section */
-.section {
-  z-index: 1;
-}
+
 
 /* Columns */
 .column {
@@ -251,23 +252,7 @@ p {
   z-index: 1;
   display: flex;
   margin: var(--page-vertical) var(--page-gutter);
-  border-top: 1px solid rgb(39, 39, 39);
   justify-content: space-between;
-}
-
-.footer h2 {
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 20px;
-  letter-spacing: 0.5px;
-}
-
-.footer p {
-  font-size: 14px;
-  color: #ffffff;
-  margin-top: 30px;
-  margin-bottom: 8px;
-  font-weight: 100;
 }
 
 /* --- universal box / card --- */
