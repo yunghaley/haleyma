@@ -25,19 +25,8 @@
   --content-width: calc(100% - (var(--page-gutter) * 2));
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 600;
-  color: rgb(39, 39, 39);
-}
-
 body {
-  background: #bfbfbf;
-  color: rgb(39, 39, 39);
-  line-height: 1.4;
+  background: #dadada;
 }
 
 a {
@@ -75,9 +64,8 @@ li:before {
   position: fixed;
   inset: 0;                     /* top:0; right:0; bottom:0; left:0 */
   pointer-events: none;
-  z-index: -1;
   opacity: 0.25;
-  mix-blend-mode: normal;                  /* your content should be z-index: 1 (or auto if content appears after this in DOM) */
+  mix-blend-mode: normal;                 
   overflow: hidden;
 }
 
@@ -211,7 +199,6 @@ li:before {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  all: unset;
   justify-content: space-between;
   align-items: right;
   padding: 3px 0px;
@@ -282,7 +269,7 @@ li:before {
 
 /* Footer */
 .footer {
-  z-index: 1;
+
   display: flex;
   margin: var(--page-vertical) var(--page-gutter);
   justify-content: space-between;
