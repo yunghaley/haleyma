@@ -1,16 +1,21 @@
-const slides = document.querySelector('.slides');
-let currentIndex = 0;
+// W3Schools Slideshow
+let slideIndex = 0;
+showSlides();
 
-function updateSlides() {
-  slides.style.transition = 'none'; // Disable transition
-  slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+function showSlides() {
+  let i;
+  let slides = document.getElementsByClassName("slide");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 1000); // Change image every 1 second
 }
 
-// Auto-advance every 1 seconds
-setInterval(() => {
-  currentIndex = (currentIndex + 1) % slides.children.length;
-  updateSlides();
-}, 1000);
+// AI Generated Slideshow Functionality
+
 
 // Accordion Functionality
 document.addEventListener("DOMContentLoaded", function () {
