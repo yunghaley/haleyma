@@ -28,15 +28,14 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "DM Sans", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+  font-weight: 600;
+  color: rgb(39, 39, 39);
 }
 
 body {
   background: #bfbfbf;
   color: rgb(39, 39, 39);
   line-height: 1.4;
-  font-size: medium;
 }
 
 a {
@@ -84,6 +83,7 @@ p {
   gap: 0;
   align-items: stretch;
   margin: var(--page-vertical) var(--page-gutter);
+  color: rgb(39, 39, 39);
 }
 
 
@@ -94,9 +94,9 @@ p {
   font-family: "Xanh Mono", monospace;
 }
 
-.header p {
+.header h2 {
   font-size: 1rem;
-  color: rgb(39, 39, 39);
+  font-weight: 600;
   font-family: "DM Sans", sans-serif;
 }
 
@@ -230,7 +230,7 @@ p {
 .accordion-panel p {
   margin: 0;
   color: rgb(39,39,39);
-  font-weight: 300;
+  font-weight: 600;
 }
 
 /* expanded state helper (added/controlled by JS via inline style) */
