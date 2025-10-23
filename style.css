@@ -14,10 +14,10 @@
   --card-bg: #ffffff;
 
   /* global layout (mobile defaults) */
-  --page-gutter: 12px;         /* left/right outer margin (mobile) */
-  --page-vertical: 12px;       /* top/bottom margin for header/section/footer */
-  --container-vertical: 12px;  /* vertical spacing around the main grid */
-  --content-gap: 12px;         /* grid/gap default */
+  --page-gutter: 6px;         /* left/right outer margin (mobile) */
+  --page-vertical: 6px;       /* top/bottom margin for header/section/footer */
+  --container-vertical: 6px;  /* vertical spacing around the main grid */
+  --content-gap: 6px;         /* grid/gap default */
   --header-spacer: 16px;       /* spacer used in header (mobile small) */
 
   --content-width: calc(100% - (var(--page-gutter) * 2));
@@ -48,6 +48,24 @@ h2 {
 
 p {
   font-weight: 300;
+}
+
+ul {
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-size: 0.85rem;
+}
+
+li {
+  display: inline-block;
+  position: relative;
+}
+
+li:before {
+  content: "•";
+  position: relative;
+  margin-right: 0.3rem;
+  top: 0.05rem;
 }
 
 /* Background Layer */
@@ -109,6 +127,7 @@ p {
 .spacer {
   order: 0;
   height: var(--page-vertical);
+  visibility: hidden;
 }
 
 .bio {
@@ -224,7 +243,7 @@ p {
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+  /* transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease; */
 }
 
 .accordion-panel p {
@@ -236,6 +255,18 @@ p {
 /* expanded state helper (added/controlled by JS via inline style) */
 .accordion-panel.is-open {
   opacity: 1;
+}
+
+.accordion-labels {
+  display: grid;
+  grid-template-columns: repeat(0, 1fr);
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+
+.accordion-labels col-span-2 {
+  grid-column: span 2;
+  background-color: aquamarine;
 }
 
 
@@ -304,10 +335,10 @@ p {
   /* adjust rhythm/spacing for larger screens */
   :root {
     --baseline: 8px;
-    --card-padding: calc(var(--baseline) * 3);
-    --page-gutter: 24px;
-    --container-vertical: 30px;
-    --content-gap: 20px;
+    --card-padding: calc(var(--baseline) * 2);
+    --page-gutter: 6px;
+    --container-vertical: 6px;
+    --content-gap: 6px;
     --header-spacer: 120px;
   }
 
@@ -318,14 +349,21 @@ p {
     justify-content: space-between;
     margin: var(--page-vertical) var(--page-gutter);
   }
-  .spacer { display: block; flex: 0 0 var(--header-spacer); width: var(--header-spacer); height: 1px; }
+  .spacer { 
+    display: block; 
+    flex: 0 0 var(--header-spacer); 
+    width: var(--header-spacer); 
+    height: 1px; 
+    visibility: visible;
+    border-left: var(--content-gap) solid transparent;
+    border-right: var(--content-gap) solid transparent;
+  }
 
   /* two-column layout */
   .container {
     grid-template-areas: "left right";
-    grid-template-columns: 0.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--content-gap);
-    margin: var(--container-vertical) var(--page-gutter);
   }
 
   /* reintroduce a desktop slideshow height */
@@ -333,7 +371,10 @@ p {
   .slides, .slide { height: 600px; }
 
   /* boxes slightly larger radius on tablet/desktop */
-  .box, .card { border-radius: 6px; }
+  .box, .card { 
+    min-height: 120px;
+    border-radius: 6px; 
+  }
 }
 
 /* --- wide screens --- */
@@ -346,7 +387,7 @@ p {
   }
 
   .container {
-    grid-template-columns: 0.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
     margin: var(--container-vertical) var(--page-gutter);
     gap: var(--content-gap);
   }
