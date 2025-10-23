@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haley Ma</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="tailwind.css" rel="stylesheet">
+  <link rel="stylesheet" href="tailwind.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
@@ -16,6 +16,10 @@
       <div class="bio">
         <div class="box">
           <h2>Creative and Photography Direction for Brands and Technology</h2>
+          <!-- Move to CV section??? -->
+          <div class="text-xs">Previously Head of Camera Product at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
+          Previously Creative - Moving Image at <a href="https://www.akqa.com/">AKQA</a> London and Portland (2017–2020).
+          Past clients include Nike, Molson Coors, Inter Miami CF and British GQ.</div>
         </div>
       </div> 
     <div class="spacer" aria-hidden="true">
@@ -40,34 +44,57 @@
         <div class="left">
           <!-- Description of Work Goes Here -->
           <div class="box">
-            <div class="accordion-labels">
-              project
-              client
+            <div class="grid grid-cols-12 gap-x-2 text-xs tracking-wide">
+              <div class="col-span-8">project</div> 
+              <div class="col-span-4">client</div>
             </div>
-            <div class="accordion">
 
+            <div class="accordion">
               <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1">
-                Bio
-                </button>
+                <div class="grid grid-cols-12 text-sm items-baseline">
+                  <div class="col-span-8">
+                      Head of Camera Product
+                  </div>
+                  <div class="col-span-3">
+                    Lapse
+                  </div>
+                  <div class="col-span-1">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1">
+                    </button>
+                  </div>
+                </div>
+                    
+              </div>
                 <div id="panel-1" class="accordion-panel">
-                  <!-- Move to CV section??? -->
-                  <br><p>Previously Head of Camera Product at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
-                  Previously Creative - Moving Image at <a href="https://www.akqa.com/">AKQA</a> London and Portland (2017–2020).
-                  Past clients include Nike, Molson Coors, Inter Miami CF and British GQ.</p>
+                  <ul>
+                    <li>app design</li>
+                    <li>pipeline development</li>
+                    <li>project management</li>
+                    <li>creative direction</li>
+                    <li>brand marketing</li>
+                  </ul>
+                  <p>Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</p>
                 </div>  
               </div>
 
               <div class="accordion-item">
-                  <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2">
-                  Lapse
-                  </button>
+                <div class="grid grid-cols-12 text-sm items-baseline">
+                  <div class="col-span-8">
+                    Paul George "Keep Rising"
+                  </div>
+                  <div class="col-span-3">
+                    Nike Basketball
+                  </div>
+                  <div class="col-span-1">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2">
+                    </button>
+                  </div>
+                </div>
                   <div id="panel-2" class="accordion-panel">
                     <ul>
-                      <li>app design</li>
-                      <li>pipeline development</li>
-                      <li>project management</li>
                       <li>creative direction</li>
+                      <li>cinematography</li>
+                      <li>directing</li>
                       <li>brand marketing</li>
                     </ul>
                     <p>Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</p>
@@ -75,11 +102,27 @@
               </div>
 
               <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3">
-                Nike
-                </button>
+                <div class="grid grid-cols-12 text-sm items-baseline">
+                  <div class="col-span-8">
+                    "Hand Covers Bruise" Fashion Film
+                  </div>
+                  <div class="col-span-3">
+                    Sequence
+                  </div>
+                  <div class="col-span-1">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3">
+                    </button>
+                  </div>
+                </div>
                 <div id="panel-3" class="accordion-panel">
-                  <br><p>Worked with different divisions of Nike to create impactful brand films, social content and research spanning Nike Global Football, Nike Basketball, Nike London and Nike Running.</p>
+                    <ul>
+                      <li>creative direction</li>
+                      <li>cinematography</li>
+                      <li>directing</li>
+                      <li>video edit</li>
+                      <li>colour grade</li>
+                    </ul>
+                  <br><p>The short dance film reverses the story of the photo editorial and provides context on the inner turmoil the character experiences before stepping out of his safe space to face the world.</p>
                 </div>  
               </div>
 
@@ -151,6 +194,9 @@
                 </div>
                 <div class="slide">
                   <img src="assets/HM-17.jpg" alt="HM 17">
+                </div>
+                <div class="slide">
+                  <img src="assets/HM-18.jpg" alt="HM 18">
                 </div>
                 <div class="slide">
                   <img src="assets/2024/L1003566.jpg" alt="2024 L1003566">

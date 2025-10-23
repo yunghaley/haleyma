@@ -203,6 +203,8 @@ li:before {
 
 .accordion-item {
   margin-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgb(39, 39, 39);
 }
 
 .accordion-trigger {
@@ -210,13 +212,11 @@ li:before {
   max-width: none;
   box-sizing: border-box;
   all: unset;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: right;
   padding: 3px 0px;
-  border-bottom: 1px solid #000000;
   cursor: pointer;
-  text-align: left;
+  text-align: right;
   transition: background 150ms ease;
 }
 
