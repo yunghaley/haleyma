@@ -229,35 +229,26 @@
   .inline {
     display: inline;
   }
-  .h-24 {
-    height: calc(var(--spacing) * 24);
-  }
-  .h-28 {
-    height: calc(var(--spacing) * 28);
-  }
-  .h-48 {
-    height: calc(var(--spacing) * 48);
-  }
-  .h-fit {
-    height: fit-content;
-  }
-  .w-0\.5 {
-    width: calc(var(--spacing) * 0.5);
-  }
-  .w-fit {
-    width: fit-content;
-  }
   .w-full {
     width: 100%;
   }
+  .w-max {
+    width: max-content;
+  }
   .max-w-4xl {
     max-width: var(--container-4xl);
+  }
+  .flex-grow {
+    flex-grow: 1;
   }
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
   .grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .flex-row {
+    flex-direction: row;
   }
   .items-baseline {
     align-items: baseline;
@@ -551,7 +542,7 @@ li:before {
   display: block;
   background: var(--card-bg);
   border: var(--card-border);
-  border-radius: var(--card-radius);
+  border-radius: 0px 0px var(--card-radius) var(--card-radius);
   padding: var(--card-padding);
   color: inherit;
   margin: 0;
