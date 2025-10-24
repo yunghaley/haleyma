@@ -14,9 +14,6 @@ function showSlides() {
   setTimeout(showSlides, 1000); // Change image every 1 second
 }
 
-// AI Generated Slideshow Functionality
-
-
 // Accordion Functionality
 document.addEventListener("DOMContentLoaded", function () {
   const triggers = document.querySelectorAll(".accordion-trigger");
@@ -36,7 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
   triggers.forEach(btn => {
     const panel = document.getElementById(btn.getAttribute("aria-controls"));
     // ensure panels are hidden initially
-    if (panel) {
+    if (panel-0) {
+      panel.style.maxHeight = null;
+      panel.setAttribute("aria-hidden", "false");
+    } else {
       panel.style.maxHeight = null;
       panel.setAttribute("aria-hidden", "true");
     }

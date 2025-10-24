@@ -125,11 +125,6 @@ li:before {
   width: 100%;
 }
 
-/* Section */
-.section {
-  margin: var(--container-vertical) var(--page-gutter);
-}
-
 /* Container */
 .container {
   display: grid;
@@ -199,17 +194,10 @@ li:before {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  justify-content: space-between;
-  align-items: right;
   padding: 3px 0px;
   cursor: pointer;
   text-align: right;
   transition: background 150ms ease;
-}
-
-.accordion-trigger:focus {
-  outline: 3px solid rgba(106,0,255,0.12);
-  outline-offset: 2px;
 }
 
 .accordion-trigger::after {

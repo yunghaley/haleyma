@@ -8,7 +8,6 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-amber-300: oklch(87.9% 0.169 91.605);
-    --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-stone-800: oklch(26.8% 0.007 34.298);
     --spacing: 0.25rem;
@@ -209,9 +208,6 @@
   .col-span-1 {
     grid-column: span 1 / span 1;
   }
-  .col-span-2 {
-    grid-column: span 2 / span 2;
-  }
   .col-span-3 {
     grid-column: span 3 / span 3;
   }
@@ -223,6 +219,9 @@
   }
   .m-1\.5 {
     margin: calc(var(--spacing) * 1.5);
+  }
+  .mt-auto {
+    margin-top: auto;
   }
   .mb-1\.5 {
     margin-bottom: calc(var(--spacing) * 1.5);
@@ -242,11 +241,23 @@
   .inline {
     display: inline;
   }
-  .h-svh {
-    height: 100svh;
+  .min-h-lvh {
+    min-height: 100lvh;
+  }
+  .min-h-screen {
+    min-height: 100vh;
   }
   .w-full {
     width: 100%;
+  }
+  .w-lvh {
+    width: 100lvh;
+  }
+  .w-svh {
+    width: 100svh;
+  }
+  .w-svw {
+    width: 100svw;
   }
   .max-w-4xl {
     max-width: var(--container-4xl);
@@ -256,6 +267,9 @@
   }
   .grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
   }
   .flex-row {
     flex-direction: row;
@@ -275,12 +289,12 @@
   .gap-x-1 {
     column-gap: calc(var(--spacing) * 1);
   }
+  .justify-self-end {
+    justify-self: flex-end;
+  }
   .rounded-b-md {
     border-bottom-right-radius: var(--radius-md);
     border-bottom-left-radius: var(--radius-md);
-  }
-  .bg-amber-500 {
-    background-color: var(--color-amber-500);
   }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
@@ -456,9 +470,6 @@ li:before {
   order: 1;
   width: 100%;
 }
-.section {
-  margin: var(--container-vertical) var(--page-gutter);
-}
 .container {
   display: grid;
   grid-template-areas: "left" "right";
@@ -513,16 +524,10 @@ li:before {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  justify-content: space-between;
-  align-items: right;
   padding: 3px 0px;
   cursor: pointer;
   text-align: right;
   transition: background 150ms ease;
-}
-.accordion-trigger:focus {
-  outline: 3px solid rgba(106,0,255,0.12);
-  outline-offset: 2px;
 }
 .accordion-trigger::after {
   content: "▾";
