@@ -10,6 +10,7 @@
     --color-amber-300: oklch(87.9% 0.169 91.605);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-stone-600: oklch(44.4% 0.011 73.639);
+    --color-white: #fff;
     --spacing: 0.25rem;
     --container-4xl: 56rem;
     --text-xs: 0.75rem;
@@ -214,6 +215,12 @@
   .col-span-8 {
     grid-column: span 8 / span 8;
   }
+  .m-1\.5 {
+    margin: calc(var(--spacing) * 1.5);
+  }
+  .mb-1\.5 {
+    margin-bottom: calc(var(--spacing) * 1.5);
+  }
   .block {
     display: block;
   }
@@ -232,14 +239,8 @@
   .w-full {
     width: 100%;
   }
-  .w-max {
-    width: max-content;
-  }
   .max-w-4xl {
     max-width: var(--container-4xl);
-  }
-  .flex-grow {
-    flex-grow: 1;
   }
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -268,8 +269,15 @@
   .rounded-md {
     border-radius: var(--radius-md);
   }
+  .rounded-b-md {
+    border-bottom-right-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
+  }
+  .bg-white {
+    background-color: var(--color-white);
   }
   .p-3 {
     padding: calc(var(--spacing) * 3);
@@ -279,6 +287,9 @@
   }
   .py-96 {
     padding-block: calc(var(--spacing) * 96);
+  }
+  .font-\[Xanh_Mono\] {
+    font-family: Xanh Mono;
   }
   .text-sm {
     font-size: var(--text-sm);
@@ -312,9 +323,39 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
+  .md\:visible {
+    @media (width >= 48rem) {
+      visibility: visible;
+    }
+  }
+  .md\:col-span-2 {
+    @media (width >= 48rem) {
+      grid-column: span 2 / span 2;
+    }
+  }
+  .md\:col-span-4 {
+    @media (width >= 48rem) {
+      grid-column: span 4 / span 4;
+    }
+  }
   .md\:col-span-6 {
     @media (width >= 48rem) {
       grid-column: span 6 / span 6;
+    }
+  }
+  .md\:col-span-8 {
+    @media (width >= 48rem) {
+      grid-column: span 8 / span 8;
+    }
+  }
+  .md\:block {
+    @media (width >= 48rem) {
+      display: block;
+    }
+  }
+  .md\:hidden {
+    @media (width >= 48rem) {
+      display: none;
     }
   }
   .md\:grid-cols-12 {
@@ -586,6 +627,7 @@ li:before {
     --header-spacer: 120px;
   }
   .header {
+    display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
