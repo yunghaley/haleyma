@@ -8,9 +8,9 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-amber-300: oklch(87.9% 0.169 91.605);
+    --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-gray-100: oklch(96.7% 0.003 264.542);
-    --color-stone-600: oklch(44.4% 0.011 73.639);
-    --color-white: #fff;
+    --color-stone-800: oklch(26.8% 0.007 34.298);
     --spacing: 0.25rem;
     --container-4xl: 56rem;
     --text-xs: 0.75rem;
@@ -200,11 +200,17 @@
   .z-10 {
     z-index: 10;
   }
+  .z-20 {
+    z-index: 20;
+  }
   .z-50 {
     z-index: 50;
   }
   .col-span-1 {
     grid-column: span 1 / span 1;
+  }
+  .col-span-2 {
+    grid-column: span 2 / span 2;
   }
   .col-span-3 {
     grid-column: span 3 / span 3;
@@ -236,6 +242,9 @@
   .inline {
     display: inline;
   }
+  .h-svh {
+    height: 100svh;
+  }
   .w-full {
     width: 100%;
   }
@@ -266,18 +275,15 @@
   .gap-x-1 {
     column-gap: calc(var(--spacing) * 1);
   }
-  .rounded-md {
-    border-radius: var(--radius-md);
-  }
   .rounded-b-md {
     border-bottom-right-radius: var(--radius-md);
     border-bottom-left-radius: var(--radius-md);
   }
+  .bg-amber-500 {
+    background-color: var(--color-amber-500);
+  }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
-  }
-  .bg-white {
-    background-color: var(--color-white);
   }
   .p-3 {
     padding: calc(var(--spacing) * 3);
@@ -285,8 +291,11 @@
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
   }
-  .py-96 {
-    padding-block: calc(var(--spacing) * 96);
+  .text-right {
+    text-align: right;
+  }
+  .font-\[DM_Sans\] {
+    font-family: DM Sans;
   }
   .font-\[Xanh_Mono\] {
     font-family: Xanh Mono;
@@ -299,12 +308,15 @@
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
+  .text-\[10px\] {
+    font-size: 10px;
+  }
   .tracking-wide {
     --tw-tracking: var(--tracking-wide);
     letter-spacing: var(--tracking-wide);
   }
-  .text-stone-600 {
-    color: var(--color-stone-600);
+  .text-stone-800 {
+    color: var(--color-stone-800);
   }
   .uppercase {
     text-transform: uppercase;
@@ -315,27 +327,14 @@
   .opacity-85 {
     opacity: 85%;
   }
-  .opacity-100 {
-    opacity: 100%;
-  }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-  .md\:visible {
-    @media (width >= 48rem) {
-      visibility: visible;
-    }
-  }
   .md\:col-span-2 {
     @media (width >= 48rem) {
       grid-column: span 2 / span 2;
-    }
-  }
-  .md\:col-span-4 {
-    @media (width >= 48rem) {
-      grid-column: span 4 / span 4;
     }
   }
   .md\:col-span-6 {
@@ -351,11 +350,6 @@
   .md\:block {
     @media (width >= 48rem) {
       display: block;
-    }
-  }
-  .md\:hidden {
-    @media (width >= 48rem) {
-      display: none;
     }
   }
   .md\:grid-cols-12 {
@@ -379,7 +373,6 @@
   --container-vertical: 6px;
   --content-gap: 6px;
   --header-spacer: 16px;
-  --content-width: calc(100% - (var(--page-gutter) * 2));
 }
 body {
   background: #dadada;
@@ -549,23 +542,15 @@ li:before {
   max-height: 0;
   opacity: 0;
 }
-.accordion-panel p {
-  margin: 0;
-  color: rgb(39,39,39);
-  font-weight: 600;
-}
 .accordion-panel.is-open {
   opacity: 1;
 }
 .accordion-labels {
   display: grid;
   grid-template-columns: repeat(0, 1fr);
-  font-size: 0.85rem;
-  font-weight: 300;
 }
 .accordion-labels col-span-2 {
   grid-column: span 2;
-  background-color: aquamarine;
 }
 .column {
   columns: auto;
@@ -574,8 +559,6 @@ li:before {
 }
 .footer {
   display: flex;
-  margin: var(--page-vertical) var(--page-gutter);
-  justify-content: space-between;
 }
 .box, .card {
   box-sizing: border-box;

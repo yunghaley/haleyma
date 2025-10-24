@@ -22,7 +22,7 @@
   --content-gap: 6px;         /* grid/gap default */
   --header-spacer: 16px;       /* spacer used in header (mobile small) */
 
-  --content-width: calc(100% - (var(--page-gutter) * 2));
+
 }
 
 body {
@@ -235,12 +235,6 @@ li:before {
   /* transition: max-height 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease; */
 }
 
-.accordion-panel p {
-  margin: 0;
-  color: rgb(39,39,39);
-  font-weight: 600;
-}
-
 /* expanded state helper (added/controlled by JS via inline style) */
 .accordion-panel.is-open {
   opacity: 1;
@@ -249,16 +243,11 @@ li:before {
 .accordion-labels {
   display: grid;
   grid-template-columns: repeat(0, 1fr);
-  font-size: 0.85rem;
-  font-weight: 300;
 }
 
 .accordion-labels col-span-2 {
   grid-column: span 2;
-  background-color: aquamarine;
 }
-
-
 
 /* Columns */
 .column {
@@ -269,10 +258,7 @@ li:before {
 
 /* Footer */
 .footer {
-
   display: flex;
-  margin: var(--page-vertical) var(--page-gutter);
-  justify-content: space-between;
 }
 
 /* --- universal box / card --- */
