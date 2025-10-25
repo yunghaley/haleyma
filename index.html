@@ -36,9 +36,9 @@
   </header>
 
   <!-- Content and Background Layers -->
-   <div id="project-panels" class="absolute inset-0 z-10 pointer-events-none">
-    <div id="project-lapse" class="project-panel hidden">
-      <div class="fixed inset-0 z-10 flex items-center justify-center pointer-events-none">
+   <div id="project-panels" class="absolute inset-0 z-10 pointer-events-none fixed flex items-center justify-center">
+
+      <div id="project-default" class="project-panel">
         <div class="slideshow w-full max-w-4xl px-4">
             <div class="slides flex">
               <div class="slide flex items-center justify-center">
@@ -104,11 +104,26 @@
             </div>
         </div>
       </div>
-    </div>
+
+      <div id="project-lapse" class="project-panel hidden">
+        Lapse project goes here
+      </div>
+
+      <div id="project-nike-basketball" class="project-panel hidden">
+        Hello World
+        <img src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising.avif" alt="Nike Basketball Paul George Keep Rising">
+      </div>
+
+      <div id="project-sequence" class="project-panel hidden">
+        <div class="md:m-24">
+          <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" autoplay loop muted playsinline></video>
+        </div>
+      </div>
   </div>
 
+
   <!-- Background Motifs -->
-  <div class="z-10"><div class="bg-texture"></div></div>
+  <div class="z-0"><div class="bg-texture"></div></div>
   <div class="z-0 opacity-15 absolute">
     <img class="bg-item bg-item--flower" src="assets/misc/hibiscus-flower-hm.png" alt="">
     <img class="bg-item bg-item--texture" src="assets/textures/linen.webp" alt="">
@@ -173,7 +188,7 @@
                       <li>directing</li>
                       <li>brand marketing</li>
                     </ul>
-                    <div class="text-sm">Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</div>
+                    <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
                   </div>  
               </div>
 

@@ -220,6 +220,15 @@
   .m-1\.5 {
     margin: calc(var(--spacing) * 1.5);
   }
+  .m-2 {
+    margin: calc(var(--spacing) * 2);
+  }
+  .m-36 {
+    margin: calc(var(--spacing) * 36);
+  }
+  .m-48 {
+    margin: calc(var(--spacing) * 48);
+  }
   .mt-auto {
     margin-top: auto;
   }
@@ -350,6 +359,16 @@
   .md\:col-span-8 {
     @media (width >= 48rem) {
       grid-column: span 8 / span 8;
+    }
+  }
+  .md\:m-24 {
+    @media (width >= 48rem) {
+      margin: calc(var(--spacing) * 24);
+    }
+  }
+  .md\:m-36 {
+    @media (width >= 48rem) {
+      margin: calc(var(--spacing) * 36);
     }
   }
   .md\:block {

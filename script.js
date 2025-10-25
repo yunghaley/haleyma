@@ -49,6 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.project-panel').forEach(group => {
       group.classList.add('hidden');
     });
+
+    // Show default asset group
+    const defaultGroup = document.getElementById('project-default');
+    if (defaultGroup) {
+      defaultGroup.classList.remove('hidden');
+    }
   }
 
   triggers.forEach(btn => {
