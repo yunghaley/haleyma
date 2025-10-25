@@ -292,6 +292,29 @@ li:before {
   box-sizing: border-box;
 }
 
+/* background panels (stacked, crossfade-capable) */
+.bg-project-panel {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 360ms ease;
+  display: block;
+}
+
+/* visible panel */
+.bg-project-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* make images inside panels cover */
+.bg-project-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* --- consolidated breakpoint: tablet and up --- */
 @media (min-width: 769px) {
