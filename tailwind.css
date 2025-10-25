@@ -265,6 +265,9 @@
   .max-w-4xl {
     max-width: var(--container-4xl);
   }
+  .cursor-pointer {
+    cursor: pointer;
+  }
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }

@@ -14,6 +14,27 @@ function showSlides() {
   setTimeout(showSlides, 1000); // Change image every 1 second
 }
 
+// Toggle UI Elements
+document.addEventListener('click', function(event) {
+  console.log('Click detected anywhere on page:', event.target);
+  
+  // Check if click originated from or inside a logo wrapper
+  const logoWrapper = event.target.closest('[data-target]');
+  
+  if (logoWrapper) {
+    console.log('Logo wrapper clicked via delegation!');
+    const targetId = logoWrapper.getAttribute('data-target');
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+      console.log('Toggling element:', targetId);
+      targetElement.classList.toggle('hidden');
+    } else {
+      console.error('Target element not found:', targetId);
+    }
+  }
+});
+
 // Accordion Functionality with Project Assets
 document.addEventListener("DOMContentLoaded", function () {
   const triggers = document.querySelectorAll(".accordion-trigger");
