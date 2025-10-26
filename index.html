@@ -12,20 +12,30 @@
 </head>
 <body class="flex flex-col min-h-screen">
   <!-- Header -->
-  <header class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-50 relative">
-      
-      <div class="md:col-span-2 block w-full p-3 bg-gray-100 opacity-85 text-stone-800 rounded-b-md cursor-pointer" data-target="ui-section">
-        <div class="flex flex-row">        
-          <div class="font-[Xanh_Mono]">
-            HALEY MA
-          </div> 
+  <header class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5">
+     
+    <div id="logo-nav" class="fixed inset-x-0 left-1.5 right-1.5 z-50 bg-gray-100 opacity-85 text-stone-800 rounded-b-md cursor-pointer">        
+      <div class="flex w-full max-w-7xl mx-auto gap-1.5 p-1.5">
+        <div class="font-[Xanh_Mono]">
+          HALEY MA
         </div>
+        <div class="grow">
+          <!-- Spacer -->
+        </div>
+        <div class="font-[Xanh_Mono]" data-target="projects-section">
+          PROJECTS
+        </div> 
+        <div class="font-[Xanh_Mono]" data-target="info-section">
+          INFO
+        </div> 
       </div>
+    </div>
 
-      <div class="md:col-span-2 w-full bg-gray-100 opacity-85 rounded-b-md hidden md:block" aria-hidden="true">
-      </div>
+    <div class="md:col-span-2 w-full bg-gray-100 opacity-85 rounded-b-md hidden md:block" aria-hidden="true">
+    </div>
 
-      <div class="md:col-span-8 block w-full p-3 bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
+    <div class="mt-[42px] grid grid-cols-1 md:grid-cols-12 gap-1.5">
+      <div id="info-section" class="hidden md:col-span-8 block w-full p-3 z-40 bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
         <div class="font-[Xanh_Mono] mb-1.5">Creative and Photography Direction for Brands and Technology</div>
         <!-- Move to CV section??? -->
         <div class="font-[DM_Sans] text-xs">Previously Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
@@ -33,7 +43,115 @@
         </div>
       </div>
 
+      <!-- UI and Text -->
+      <section id="projects-section" class="hidden section">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-1.5 z-40 relative">
+            <div class="md:col-span-6">
+              <!-- Description of Work Goes Here -->
+              <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 font-[DM_Sans]">
+                <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
+                  <div class="col-span-8">project</div> 
+                  <div class="col-span-4">client</div>
+                </div>
+                <div class="accordion">
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
+                      <div class="col-span-8">
+                          Head of Camera Product
+                      </div>
+                      <div class="col-span-3">
+                        Lapse
+                      </div>
+                      <div class="col-span-1">
+
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1" data-project="lapse">
+                        </button>
+                      </div>
+                    </div>
+                        
+                  </div>
+                    <div id="panel-1" class="accordion-panel">
+                      <ul>
+                        <li>app design</li>
+                        <li>pipeline development</li>
+                        <li>project management</li>
+                        <li>creative direction</li>
+                        <li>brand marketing</li>
+                      </ul>
+                      <div class="text-sm">Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</div>
+                    </div>                 
+                  </div>
+
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
+                      <div class="col-span-8">
+                        Paul George "Keep Rising"
+                      </div>
+                      <div class="col-span-3">
+                        Nike Basketball
+                      </div>
+                      <div class="col-span-1">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
+                        </button>
+                      </div>
+                    </div>
+                      <div id="panel-2" class="accordion-panel">
+                        <ul>
+                          <li>creative direction</li>
+                          <li>cinematography</li>
+                          <li>directing</li>
+                          <li>brand marketing</li>
+                        </ul>
+                        <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
+                      </div>  
+                  </div>
+
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
+                      <div class="col-span-8">
+                        "Hand Covers Bruise" Fashion Film
+                      </div>
+                      <div class="col-span-3">
+                        Sequence
+                      </div>
+                      <div class="col-span-1">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3" data-project="sequence">
+                        </button>
+                      </div>
+                    </div>
+                    <div id="panel-3" class="accordion-panel">
+                        <ul>
+                          <li>creative direction</li>
+                          <li>cinematography</li>
+                          <li>directing</li>
+                          <li>video edit</li>
+                          <li>colour grade</li>
+                        </ul>
+                      <div class="text-sm">The short dance film reverses the story of the photo editorial and provides context on the inner turmoil the character experiences before stepping out of his safe space to face the world.</div>
+                    </div>  
+                  </div>
+
+    <!-- 
+                  <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-4" id="trigger-4">
+                    Molson Coors
+                    </button>
+                    <div id="panel-4" class="accordion-panel">
+                      <br><p>Worked with different divisions of Nike to create impactful brand films, social content and research spanning Nike Global Football, Nike Basketball, Nike London and Nike Running.</p>
+                    </div>  
+                  </div> -->
+
+                </div>
+
+            </div>
+
+          </div>  
+      </section>
+    </div>
+
   </header>
+
+
 
   <!-- Content and Background Layers -->
    <div id="project-panels" class="absolute inset-0 z-10 pointer-events-none fixed flex items-center justify-center">
@@ -128,114 +246,11 @@
     <img class="bg-item bg-item--texture" src="assets/textures/linen.webp" alt="">
   </div>
 
-  <!-- UI and Text -->
-  <section id="ui-section" class="section ml-1.5 mr-1.5 mb-1.5">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-1.5 z-50 relative">
-        <div class="md:col-span-6">
-          <!-- Description of Work Goes Here -->
-          <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 font-[DM_Sans]">
-            <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
-              <div class="col-span-8">project</div> 
-              <div class="col-span-4">client</div>
-            </div>
-            <div class="accordion">
-              <div class="accordion-item">
-                <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
-                  <div class="col-span-8">
-                      Head of Camera Product
-                  </div>
-                  <div class="col-span-3">
-                    Lapse
-                  </div>
-                  <div class="col-span-1">
-
-                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1" data-project="lapse">
-                    </button>
-                  </div>
-                </div>
-                    
-              </div>
-                <div id="panel-1" class="accordion-panel">
-                  <ul>
-                    <li>app design</li>
-                    <li>pipeline development</li>
-                    <li>project management</li>
-                    <li>creative direction</li>
-                    <li>brand marketing</li>
-                  </ul>
-                  <div class="text-sm">Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</div>
-                </div>                 
-              </div>
-
-              <div class="accordion-item">
-                <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
-                  <div class="col-span-8">
-                    Paul George "Keep Rising"
-                  </div>
-                  <div class="col-span-3">
-                    Nike Basketball
-                  </div>
-                  <div class="col-span-1">
-                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
-                    </button>
-                  </div>
-                </div>
-                  <div id="panel-2" class="accordion-panel">
-                    <ul>
-                      <li>creative direction</li>
-                      <li>cinematography</li>
-                      <li>directing</li>
-                      <li>brand marketing</li>
-                    </ul>
-                    <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
-                  </div>  
-              </div>
-
-              <div class="accordion-item">
-                <div class="grid grid-cols-12 gap-x-1 font-[DM_Sans] text-sm items-baseline">
-                  <div class="col-span-8">
-                    "Hand Covers Bruise" Fashion Film
-                  </div>
-                  <div class="col-span-3">
-                    Sequence
-                  </div>
-                  <div class="col-span-1">
-                    <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3" data-project="sequence">
-                    </button>
-                  </div>
-                </div>
-                <div id="panel-3" class="accordion-panel">
-                    <ul>
-                      <li>creative direction</li>
-                      <li>cinematography</li>
-                      <li>directing</li>
-                      <li>video edit</li>
-                      <li>colour grade</li>
-                    </ul>
-                  <div class="text-sm">The short dance film reverses the story of the photo editorial and provides context on the inner turmoil the character experiences before stepping out of his safe space to face the world.</div>
-                </div>  
-              </div>
-
-<!-- 
-              <div class="accordion-item">
-                <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-4" id="trigger-4">
-                Molson Coors
-                </button>
-                <div id="panel-4" class="accordion-panel">
-                  <br><p>Worked with different divisions of Nike to create impactful brand films, social content and research spanning Nike Global Football, Nike Basketball, Nike London and Nike Running.</p>
-                </div>  
-              </div> -->
-
-            </div>
-
-        </div>
-
-      </div>  
-  </section>
+  
 
   <!-- Contact Footer -->
-  <footer class="footer mt-auto">
-    <div class="w-svw grid grid-cols-12 m-1.5 gap-1.5 z-20 relative w-full">
+  <footer class="footer fixed bottom-0 left-0 right-0">
+    <div class="grid grid-cols-12 m-1.5 gap-1.5 z-20 relative w-full font-[DM_Sans] text-sm">
       <div class="col-span-4"><a href="mailto:hm@haleyma.com">Email</a></div>
       <div class="col-span-4"><a href="https://www.instagram.com/haleyma/">Instagram</a></div>
       <div class="col-span-4 justify-self-end">live. laugh. love.</div>
