@@ -22,7 +22,27 @@
   --content-gap: 6px;         /* grid/gap default */
   --header-spacer: 16px;       /* spacer used in header (mobile small) */
 
+  font-family: "Inter", sans-serif;
+  font-feature-settings: "zero", "liga", "ss01";
+  font-variation-settings: "wght" 400;
+}
 
+@supports (font-variation-settings: normal) {
+  :root { font-family: "InterVariable", "Inter", sans-serif; font-optical-sizing: auto; }
+}
+
+@font-face {
+  font-family: "InterVariable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/InterVariable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: XanhMono;
+  font-style: normal;
+  src: url("assets/fonts/XanhMono-Regular.ttf") format("ttf");
 }
 
 body {
