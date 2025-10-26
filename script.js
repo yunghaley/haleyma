@@ -1,20 +1,24 @@
 // Toggle UI Elements
+// Single-open behavior - only one section visible at a time
 document.addEventListener('click', function(event) {
-  console.log('Click detected anywhere on page:', event.target);
+  const toggleElement = event.target.closest('[data-target]');
   
-  // Check if click originated from or inside a logo wrapper
-  const logoWrapper = event.target.closest('[data-target]');
-  
-  if (logoWrapper) {
-    console.log('Logo wrapper clicked via delegation!');
-    const targetId = logoWrapper.getAttribute('data-target');
-    const targetElement = document.getElementById(targetId);
+  if (toggleElement) {
+    const sectionType = toggleElement.getAttribute('data-target');
+    const targetElement = document.querySelector(`[data-section="${sectionType}"]`);
     
     if (targetElement) {
-      console.log('Toggling element:', targetId);
-      targetElement.classList.toggle('hidden');
-    } else {
-      console.error('Target element not found:', targetId);
+      const isOpening = targetElement.classList.contains('hidden');
+      
+      // Always hide both sections first
+      document.querySelectorAll('[data-section]').forEach(section => {
+        section.classList.add('hidden');
+      });
+      
+      // Then show the target only if we're opening it
+      if (isOpening) {
+        targetElement.classList.remove('hidden');
+      }
     }
   }
 });
@@ -101,12 +105,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-});
-
-// keyboard accessibility: toggle with Enter/Space
-btn.addEventListener("keydown", (e) => {
-  if (e.key === " " || e.key === "Enter") {
-    e.preventDefault();
-    btn.click();
-  }
 });
