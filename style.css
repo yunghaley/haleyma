@@ -191,17 +191,18 @@ li:before {
 }
 
 .accordion-trigger {
+  display: inline-flex;
   width: 100%;
   max-width: none;
   box-sizing: border-box;
   padding: 3px 0px;
   cursor: pointer;
-  text-align: right;
   transition: background 150ms ease;
 }
 
 .accordion-trigger::after {
   content: "▾";
+  display: inline-flex;
   font-size: 0.9rem;
   transform-origin: center;
   transition: transform 180ms ease;

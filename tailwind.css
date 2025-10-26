@@ -220,15 +220,6 @@
   .m-1\.5 {
     margin: calc(var(--spacing) * 1.5);
   }
-  .m-2 {
-    margin: calc(var(--spacing) * 2);
-  }
-  .m-36 {
-    margin: calc(var(--spacing) * 36);
-  }
-  .m-48 {
-    margin: calc(var(--spacing) * 48);
-  }
   .mt-auto {
     margin-top: auto;
   }
@@ -367,11 +358,6 @@
   .md\:m-24 {
     @media (width >= 48rem) {
       margin: calc(var(--spacing) * 24);
-    }
-  }
-  .md\:m-36 {
-    @media (width >= 48rem) {
-      margin: calc(var(--spacing) * 36);
     }
   }
   .md\:block {
@@ -534,16 +520,17 @@ li:before {
   border-bottom: 1px solid rgb(39, 39, 39);
 }
 .accordion-trigger {
+  display: inline-flex;
   width: 100%;
   max-width: none;
   box-sizing: border-box;
   padding: 3px 0px;
   cursor: pointer;
-  text-align: right;
   transition: background 150ms ease;
 }
 .accordion-trigger::after {
   content: "▾";
+  display: inline-flex;
   font-size: 0.9rem;
   transform-origin: center;
   transition: transform 180ms ease;
