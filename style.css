@@ -97,7 +97,7 @@ li:before {
 .bg-texture {
   --dot-color: rgb(0, 0, 0);
   --dot-size: 0.2px;    /* dot radius/diameter tweak */
-  --dot-gap: 3rem;    /* spacing between dots */
+  --dot-gap: 3.5rem;    /* spacing between dots */
   content: "";
   position: fixed;
   inset: 0;
@@ -106,7 +106,7 @@ li:before {
   background-size: var(--dot-gap) var(--dot-gap);
   background-repeat: repeat;
   mix-blend-mode: normal;
-  opacity: 0.5;
+  opacity: 1;
 }
 
 /* mobile-first defaults (stacked header, single column content) */
