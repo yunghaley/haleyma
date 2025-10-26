@@ -8,24 +8,24 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body class="flex flex-col min-h-screen">
   <!-- Header -->
   <header class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-50">
      
-    <div id="logo-nav" class="fixed inset-x-0 left-1.5 right-1.5 z-50 bg-gray-100 opacity-85 text-stone-800 rounded-b-md cursor-pointer">        
+    <div id="logo-nav" class="font-mono text-xl fixed inset-x-0 left-1.5 right-1.5 z-50 bg-gray-100 opacity-85 text-stone-800 rounded-b-md cursor-pointer">        
       <div class="flex w-full max-w-7xl mx-auto gap-1.5 p-1.5 z-50">
-        <div class="font-[Xanh_Mono]">
+        <div>
           HALEY MA
         </div>
         <div class="grow">
           <!-- Spacer -->
         </div>
-        <div class="font-[Xanh_Mono]" data-target="projects-section">
+        <div data-target="projects-section">
           PROJECTS
         </div> 
-        <div class="font-[Xanh_Mono]" data-target="info-section">
+        <div data-target="info-section">
           INFO
         </div> 
       </div>
@@ -35,9 +35,9 @@
     <div class="mt-[42px] grid grid-cols-1 md:col-span-6 md:grid-cols-6 md:sticky md:right-1.5 gap-1.5 z-40">
 
       <div id="info-section" class="hidden md:col-span-6 w-full p-3 z-40 bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
-        <div class="font-[Inter] text-m mb-1.5">Creative and Photography Direction for Brands and Technology</div>
+        <div class="font-sans text-m mb-1.5">Creative and Photography Direction for Brands and Technology</div>
         <!-- Move to CV section??? -->
-        <div class="font-[Inter] text-xs">Previously Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
+        <div class="font-sans text-xs">Previously Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
         Previously Creative - Moving Image at <a href="https://www.akqa.com/">AKQA</a> London and Portland (2017–2020).
         </div>
       </div>
@@ -46,7 +46,7 @@
           <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
               <!-- Description of Work Goes Here -->
-              <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 font-[Inter]">
+              <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 font-sans">
                 <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
                   <div class="col-span-8">project</div> 
                   <div class="col-span-4">client</div>
@@ -230,7 +230,7 @@
 
   <!-- Contact Footer -->
   <footer class="footer fixed bottom-0 left-0 right-0">
-    <div class="grid grid-cols-12 m-1.5 gap-1.5 z-20 relative w-full font-[Inter] text-xs">
+    <div class="grid grid-cols-12 m-1.5 gap-1.5 z-20 relative w-full font-sans text-xs">
       <div class="col-span-4"><a href="mailto:hm@haleyma.com">Email</a></div>
       <div class="col-span-4"><a href="https://www.instagram.com/haleyma/">Instagram</a></div>
       <div class="col-span-4 justify-self-end">live. laugh. love.</div>

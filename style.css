@@ -31,6 +31,11 @@
   :root { font-family: "InterVariable", "Inter", sans-serif; font-optical-sizing: auto; }
 }
 
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "XanhMono", sans-serif;
+}
+
 @font-face {
   font-family: "InterVariable";
   font-style: normal;
@@ -40,9 +45,9 @@
 }
 
 @font-face {
-  font-family: XanhMono;
+  font-family: "XanhMono";
   font-style: normal;
-  src: url("assets/fonts/XanhMono-Regular.ttf") format("ttf");
+  src: url("assets/fonts/XanhMono-Regular.ttf") format("truetype");
 }
 
 body {
@@ -112,20 +117,6 @@ li:before {
   align-items: stretch;
   margin: var(--page-vertical) var(--page-gutter);
   color: rgb(39, 39, 39);
-}
-
-
-.header h1 {
-  font-size: 1.5rem;
-  font-weight: 300;
-  letter-spacing: 0.5px;
-  font-family: "Xanh Mono", monospace;
-}
-
-.header h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: "DM Sans", sans-serif;
 }
 
 .logo {
