@@ -248,6 +248,27 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .mt-24 {
+    margin-top: calc(var(--spacing) * 24);
+  }
+  .mt-64 {
+    margin-top: calc(var(--spacing) * 64);
+  }
+  .mt-84 {
+    margin-top: calc(var(--spacing) * 84);
+  }
+  .mt-96 {
+    margin-top: calc(var(--spacing) * 96);
+  }
+  .mt-128 {
+    margin-top: calc(var(--spacing) * 128);
+  }
+  .mt-192 {
+    margin-top: calc(var(--spacing) * 192);
+  }
+  .mt-256 {
+    margin-top: calc(var(--spacing) * 256);
+  }
   .mt-\[45px\] {
     margin-top: 45px;
   }
