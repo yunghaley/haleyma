@@ -20,7 +20,6 @@
   --page-vertical: 6px;       /* top/bottom margin for header/section/footer */
   --container-vertical: 6px;  /* vertical spacing around the main grid */
   --content-gap: 6px;         /* grid/gap default */
-  --header-spacer: 16px;       /* spacer used in header (mobile small) */
 
   font-family: "Inter", sans-serif;
   font-feature-settings: "zero", "liga", "ss01";
@@ -107,52 +106,6 @@ li:before {
   background-repeat: repeat;
   mix-blend-mode: normal;
   opacity: 1;
-}
-
-/* mobile-first defaults (stacked header, single column content) */
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: stretch;
-  margin: var(--page-vertical) var(--page-gutter);
-  color: rgb(39, 39, 39);
-}
-
-.logo {
-  order: -1;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.spacer {
-  order: 0;
-  height: var(--page-vertical);
-  visibility: hidden;
-}
-
-.bio {
-  order: 1;
-  width: 100%;
-}
-
-/* Container */
-.container {
-  display: grid;
-  grid-template-areas:
-    "left"
-    "right";
-  grid-template-columns: 1fr;
-  gap: var(--content-gap);
-  
-}
-
-.container div.left {
-  grid-area: left;
-}
-
-.container div.right {
-  grid-area: right;
 }
 
 /* Slideshow */
@@ -304,30 +257,6 @@ li:before {
   box-sizing: border-box;
 }
 
-/* background panels (stacked, crossfade-capable) */
-.bg-project-panel {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: opacity 360ms ease;
-  display: block;
-}
-
-/* visible panel */
-.bg-project-panel.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* make images inside panels cover */
-.bg-project-panel img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 /* --- consolidated breakpoint: tablet and up --- */
 @media (min-width: 769px) {
   /* adjust rhythm/spacing for larger screens */
@@ -340,23 +269,7 @@ li:before {
     --header-spacer: 120px;
   }
 
-  /* header becomes horizontal with spacer */
-  .header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin: var(--page-vertical) var(--page-gutter);
-  }
-  .spacer { 
-    display: block; 
-    flex: 0 0 var(--header-spacer); 
-    width: var(--header-spacer); 
-    height: 1px; 
-    visibility: visible;
-    border-left: var(--content-gap) solid transparent;
-    border-right: var(--content-gap) solid transparent;
-  }
+
 
   /* two-column layout */
   .container {
