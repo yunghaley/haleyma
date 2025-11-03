@@ -12,9 +12,10 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="sticky m-1.5 z-50">
-              
-      <div class="flex w-full max-w-7xl gap-1.5 p-1.5 z-50 font-mono text-xl cursor-pointer z-50  bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <!-- Nav Bar -->
+    <div class="m-1.5">          
+      <div class="flex w-full max-w-7xl gap-1.5 p-1.5 font-mono text-xl cursor-pointer bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
         <div data-project="default">
           HALEY MA
         </div>
@@ -28,11 +29,9 @@
           INFO
         </div> 
       </div>
+    </div>
 
-  </header>
-
-  <!-- Nav -->
-
+    <!-- Nav Dropdowns -->
     <div class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-40">
 
       <div data-section="info" class="hidden col-span-1 md:col-span-6 z-40">
@@ -155,99 +154,101 @@
       </div>
 
     </div>
+  </header>
 
+  <main>
+    <!-- Content and Background Layers -->
+    <div class="z-0 md:m-24 absolute inset-0 flex items-center justify-center">
 
-  <!-- Content and Background Layers -->
-   <div class="z-0 md:m-24 inset-0 absolute pointer-events-none flex items-center justify-center">
-
-      <div id="project-default" class="project-panel">
-        <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" autoplay loop muted playsinline></video>
-        <!-- <div class="slideshow w-full max-w-4xl px-4">
-            <div class="slides flex">
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-0.jpg" alt="HM 0">
+        <div id="project-default" class="project-panel">
+          <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" autoplay loop muted playsinline></video>
+          <!-- <div class="slideshow w-full max-w-4xl px-4">
+              <div class="slides flex">
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-0.jpg" alt="HM 0">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-1.jpg" alt="HM 1">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-3.jpg" alt="HM 3">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-4.jpg" alt="HM 4">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-5.jpg" alt="HM 5">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-6.jpg" alt="HM 6">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-7.jpg" alt="HM 7">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-8.jpg" alt="HM 8">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-9.jpg" alt="HM 9">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-10.jpg" alt="HM 10">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-11.jpg" alt="HM 11">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-12.jpg" alt="HM 12">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-13.jpg" alt="HM 13">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-14.jpg" alt="HM 14">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-15.jpg" alt="HM 15">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-16.jpg" alt="HM 16">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-17.jpg" alt="HM 17">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/HM-18.jpg" alt="HM 18">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/2024/L1003566.jpg" alt="2024 L1003566">
+                </div>
+                <div class="slide flex items-center justify-center">
+                  <img src="assets/2024/L1061559.jpg" alt="2024 L1061559">
+                </div>
               </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-1.jpg" alt="HM 1">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-3.jpg" alt="HM 3">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-4.jpg" alt="HM 4">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-5.jpg" alt="HM 5">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-6.jpg" alt="HM 6">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-7.jpg" alt="HM 7">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-8.jpg" alt="HM 8">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-9.jpg" alt="HM 9">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-10.jpg" alt="HM 10">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-11.jpg" alt="HM 11">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-12.jpg" alt="HM 12">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-13.jpg" alt="HM 13">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-14.jpg" alt="HM 14">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-15.jpg" alt="HM 15">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-16.jpg" alt="HM 16">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-17.jpg" alt="HM 17">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/HM-18.jpg" alt="HM 18">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/2024/L1003566.jpg" alt="2024 L1003566">
-              </div>
-              <div class="slide flex items-center justify-center">
-                <img src="assets/2024/L1061559.jpg" alt="2024 L1061559">
-              </div>
-            </div>
-        </div> -->
-      </div>
-
-      <div id="project-lapse" class="project-panel hidden">
-        <div class="flex flex-col items-start justify-center">
-          <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" width="360px" height="720px" autoplay loop muted playsinline></video>
-          <img src="assets/projects/lapse/snap-submissions-hof-grid-screenshot-overlay.png" alt="Lapse Snap Submissions HoF">
+          </div> -->
         </div>
-      </div>
 
-      <div id="project-nike-basketball" class="project-panel hidden">
-        <img src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising.avif" alt="Nike Basketball: Paul George Keep Rising">
-      </div>
+        <div id="project-lapse" class="project-panel hidden">
+          <div class="flex flex-col items-start justify-center">
+            <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" width="360px" height="720px" autoplay loop muted playsinline></video>
+            <img src="assets/projects/lapse/snap-submissions-hof-grid-screenshot-overlay.png" alt="Lapse Snap Submissions HoF">
+          </div>
+        </div>
 
-      <div id="project-sequence" class="project-panel hidden">
-        <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" autoplay loop muted playsinline></video>
-      </div>
+        <div id="project-nike-basketball" class="project-panel hidden">
+          <img src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising.avif" alt="Nike Basketball: Paul George Keep Rising">
+        </div>
 
-      <div id="project-nike-football" class="project-panel hidden">
-        <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" autoplay loop muted playsinline></video>
-      </div>
+        <div id="project-sequence" class="project-panel hidden">
+          <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" autoplay loop muted playsinline></video>
+        </div>
 
-  </div>
+        <div id="project-nike-football" class="project-panel hidden">
+          <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" autoplay loop muted playsinline></video>
+        </div>
+
+    </div>
+  </main>
 
   <!-- Background Motifs -->
   <!-- <div class="absolute">
