@@ -1,8 +1,9 @@
 // Toggle UI Elements
-// Single-open behavior - only one section visible at a time
 document.addEventListener('click', function(event) {
   const toggleElement = event.target.closest('[data-target]');
+  const sectionElement = event.target.closest('[data-section]');
   
+  // If clicking a toggle button
   if (toggleElement) {
     const sectionType = toggleElement.getAttribute('data-target');
     const targetElement = document.querySelector(`[data-section="${sectionType}"]`);
@@ -20,6 +21,13 @@ document.addEventListener('click', function(event) {
         targetElement.classList.remove('hidden');
       }
     }
+  } 
+  // If clicking anywhere else (outside dropdowns and toggle buttons)
+  else if (!sectionElement) {
+    // Hide all dropdown sections
+    document.querySelectorAll('[data-section]').forEach(section => {
+      section.classList.add('hidden');
+    });
   }
 });
 
