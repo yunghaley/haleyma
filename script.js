@@ -1,9 +1,10 @@
-// Toggle UI Elements
+// Combined Toggle UI Elements and Accordion Functionality
 document.addEventListener('click', function(event) {
   const toggleElement = event.target.closest('[data-target]');
+  const accordionItem = event.target.closest('.accordion-item');
   const sectionElement = event.target.closest('[data-section]');
   
-  // If clicking a toggle button
+  // If clicking a nav toggle button (PROJECTS/INFO)
   if (toggleElement) {
     const sectionType = toggleElement.getAttribute('data-target');
     const targetElement = document.querySelector(`[data-section="${sectionType}"]`);
@@ -22,7 +23,45 @@ document.addEventListener('click', function(event) {
       }
     }
   } 
-  // If clicking anywhere else (outside dropdowns and toggle buttons)
+  // If clicking an accordion item
+  else if (accordionItem) {
+    const panel = document.getElementById(accordionItem.getAttribute('aria-controls'));
+    const projectID = accordionItem.getAttribute('data-project');
+    const triggerButton = accordionItem.querySelector('.accordion-trigger');
+    const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
+    const isTriggerOpen = triggerButton.getAttribute('aria-expanded') === 'true';
+
+    if (isTriggerOpen) {
+      triggerButton.setAttribute('aria-expanded', 'false');
+    } else {
+      triggerButton.setAttribute('aria-expanded', 'true');
+    }
+
+    if (isOpen) {
+      // Closing the accordion
+      accordionItem.setAttribute('aria-expanded', 'false');
+      if (panel) {
+        panel.style.maxHeight = null;
+        panel.setAttribute('aria-hidden', 'true');
+        panel.classList.remove('is-open');
+      }
+      // Hide project assets and show default
+      hideAllProjectAssets();
+    } else {
+      // Opening the accordion - close others first
+      closeAllAccordions(accordionItem);
+      accordionItem.setAttribute('aria-expanded', 'true');
+      
+      if (panel) {
+        panel.classList.add('is-open');
+        panel.setAttribute('aria-hidden', 'false');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+      // Show project assets
+      showProjectAssets(projectID);
+    }
+  }
+  // If clicking anywhere else (outside dropdowns and accordion items)
   else if (!sectionElement) {
     // Hide all dropdown sections
     document.querySelectorAll('[data-section]').forEach(section => {
@@ -31,86 +70,50 @@ document.addEventListener('click', function(event) {
   }
 });
 
-// Accordion Functionality with Project Assets
-document.addEventListener("DOMContentLoaded", function () {
-  const triggers = document.querySelectorAll(".accordion-trigger");
-
-  function closeAll(except = null) {
-    triggers.forEach(btn => {
-      if (btn === except) return;
-      btn.setAttribute("aria-expanded", "false");
-      const panel = document.getElementById(btn.getAttribute("aria-controls"));
-      if (panel) {
-        panel.style.maxHeight = null;
-        panel.classList.remove("is-open");
-      }
-    });
-  }
-
-  // Function to show project assets
-  function showProjectAssets(projectId) {
-    // Hide all project asset groups
-    document.querySelectorAll('.project-panel').forEach(group => {
-      group.classList.add('hidden');
-    });
-    
-    // Show the selected project's assets
-    const assetGroup = document.getElementById(`project-${projectId}`);
-    if (assetGroup) {
-      assetGroup.classList.remove('hidden');
-    }
-  }
-
-  // Function to hide all project assets
-  function hideAllProjectAssets() {
-    document.querySelectorAll('.project-panel').forEach(group => {
-      group.classList.add('hidden');
-    });
-
-    // Show default asset group
-    const defaultGroup = document.getElementById('project-default');
-    if (defaultGroup) {
-      defaultGroup.classList.remove('hidden');
-    }
-  }
-
-  triggers.forEach(btn => {
-    const panel = document.getElementById(btn.getAttribute("aria-controls"));
-    const projectID = btn.getAttribute("data-project");
-
-    // ensure panels are hidden initially
+// Helper functions
+function closeAllAccordions(except = null) {
+  document.querySelectorAll('.accordion-item').forEach(item => {
+    if (item === except) return;
+    item.setAttribute('aria-expanded', 'false');
+    const panel = document.getElementById(item.getAttribute('aria-controls'));
     if (panel) {
       panel.style.maxHeight = null;
-      panel.setAttribute("aria-hidden", "true");
+      panel.classList.remove('is-open');
+      panel.setAttribute('aria-hidden', 'true');
     }
+  });
+}
 
-    btn.addEventListener("click", () => {
-      const isOpen = btn.getAttribute("aria-expanded") === "true";
+function showProjectAssets(projectId) {
+  document.querySelectorAll('.project-panel').forEach(group => {
+    group.classList.add('hidden');
+  });
+  
+  const assetGroup = document.getElementById(`project-${projectId}`);
+  if (assetGroup) {
+    assetGroup.classList.remove('hidden');
+  }
+}
 
-      if (isOpen) {
-        // closing the accordion
-        btn.setAttribute("aria-expanded", "false");
-        if (panel) {
-          panel.style.maxHeight = null;
-          panel.setAttribute("aria-hidden", "true");
-          panel.classList.remove("is-open");
-        }
-        // hide project assets
-        hideAllProjectAssets();
-      } else {
-        // single-open behaviour: close others
-        closeAll(btn);
-        btn.setAttribute("aria-expanded", "true");
+function hideAllProjectAssets() {
+  document.querySelectorAll('.project-panel').forEach(group => {
+    group.classList.add('hidden');
+  });
 
-        if (panel) {
-          panel.classList.add("is-open");
-          panel.setAttribute("aria-hidden", "false");
-          // set maxHeight to enable transition
-          panel.style.maxHeight = panel.scrollHeight + "px";
-        }
-        // show project assets
-        showProjectAssets(projectID);
-      }
-    });
+  const defaultGroup = document.getElementById('project-default');
+  if (defaultGroup) {
+    defaultGroup.classList.remove('hidden');
+  }
+}
+
+// Initialize panels on load
+document.addEventListener("DOMContentLoaded", function () {
+  // Ensure all accordion panels start hidden
+  document.querySelectorAll('.accordion-item').forEach(item => {
+    const panel = document.getElementById(item.getAttribute('aria-controls'));
+    if (panel) {
+      panel.style.maxHeight = null;
+      panel.setAttribute('aria-hidden', 'true');
+    }
   });
 });
