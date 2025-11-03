@@ -10,13 +10,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
   <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-50">
-    <!-- Nav Bar -->
-    <div class="m-1.5">          
-      <div class="flex w-full max-w-7xl gap-1.5 p-1.5 font-mono text-xl cursor-pointer bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
-        <div data-project="default">
+  <header class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-50">
+     
+    <div class="font-mono text-xl fixed inset-x-0 left-1.5 right-1.5 z-50 bg-gray-100 opacity-85 text-stone-800 rounded-b-md cursor-pointer">        
+      <div class="flex w-full max-w-7xl mx-auto gap-1.5 p-1.5 z-50">
+        <div>
           HALEY MA
         </div>
         <div class="grow">
@@ -31,235 +31,234 @@
       </div>
     </div>
 
-    <!-- Nav Dropdowns -->
-    <div class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-40">
+    <div class="hidden md:block md:col-span-6"></div>
+    <!-- TODO: fix below magic number on margin top property -->
+    <div class="mt-[45px] grid grid-cols-1 md:col-span-6 md:grid-cols-6 md:sticky md:right-1.5 gap-1.5 z-40">
 
-      <div data-section="info" class="hidden col-span-1 md:col-span-6 z-40">
-        <div class="p-3 bg-gray-100 text-stone-800 opacity-80 border-white border-[1px] rounded-b-md">  
-          <div class="font-sans text-m mb-1.5">Creative and Photography Direction for Brands and Technology</div>
-          <!-- Move to CV section??? -->
-          <div class="font-sans text-xs">Previously Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
-          Previously Creative - Moving Image at <a href="https://www.akqa.com/">AKQA</a> London and Portland (2017–2020).
-          </div>
+      <div data-section="info" class="hidden md:col-span-6 w-full p-3 z-40 bg-gray-100 opacity-85 text-stone-800 rounded-b-md">
+        <div class="font-sans text-m mb-1.5">Creative and Photography Direction for Brands and Technology</div>
+        <!-- Move to CV section??? -->
+        <div class="font-sans text-xs">Previously Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London leading iOS app camera experience and photo processing pipeline development (2021–2025).    
+        Previously Creative - Moving Image at <a href="https://www.akqa.com/">AKQA</a> London and Portland (2017–2020).
         </div>
       </div>
-        
-      <div data-section="projects" class="hidden col-span-1 md:col-span-6 z-40">
-                <!-- Description of Work Goes Here -->
-                <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 opacity-80 border-white border-[1px] font-sans">
-                  <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
-                    <div class="col-span-8">project</div> 
-                    <div class="col-span-4">client</div>
+      
+      <section data-section="projects" class="hidden md:col-span-6 section">
+          <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
+
+              <!-- Description of Work Goes Here -->
+              <div class="p-3 rounded-b-md bg-gray-100 opacity-85 text-stone-800 font-sans">
+                <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
+                  <div class="col-span-8">project</div> 
+                  <div class="col-span-4">client</div>
+                </div>
+                <div class="accordion">
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                      <div class="col-span-8">
+                          Head of Camera Product
+                      </div>
+                      <div class="col-span-3">
+                        Lapse
+                      </div>
+                      <div class="col-span-1 justify-self-end">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1" data-project="lapse">
+                        </button>
+                      </div>
+                    </div>    
+                    <div id="panel-1" class="accordion-panel">
+                      <ul>
+                        <li>app design</li>
+                        <li>pipeline development</li>
+                        <li>project management</li>
+                        <li>creative direction</li>
+                        <li>brand marketing</li>
+                      </ul>
+                      <div class="text-sm">Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</div>
+                    </div>                 
                   </div>
-                  <div class="accordion">
-                    <div class="accordion-item">
-                      <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                        <div class="col-span-8">
-                            Head of Camera Product
-                        </div>
-                        <div class="col-span-3">
-                          Lapse
-                        </div>
-                        <div class="col-span-1 justify-self-end">
-                          <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-1" id="trigger-1" data-project="lapse">
-                          </button>
-                        </div>
-                      </div>    
-                      <div id="panel-1" class="accordion-panel">
+
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                      <div class="col-span-8">
+                        Paul George "Keep Rising"
+                      </div>
+                      <div class="col-span-3">
+                        Nike Basketball
+                      </div>
+                      <div class="col-span-1 justify-self-end">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
+                        </button>
+                      </div>
+                    </div>
+                      <div id="panel-2" class="accordion-panel">
                         <ul>
-                          <li>app design</li>
-                          <li>pipeline development</li>
-                          <li>project management</li>
-                          <li>creative direction</li>
+                          <li>art direction</li>
+                          <li>cinematography</li>
+                          <li>directing</li>
                           <li>brand marketing</li>
                         </ul>
-                        <div class="text-sm">Built from the ground up in partnership with iOS engineers the organic look and feel of the proprietary image processing pipeline for Lapse, the social disposable camera app.</div>
-                      </div>                 
-                    </div>
-
-                    <div class="accordion-item">
-                      <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                        <div class="col-span-8">
-                          Paul George "Keep Rising"
-                        </div>
-                        <div class="col-span-3">
-                          Nike Basketball
-                        </div>
-                        <div class="col-span-1 justify-self-end">
-                          <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
-                          </button>
-                        </div>
-                      </div>
-                        <div id="panel-2" class="accordion-panel">
-                          <ul>
-                            <li>art direction</li>
-                            <li>cinematography</li>
-                            <li>directing</li>
-                            <li>brand marketing</li>
-                          </ul>
-                          <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
-                        </div>  
-                    </div>
-
-                    <div class="accordion-item">
-                      <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                        <div class="col-span-8">
-                          "Hand Covers Bruise" Fashion Film
-                        </div>
-                        <div class="col-span-3">
-                          Sequence
-                        </div>
-                        <div class="col-span-1 justify-self-end">
-                          <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3" data-project="sequence">
-                          </button>
-                        </div>
-                      </div>
-                      <div id="panel-3" class="accordion-panel">
-                          <ul>
-                            <li>art direction</li>
-                            <li>cinematography</li>
-                            <li>directing</li>
-                            <li>video edit</li>
-                            <li>colour grade</li>
-                          </ul>
-                        <div class="text-sm">The short dance film reverses the story of the photo editorial and provides context on the inner turmoil the character experiences before stepping out of his safe space to face the world.</div>
+                        <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
                       </div>  
-                    </div>
+                  </div>
 
-                    <div class="accordion-item">
-                      <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                        <div class="col-span-8">
-                          Born Mercurial
-                        </div>
-                        <div class="col-span-3">
-                          Nike Football
-                        </div>
-                        <div class="col-span-1 justify-self-end">
-                          <button class="accordion-trigger" aria-controls="panel-4" id="trigger-4" data-project="nike-football" aria-expanded="false">
-                          </button>
-                        </div>
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                      <div class="col-span-8">
+                        "Hand Covers Bruise" Fashion Film
                       </div>
-                      <div id="panel-4" class="accordion-panel">
-                          <ul>
-                            <li>camera</li>
-                            <li>video edit</li>
-                            <li>colour grade</li>
-                          </ul>
-                        <div class="text-sm">Digital content that offered an intimate vignette on a footballer's beginnings that connected deeply with fans globally via Nike's social channels.</div>
-                      </div>  
+                      <div class="col-span-3">
+                        Sequence
+                      </div>
+                      <div class="col-span-1 justify-self-end">
+                        <button class="accordion-trigger" aria-expanded="false" aria-controls="panel-3" id="trigger-3" data-project="sequence">
+                        </button>
+                      </div>
                     </div>
+                    <div id="panel-3" class="accordion-panel">
+                        <ul>
+                          <li>art direction</li>
+                          <li>cinematography</li>
+                          <li>directing</li>
+                          <li>video edit</li>
+                          <li>colour grade</li>
+                        </ul>
+                      <div class="text-sm">The short dance film reverses the story of the photo editorial and provides context on the inner turmoil the character experiences before stepping out of his safe space to face the world.</div>
+                    </div>  
+                  </div>
 
-                  </div>    
-              </div>
-      </div>
+                  <div class="accordion-item">
+                    <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                      <div class="col-span-8">
+                        Born Mercurial
+                      </div>
+                      <div class="col-span-3">
+                        Nike Football
+                      </div>
+                      <div class="col-span-1 justify-self-end">
+                        <button class="accordion-trigger" aria-controls="panel-4" id="trigger-4" data-project="nike-football" aria-expanded="false">
+                        </button>
+                      </div>
+                    </div>
+                    <div id="panel-4" class="accordion-panel">
+                        <ul>
+                          <li>camera</li>
+                          <li>video edit</li>
+                          <li>colour grade</li>
+                        </ul>
+                      <div class="text-sm">Digital content that offered an intimate vignette on a footballer's beginnings that connected deeply with fans globally via Nike's social channels.</div>
+                    </div>  
+                  </div>
 
+                </div>    
+            </div>
+          </div>  
+      </section>
     </div>
+
   </header>
 
-  <main>
-    <!-- Content and Background Layers -->
-    <div class="z-0 md:m-24 absolute inset-0 flex items-center justify-center">
+  <!-- Content Layers -->
+   <div class="md:m-24 z-10 pointer-events-none flex items-center justify-center">
 
-        <div id="project-default" class="project-panel">
-          <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" autoplay loop muted playsinline></video>
-          <!-- <div class="slideshow w-full max-w-4xl px-4">
-              <div class="slides flex">
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-0.jpg" alt="HM 0">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-1.jpg" alt="HM 1">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-3.jpg" alt="HM 3">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-4.jpg" alt="HM 4">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-5.jpg" alt="HM 5">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-6.jpg" alt="HM 6">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-7.jpg" alt="HM 7">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-8.jpg" alt="HM 8">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-9.jpg" alt="HM 9">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-10.jpg" alt="HM 10">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-11.jpg" alt="HM 11">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-12.jpg" alt="HM 12">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-13.jpg" alt="HM 13">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-14.jpg" alt="HM 14">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-15.jpg" alt="HM 15">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-16.jpg" alt="HM 16">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-17.jpg" alt="HM 17">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/HM-18.jpg" alt="HM 18">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/2024/L1003566.jpg" alt="2024 L1003566">
-                </div>
-                <div class="slide flex items-center justify-center">
-                  <img src="assets/2024/L1061559.jpg" alt="2024 L1061559">
-                </div>
+      <div id="project-default" class="project-panel">
+        <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" autoplay loop muted playsinline></video>
+        <!-- <div class="slideshow w-full max-w-4xl px-4">
+            <div class="slides flex">
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-0.jpg" alt="HM 0">
               </div>
-          </div> -->
-        </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-1.jpg" alt="HM 1">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-3.jpg" alt="HM 3">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-4.jpg" alt="HM 4">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-5.jpg" alt="HM 5">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-6.jpg" alt="HM 6">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-7.jpg" alt="HM 7">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-8.jpg" alt="HM 8">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-9.jpg" alt="HM 9">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-10.jpg" alt="HM 10">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-11.jpg" alt="HM 11">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-12.jpg" alt="HM 12">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-13.jpg" alt="HM 13">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-14.jpg" alt="HM 14">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-15.jpg" alt="HM 15">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-16.jpg" alt="HM 16">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-17.jpg" alt="HM 17">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/HM-18.jpg" alt="HM 18">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/2024/L1003566.jpg" alt="2024 L1003566">
+              </div>
+              <div class="slide flex items-center justify-center">
+                <img src="assets/2024/L1061559.jpg" alt="2024 L1061559">
+              </div>
+            </div>
+        </div> -->
+      </div>
 
-        <div id="project-lapse" class="project-panel hidden">
-          <div class="flex flex-col items-start justify-center">
-            <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" width="360px" height="720px" autoplay loop muted playsinline></video>
-            <img src="assets/projects/lapse/snap-submissions-hof-grid-screenshot-overlay.png" alt="Lapse Snap Submissions HoF">
-          </div>
+      <div id="project-lapse" class="project-panel hidden">
+        <div class="flex flex-col items-center justify-center">
+          <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" width="360px" height="720px" autoplay loop muted playsinline></video>
+          <img src="assets/projects/lapse/snap-submissions-hof-grid-screenshot-overlay.png" alt="Lapse Snap Submissions HoF">
         </div>
+      </div>
 
-        <div id="project-nike-basketball" class="project-panel hidden">
-          <img src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising.avif" alt="Nike Basketball: Paul George Keep Rising">
-        </div>
+      <div id="project-nike-basketball" class="project-panel hidden">
+        <img src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising.avif" alt="Nike Basketball: Paul George Keep Rising">
+      </div>
 
-        <div id="project-sequence" class="project-panel hidden">
-          <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" autoplay loop muted playsinline></video>
-        </div>
+      <div id="project-sequence" class="project-panel hidden">
+        <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" autoplay loop muted playsinline></video>
+      </div>
 
-        <div id="project-nike-football" class="project-panel hidden">
-          <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" autoplay loop muted playsinline></video>
-        </div>
+      <div id="project-nike-football" class="project-panel hidden">
+        <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" autoplay loop muted playsinline></video>
+      </div>
 
-    </div>
-  </main>
+  </div>
 
   <!-- Background Motifs -->
-  <!-- <div class="absolute">
-        <div class="z-10 bg-texture">
-    </div>
-    <img class="z-0 bg-item bg-item--flower" src="assets/misc/hibiscus-flower-hm.png" alt="">
-  </div> -->
+  <!-- <div class="z-0"><div class="bg-texture"></div></div>
+  <div class="z-0 opacity-15 absolute"> -->
+    <!-- <img class="bg-item bg-item--flower" src="assets/misc/hibiscus-flower-hm.png" alt=""> -->
+  </div>
 
   <!-- Contact Footer -->
   <footer class="footer fixed bottom-0 left-0 right-0">
-    <div class="grid grid-cols-12 m-1.5 gap-1.5 z-50 relative w-full font-sans text-xs">
+    <div class="grid grid-cols-12 m-1.5 gap-1.5 z-20 relative w-full font-sans text-xs">
       <div class="col-span-4"><a href="mailto:hm@haleyma.com">Email</a></div>
       <div class="col-span-4"><a href="https://www.instagram.com/haleyma/">Instagram</a></div>
       <div class="col-span-4 justify-self-end">live. laugh. love.</div>
