@@ -85,19 +85,48 @@ function closeAllAccordions(except = null) {
 }
 
 function showProjectAssets(projectId) {
-  document.querySelectorAll('.project-panel').forEach(group => {
-    group.classList.add('hidden');
-  });
+  // First hide all project panels and pause their videos
+  hideAllProjectAssets();
+  // Hide default project
+  const defaultGroup = document.getElementById('project-default');
+  if (defaultGroup) {
+    defaultGroup.classList.add('hidden');
+  }
   
+  // Show the target project panel
   const assetGroup = document.getElementById(`project-${projectId}`);
   if (assetGroup) {
     assetGroup.classList.remove('hidden');
+    
+    // Find and play any video in this project panel
+    const video = assetGroup.querySelector('video');
+    if (video) {
+      // Unmute and attempt to play
+      video.muted = false;
+      video.play().catch(error => {
+        console.log('Autoplay failed, falling back to muted:', error);
+        // If unmuted autoplay fails, try muted autoplay
+        video.muted = true;
+        video.play().catch(e => {
+          console.log('Muted autoplay also failed:', e);
+        });
+      });
+    }
   }
 }
 
 function hideAllProjectAssets() {
   document.querySelectorAll('.project-panel').forEach(group => {
     group.classList.add('hidden');
+    
+    // Pause and mute any videos in hidden panels
+    const video = group.querySelector('video');
+    if (video) {
+      video.muted = true;
+      video.pause();
+      // Optional: reset to beginning
+      // video.currentTime = 0;
+    }
   });
 
   const defaultGroup = document.getElementById('project-default');
@@ -115,5 +144,11 @@ document.addEventListener("DOMContentLoaded", function () {
       panel.style.maxHeight = null;
       panel.setAttribute('aria-hidden', 'true');
     }
+  });
+  
+  // Ensure all videos in hidden project panels are muted and paused
+  document.querySelectorAll('.project-panel.hidden video').forEach(video => {
+    video.muted = true;
+    video.pause();
   });
 });
