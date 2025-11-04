@@ -12,7 +12,7 @@
 </head>
 <body class="flex flex-col min-h-screen">
   <!-- Header -->
-  <header class="grid grid-cols-1 md:grid-cols-12 m-1.5 gap-1.5 z-50">
+  <header class="grid grid-cols-1 md:grid-cols-12 mt-1.5 mr-1.5 ml-1.5 gap-1.5 z-50">
 
     <div class="font-mono text-xl fixed inset-x-0 left-1.5 right-1.5 z-50 bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
       <div class="flex w-full max-w-7xl mx-auto gap-1.5 p-1.5 z-50">
@@ -33,9 +33,9 @@
 
     <div class="hidden md:block md:col-span-6"></div>
     <!-- TODO: fix below magic number on margin top property -->
-    <div class="mt-[45px] grid grid-cols-1 md:col-span-6 md:grid-cols-6 md:sticky md:right-1.5 gap-1.5 z-40">
+    <div class="mt-[41px] grid grid-cols-1 md:col-span-6 md:grid-cols-6 md:sticky md:right-1.5 gap-1.5 z-40">
 
-      <div data-section="info" class="hidden md:col-span-6 w-full p-3 bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
+      <div data-section="info" class="hidden mt-1.5 md:col-span-6 w-full p-3 bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
         <div class="font-sans text-sm font-semibold mb-1.5">Creative and Photography Direction for Tech, Fashion, and Sportswear</div>
         <!-- Move to CV section??? -->
         <div class="font-sans text-sm">As Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London, I led iOS app camera and photo processing development.    
@@ -43,7 +43,7 @@
         </div>
       </div>
       
-      <section data-section="projects" class="hidden md:col-span-6 section">
+      <section data-section="projects" class="hidden mt-1.5 md:col-span-6 section">
           <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
               <!-- Description of Work Goes Here -->
@@ -182,9 +182,10 @@
   </header>
 
   <!-- Content Layers -->
-   <div class="md:m-24 z-10 pointer-events-none flex items-center justify-center">
+   <div class="mt-1.5 md:m-24 z-10 pointer-events-none flex items-center justify-center">
 
       <div id="project-default" class="project-panel">
+        <div class="ml-1.5 mr-1.5">
         <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" autoplay loop muted playsinline></video>
         <!-- <div class="slideshow w-full max-w-4xl px-4">
             <div class="slides flex">
@@ -250,6 +251,7 @@
               </div>
             </div>
         </div> -->
+        </div>
       </div>
       <div id="project-lapse" class="project-panel hidden">
         <div class="flex flex-col items-center justify-center ml-1.5 mr-1.5">
