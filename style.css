@@ -4,7 +4,7 @@
 :root {
   font-family: "Inter", sans-serif;
   font-feature-settings: "zero", "liga", "ss01";
-  font-variation-settings: "wght" 400;
+  font-variation-settings: "wght" 200 400 600 800;
 }
 
 @supports (font-variation-settings: normal) {
@@ -19,7 +19,7 @@
 @font-face {
   font-family: "InterVariable";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 200 400 600 800;
   font-display: swap;
   src: url("assets/fonts/InterVariable.woff2") format("woff2");
 }
