@@ -47,7 +47,7 @@ p {
 }
 
 ul {
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 5px;
 }
 
@@ -60,7 +60,7 @@ li:before {
   content: "•";
   position: relative;
   margin-right: 0.3rem;
-  top: 0.05rem;
+  
 }
 
 /* Background Layer */

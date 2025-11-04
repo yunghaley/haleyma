@@ -196,9 +196,6 @@
   .static {
     position: static;
   }
-  .sticky {
-    position: sticky;
-  }
   .inset-x-0 {
     inset-inline: calc(var(--spacing) * 0);
   }
@@ -250,26 +247,8 @@
   .mt-1\.5 {
     margin-top: calc(var(--spacing) * 1.5);
   }
-  .mt-\[40px\] {
-    margin-top: 40px;
-  }
   .mt-\[41px\] {
     margin-top: 41px;
-  }
-  .mt-\[42px\] {
-    margin-top: 42px;
-  }
-  .mt-\[43px\] {
-    margin-top: 43px;
-  }
-  .mt-\[44px\] {
-    margin-top: 44px;
-  }
-  .mt-\[45px\] {
-    margin-top: 45px;
-  }
-  .mt-\[85px\] {
-    margin-top: 85px;
   }
   .mr-1\.5 {
     margin-right: calc(var(--spacing) * 1.5);
@@ -475,7 +454,7 @@ p {
   font-weight: 300;
 }
 ul {
-  padding-top: 10px;
+  padding-top: 5px;
   padding-bottom: 5px;
 }
 li {
@@ -486,7 +465,6 @@ li:before {
   content: "•";
   position: relative;
   margin-right: 0.3rem;
-  top: 0.05rem;
 }
 .bg-layer {
   position: fixed;
