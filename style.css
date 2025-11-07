@@ -32,6 +32,9 @@
 
 body {
   background: rgb(237, 237, 237);
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {
