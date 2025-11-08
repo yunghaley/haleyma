@@ -184,6 +184,9 @@
   .pointer-events-none {
     pointer-events: none;
   }
+  .visible {
+    visibility: visible;
+  }
   .absolute {
     position: absolute;
   }
@@ -202,17 +205,11 @@
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
-  .right-1\.5 {
-    right: calc(var(--spacing) * 1.5);
-  }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
-  }
-  .left-1\.5 {
-    left: calc(var(--spacing) * 1.5);
   }
   .z-0 {
     z-index: 0;
@@ -241,11 +238,11 @@
   .col-span-full {
     grid-column: 1 / -1;
   }
+  .m-0 {
+    margin: calc(var(--spacing) * 0);
+  }
   .m-1\.5 {
     margin: calc(var(--spacing) * 1.5);
-  }
-  .mx-auto {
-    margin-inline: auto;
   }
   .mt-1\.5 {
     margin-top: calc(var(--spacing) * 1.5);
@@ -400,6 +397,11 @@
       grid-column: span 6 / span 6;
     }
   }
+  .md\:mt-1\.5 {
+    @media (width >= 48rem) {
+      margin-top: calc(var(--spacing) * 1.5);
+    }
+  }
   .md\:block {
     @media (width >= 48rem) {
       display: block;
@@ -436,9 +438,6 @@
 }
 body {
   background: rgb(237, 237, 237);
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
 }
 a {
   color: rgb(106, 0, 255);
@@ -461,6 +460,16 @@ li:before {
   content: "•";
   position: relative;
   margin-right: 0.3rem;
+}
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 .bg-layer {
   position: fixed;
