@@ -23,6 +23,29 @@ document.addEventListener('click', function(event) {
       }
     }
   } 
+
+  // If clicking the logo (data-project="default")
+  else if (event.target.closest('[data-project="default"]')) {
+    hideAllProjectAssets();
+    // Ensure default project is visible
+    const defaultGroup = document.getElementById('project-default');
+    if (defaultGroup) {
+      defaultGroup.classList.remove('hidden');
+      // Play the default video
+      const video = defaultGroup.querySelector('video');
+      if (video) {
+        video.muted = true;
+        video.play().catch(e => console.log('Default video play failed:', e));
+      }
+    }
+    // Close all accordions
+    closeAllAccordions();
+    // Hide all sections (INFO/PROJECTS)
+    document.querySelectorAll('[data-section]').forEach(section => {
+      section.classList.add('hidden');
+    });
+  }
+
   // If clicking an accordion item
   else if (accordionItem) {
     const panel = document.getElementById(accordionItem.getAttribute('aria-controls'));
