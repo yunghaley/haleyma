@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.16 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -238,6 +238,9 @@
   .col-span-8 {
     grid-column: span 8 / span 8;
   }
+  .col-span-full {
+    grid-column: 1 / -1;
+  }
   .m-1\.5 {
     margin: calc(var(--spacing) * 1.5);
   }
@@ -387,9 +390,9 @@
       position: sticky;
     }
   }
-  .md\:right-1\.5 {
+  .md\:z-0 {
     @media (width >= 48rem) {
-      right: calc(var(--spacing) * 1.5);
+      z-index: 0;
     }
   }
   .md\:col-span-6 {
@@ -397,19 +400,9 @@
       grid-column: span 6 / span 6;
     }
   }
-  .md\:m-24 {
-    @media (width >= 48rem) {
-      margin: calc(var(--spacing) * 24);
-    }
-  }
   .md\:block {
     @media (width >= 48rem) {
       display: block;
-    }
-  }
-  .md\:grid-cols-6 {
-    @media (width >= 48rem) {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
     }
   }
   .md\:grid-cols-12 {
@@ -443,6 +436,9 @@
 }
 body {
   background: rgb(237, 237, 237);
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 a {
   color: rgb(106, 0, 255);
