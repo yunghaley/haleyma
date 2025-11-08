@@ -63,6 +63,11 @@ li:before {
   
 }
 
+.container {
+  @apply max-w-7xl w-full mx-auto px-6 m-1.5; /* 7xl = 80rem, px-6 = 1.5rem */
+}
+
+
 /* Background Layer */
 .bg-layer {
   position: fixed;
