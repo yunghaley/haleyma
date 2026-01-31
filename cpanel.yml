@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - /bin/cp -R . /home/haleymac/public_html/
+    - /bin/rm -rf /home/haleymac/public_html/.git
