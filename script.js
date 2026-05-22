@@ -178,17 +178,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let slideIndex = 0;
 const slides = document.querySelectorAll('.slide');
- 
+
 function showSlide(index) {
   slides.forEach((slide) => {
     slide.classList.remove('active');
   });
   slides[index].classList.add('active');
 }
- 
+
 function nextSlide() {
   slideIndex = (slideIndex + 1) % slides.length;
   showSlide(slideIndex);
 }
- 
-setInterval(nextSlide, 3000); // Change slide every 3 seconds
+
+showSlide(0);
+setInterval(nextSlide, 3000);

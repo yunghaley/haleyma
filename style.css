@@ -95,18 +95,17 @@ li:before {
 
 /* Slideshow */
 .slideshow-container {
-  position: relative;
-  overflow: hidden;
+  display: grid;
 }
 
 .slide {
+  grid-area: 1 / 1;
   width: 100%;
-  height: 100%;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 1s ease-in-out;
   padding: 5px;
 }
- 
+
 .slide.active {
   opacity: 1;
 }
