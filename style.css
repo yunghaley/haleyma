@@ -5,6 +5,7 @@
   font-family: "Inter", sans-serif;
   font-feature-settings: "zero", "liga", "ss01";
   font-variation-settings: "wght" 200 400 600 800;
+  --header-height: 41px;
 }
 
 @supports (font-variation-settings: normal) {
@@ -32,6 +33,10 @@
 
 body {
   background: rgb(237, 237, 237);
+}
+
+#page-content {
+  margin-top: var(--header-height);
 }
 
 a {
