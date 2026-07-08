@@ -276,10 +276,10 @@ video {
   pointer-events: none;
   background-color: rgb(237, 237, 237);
   background-image:
-    radial-gradient(40% 55% at 15% 20%, #ffd6e8 0%, transparent 100%),
-    radial-gradient(45% 60% at 85% 25%, #c9e4ff 0%, transparent 100%),
-    radial-gradient(50% 55% at 25% 85%, #fff3c4 0%, transparent 100%),
-    radial-gradient(45% 60% at 80% 80%, #d9c9ff 0%, transparent 100%);
+    radial-gradient(40% 55% at 15% 20%, #9e8784 0%, transparent 100%),
+    radial-gradient(45% 60% at 85% 25%, #77998F 0%, transparent 100%),
+    radial-gradient(50% 55% at 25% 85%, #BAC7DF 0%, transparent 100%),
+    radial-gradient(45% 60% at 80% 80%, #C1C8D0 0%, transparent 100%);
   background-size: 160% 160%;
   animation: bg-drift 40s ease-in-out infinite alternate;
 }
@@ -287,9 +287,10 @@ video {
 .bg-shader::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -10%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.06;
+  opacity: 0.25;
+  animation: grain-jitter 0.5s steps(1) infinite;
 }
 
 @keyframes bg-drift {
@@ -297,8 +298,23 @@ video {
   to { background-position: 100% 100%; }
 }
 
+/* Animated film grain (p5.grain-style texture shifting, pure CSS) */
+@keyframes grain-jitter {
+  0%, 100% { transform: translate(0, 0); }
+  12.5% { transform: translate(-2%, -3%); }
+  25%   { transform: translate(3%, 1%); }
+  37.5% { transform: translate(-1%, 2%); }
+  50%   { transform: translate(2%, -2%); }
+  62.5% { transform: translate(-3%, 1%); }
+  75%   { transform: translate(1%, 3%); }
+  87.5% { transform: translate(-2%, -1%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .bg-shader { animation: none; }
+  .bg-shader,
+  .bg-shader::after {
+    animation: none;
+  }
 }
 
 /* Scroll reveal (vanilla port of beUI ScrollReveal: slide + blur entrance) */
@@ -320,6 +336,9 @@ video {
 .slide img {
   width: 100%;
   height: auto;
+  max-height: 70vh;
+  max-height: 70svh;
+  object-fit: contain;
 }
 
 img.lazyload,
@@ -391,7 +410,7 @@ img.lazyloaded {
 
 /* Shimmer text (transitions.dev) — NOW section title */
 :root {
-  --shimmer-dur: 2000ms;
+  --shimmer-dur: 1200ms;
   --shimmer-base: #7c7c7c;
   --shimmer-highlight: #0d0d0d;
   --shimmer-band: 400%;
