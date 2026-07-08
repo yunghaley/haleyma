@@ -552,9 +552,19 @@ a.t-shimmer-hover:hover::before,
   transition: opacity 150ms ease;
 }
 
+/* Touch devices: controls auto-hide, reappear on tap (JS toggles .controls-visible) */
 @media (hover: none) {
-  .video-shell.is-playing .video-play {
+  .video-shell .video-play,
+  .video-shell .video-mute {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+  .video-shell.controls-visible .video-play,
+  .video-shell.controls-visible .video-mute,
+  .video-shell:not(.is-playing) .video-play {
     opacity: 1;
+    pointer-events: auto;
   }
 }
 

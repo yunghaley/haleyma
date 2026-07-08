@@ -275,5 +275,18 @@ document.querySelectorAll('video').forEach(video => {
   video.addEventListener('play', sync);
   video.addEventListener('pause', sync);
   video.addEventListener('volumechange', sync);
+
+  // Touch devices: auto-hide controls after 2s, reveal on tap inside the video
+  if (window.matchMedia('(hover: none)').matches) {
+    let hideTimer = null;
+    const showControls = () => {
+      shell.classList.add('controls-visible');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => shell.classList.remove('controls-visible'), 2000);
+    };
+    shell.addEventListener('click', showControls);
+    video.addEventListener('play', showControls);
+  }
+
   sync();
 });
