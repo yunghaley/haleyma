@@ -125,10 +125,10 @@ function showProjectAssets(projectId) {
   if (assetGroup) {
     assetGroup.classList.remove('hidden');
 
-    // Reset case-study scroll position
-    const caseStudy = assetGroup.querySelector('.case-study');
-    if (caseStudy) {
-      caseStudy.scrollTop = 0;
+    // Reset content column scroll position
+    const scrollCol = assetGroup.closest('.scroll-col');
+    if (scrollCol) {
+      scrollCol.scrollTop = 0;
     }
 
     // Replay number pop-in on stat digits (transitions.dev)
@@ -138,20 +138,13 @@ function showProjectAssets(projectId) {
       group.classList.add('is-animating');
     });
 
-    // Find and play any video in this project panel
-    const video = assetGroup.querySelector('video');
-    if (video) {
-      // Unmute and attempt to play
-      video.muted = false;
-      video.play().catch(error => {
-        console.log('Autoplay failed, falling back to muted:', error);
-        // If unmuted autoplay fails, try muted autoplay
-        video.muted = true;
-        video.play().catch(e => {
-          console.log('Muted autoplay also failed:', e);
-        });
+    // Play all videos muted — user opts into sound via the mute control
+    assetGroup.querySelectorAll('video').forEach(video => {
+      video.muted = true;
+      video.play().catch(e => {
+        console.log('Autoplay failed:', e);
       });
-    }
+    });
   }
 }
 
@@ -234,4 +227,53 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.case-study > *').forEach(block => {
   block.classList.add('reveal');
   revealObserver.observe(block);
+});
+
+// Custom video controls: centred play/pause + corner mute (replaces native controls)
+const VIDEO_ICONS = {
+  play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 5.6v12.8c0 .9 1 1.4 1.7 1l10.1-6.4c.7-.4.7-1.5 0-1.9L9.9 4.6c-.7-.4-1.7.1-1.7 1z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4.5" width="4.4" height="15" rx="1.5"/><rect x="13.6" y="4.5" width="4.4" height="15" rx="1.5"/></svg>',
+  sound: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/></svg>',
+  soundOff: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/><path d="M4.5 4.5l15 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
+};
+
+document.querySelectorAll('video').forEach(video => {
+  if (video.id === 'dither-src') return;
+
+  const shell = document.createElement('div');
+  shell.className = 'video-shell';
+  video.parentNode.insertBefore(shell, video);
+  shell.appendChild(video);
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'video-play';
+  playBtn.setAttribute('aria-label', 'Play or pause video');
+
+  const muteBtn = document.createElement('button');
+  muteBtn.className = 'video-mute';
+
+  shell.append(playBtn, muteBtn);
+
+  const sync = () => {
+    playBtn.innerHTML = video.paused ? VIDEO_ICONS.play : VIDEO_ICONS.pause;
+    shell.classList.toggle('is-playing', !video.paused);
+    muteBtn.innerHTML = video.muted ? VIDEO_ICONS.soundOff : VIDEO_ICONS.sound;
+    muteBtn.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
+  };
+
+  playBtn.addEventListener('click', () => {
+    if (video.paused) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
+  muteBtn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    sync();
+  });
+  video.addEventListener('play', sync);
+  video.addEventListener('pause', sync);
+  video.addEventListener('volumechange', sync);
+  sync();
 });
