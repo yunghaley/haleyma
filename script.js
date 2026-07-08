@@ -4,25 +4,25 @@ document.addEventListener('click', function(event) {
   const accordionItem = event.target.closest('.accordion-item');
   const sectionElement = event.target.closest('[data-section]');
   
-  // If clicking a nav toggle button (PROJECTS/INFO)
+  // If clicking a nav toggle button (NOW/PROJECTS/INFO)
   if (toggleElement) {
     const sectionType = toggleElement.getAttribute('data-target');
     const targetElement = document.querySelector(`[data-section="${sectionType}"]`);
-    
+
     if (targetElement) {
-      const isOpening = targetElement.classList.contains('hidden');
-      
-      // Always hide both sections first
-      document.querySelectorAll('[data-section]').forEach(section => {
-        section.classList.add('hidden');
-      });
-      
-      // Then show the target only if we're opening it
-      if (isOpening) {
-        targetElement.classList.remove('hidden');
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isHidden = getComputedStyle(targetElement).display === 'none';
+
+      // Mobile: exclusive — hide all sections first. Desktop: sections toggle independently.
+      if (!isDesktop) {
+        document.querySelectorAll('[data-section]').forEach(section => {
+          section.style.display = 'none';
+        });
       }
+
+      targetElement.style.display = isHidden ? 'block' : 'none';
     }
-  } 
+  }
 
   // If clicking the logo (data-project="default")
   else if (event.target.closest('[data-project="default"]')) {
@@ -40,10 +40,12 @@ document.addEventListener('click', function(event) {
     }
     // Close all accordions
     closeAllAccordions();
-    // Hide all sections (INFO/PROJECTS)
-    document.querySelectorAll('[data-section]').forEach(section => {
-      section.classList.add('hidden');
-    });
+    // Hide all sections (mobile only — desktop keeps the left column)
+    if (!window.matchMedia('(min-width: 768px)').matches) {
+      document.querySelectorAll('[data-section]').forEach(section => {
+        section.style.display = 'none';
+      });
+    }
   }
 
   // If clicking an accordion item
@@ -86,10 +88,12 @@ document.addEventListener('click', function(event) {
   }
   // If clicking anywhere else (outside dropdowns and accordion items)
   else if (!sectionElement) {
-    // Hide all dropdown sections
-    document.querySelectorAll('[data-section]').forEach(section => {
-      section.classList.add('hidden');
-    });
+    // Hide all dropdown sections (mobile only)
+    if (!window.matchMedia('(min-width: 768px)').matches) {
+      document.querySelectorAll('[data-section]').forEach(section => {
+        section.style.display = 'none';
+      });
+    }
   }
 });
 
@@ -120,7 +124,20 @@ function showProjectAssets(projectId) {
   const assetGroup = document.getElementById(`project-${projectId}`);
   if (assetGroup) {
     assetGroup.classList.remove('hidden');
-    
+
+    // Reset case-study scroll position
+    const caseStudy = assetGroup.querySelector('.case-study');
+    if (caseStudy) {
+      caseStudy.scrollTop = 0;
+    }
+
+    // Replay number pop-in on stat digits (transitions.dev)
+    assetGroup.querySelectorAll('.t-digit-group').forEach(group => {
+      group.classList.remove('is-animating');
+      void group.offsetHeight; // force reflow
+      group.classList.add('is-animating');
+    });
+
     // Find and play any video in this project panel
     const video = assetGroup.querySelector('video');
     if (video) {
@@ -142,14 +159,11 @@ function hideAllProjectAssets() {
   document.querySelectorAll('.project-panel').forEach(group => {
     group.classList.add('hidden');
     
-    // Pause and mute any videos in hidden panels
-    const video = group.querySelector('video');
-    if (video) {
-      video.muted = true;
-      video.pause();
-      // Optional: reset to beginning
-      // video.currentTime = 0;
-    }
+    // Pause and mute any videos/audio in hidden panels
+    group.querySelectorAll('video, audio').forEach(media => {
+      media.muted = true;
+      media.pause();
+    });
   });
 
   const defaultGroup = document.getElementById('project-default');
@@ -170,9 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
   // Ensure all videos in hidden project panels are muted and paused
-  document.querySelectorAll('.project-panel.hidden video').forEach(video => {
-    video.muted = true;
-    video.pause();
+  document.querySelectorAll('.project-panel.hidden video, .project-panel.hidden audio').forEach(media => {
+    media.muted = true;
+    media.pause();
   });
 });
 
@@ -193,3 +207,31 @@ function nextSlide() {
 
 showSlide(0);
 setInterval(nextSlide, 3000);
+
+// Braille spinner (vanilla port of beUI ascii-braille loader)
+const spinnerEl = document.getElementById('braille-spinner');
+if (spinnerEl) {
+  const frames = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const interval = 125 * (reducedMotion ? 2.5 : 1);
+  let frame = 0;
+  setInterval(() => {
+    frame = (frame + 1) % frames.length;
+    spinnerEl.textContent = frames[frame];
+  }, interval);
+}
+
+// Scroll reveal on case-study blocks (vanilla port of beUI ScrollReveal, once per block)
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.case-study > *').forEach(block => {
+  block.classList.add('reveal');
+  revealObserver.observe(block);
+});

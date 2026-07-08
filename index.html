@@ -20,24 +20,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body class="flex flex-col min-h-screen">
+  <div class="bg-shader" aria-hidden="true"></div>
   <div class="flex-1 flex flex-col items-center w-full">
   <!-- Header -->
   <header class="mb-1.5 z-50">
     <div class="m-1.5 fixed inset-x-0 z-50 flex justify-center">
-      <div class="max-w-7xl w-full bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
+      <div class="max-w-7xl w-full box">
         <div class="flex w-full p-1.5 gap-1.5 font-mono text-xl">
           <div data-project="default" class="cursor-pointer">
-            HALEY MA
+            <span class="t-shimmer-hover" data-text="HALEY MA">HALEY MA</span>
           </div>
           <div class="grow">
             <!-- Spacer -->
           </div>
+          <div data-target="now" class="cursor-pointer">
+            <span class="t-shimmer-hover" data-text="NOW">NOW</span>
+          </div>
           <div data-target="projects" class="cursor-pointer">
-            PROJECTS
-          </div> 
+            <span class="t-shimmer-hover" data-text="PROJECTS">PROJECTS</span>
+          </div>
           <div data-target="info" class="cursor-pointer">
-            INFO
-          </div> 
+            <span class="t-shimmer-hover" data-text="INFO">INFO</span>
+          </div>
         </div>
       </div>
     </div>
@@ -49,18 +53,20 @@
       <div class="max-w-7xl w-full mt-[41px] grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
         <!--INFO & PROJECT ACCORDION-->
         <div class="col-span-full md:col-span-6 flex flex-col">
-          <div data-section="info" class="md:block mt-1.5 md:z-0 w-full p-3 bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
+          <div data-section="info" class="md:block mt-1.5 md:z-0 w-full p-3 box">
             <div class="font-sans text-sm font-semibold mb-1.5">Creative and Photography Direction for Tech, Fashion, and Sportswear</div>
             <!-- Move to CV section??? -->
-            <div class="font-sans text-sm">As Head of Camera at <a href="https://www.lapse.com/">Lapse</a> in London, I led iOS app camera and photo processing development.    
-            My background is in video/photo creative and production for a range of global brands with <a href="https://www.akqa.com/">AKQA</a> London and Portland as well as <a href="https://yudstudio.com/">YUD Studio</a> in Toronto.
-            </div>
+            <div class="font-sans text-sm">Creative technologist and product builder. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring spatial computing and AI creative tools. Previously directed content for Nike, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, and British GQ.</div>
+          </div>
+          <div data-section="now" class="hidden md:block mt-1.5 md:z-0 w-full p-3 box">
+            <div class="font-sans text-sm font-semibold mb-1.5"><span class="t-shimmer" data-text="Now">Now</span></div>
+            <div class="font-sans text-sm">Building Trace — an iOS app for experiencing memories spatially. Running AI creative experiments (Stable Diffusion, agentic workflows, ElevenLabs). Available for freelance production.</div>
           </div>
           <section data-section="projects" class="hidden md:block mt-1.5 md:z-0 section">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
                   <!-- Description of Work Goes Here -->
-                  <div class="font-sans p-3 bg-white/60 backdrop-blur-xs text-stone-800 rounded-b-md border-[1px] border-white">
+                  <div class="font-sans p-3 box">
                     <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
                       <div class="col-span-8">project</div> 
                       <div class="col-span-4">client</div>
@@ -69,10 +75,10 @@
                       <div class="accordion-item cursor-pointer" data-project="stills-portfolio" aria-controls="panel-0" id="trigger-0">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            Photographer
+                            <span class="t-shimmer-hover" data-text="Stills Portfolio">Stills Portfolio</span>
                           </div>
                           <div class="col-span-3">
-                            Stills Portfolio
+                            Various
                           </div>
                           <div class="col-span-1 justify-self-end">
                             <button class="accordion-trigger" aria-expanded="false">
@@ -94,7 +100,7 @@
                       <div class="accordion-item cursor-pointer" data-project="lapse" aria-controls="panel-1" id="trigger-1">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                              Head of Camera
+                              <span class="t-shimmer-hover" data-text="Head of Camera">Head of Camera</span>
                           </div>
                           <div class="col-span-3">
                             Lapse
@@ -112,14 +118,14 @@
                             <li>creative direction</li>
                             <li>brand marketing</li>
                           </ul>
-                          <div class="text-sm">Architected Lapse's proprietary image processing pipeline, transforming iPhone photos into film-like images driving over 1.5M users, 1B snaps, and $40M raised. As a founding member, my role also spanned multiple disciplines including product design, product management, creative, marketing and strategy.</div>
+                          <div class="text-sm">Architected Lapse's proprietary image processing pipeline, transforming iPhone photos into film-like images driving over 1.5M users, 1B snaps, and $42M raised. As a founding member, my role also spanned multiple disciplines including product design, product management, creative, marketing and strategy.</div>
                         </div>                 
                       </div>
 
                       <div class="accordion-item cursor-pointer" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            Paul George "Keep Rising"
+                            <span class="t-shimmer-hover" data-text="Paul George &quot;Keep Rising&quot;">Paul George "Keep Rising"</span>
                           </div>
                           <div class="col-span-3">
                             Nike Basketball
@@ -143,7 +149,7 @@
                       <div class="accordion-item cursor-pointer" aria-controls="panel-3" id="trigger-3" data-project="sequence">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            "Hand Covers Bruise"
+                            <span class="t-shimmer-hover" data-text="&quot;Hand Covers Bruise&quot;">"Hand Covers Bruise"</span>
                           </div>
                           <div class="col-span-3">
                             Sequence
@@ -168,7 +174,7 @@
                       <div class="accordion-item cursor-pointer" aria-controls="panel-4" id="trigger-4" data-project="nike-football">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            Born Mercurial
+                            <span class="t-shimmer-hover" data-text="Born Mercurial">Born Mercurial</span>
                           </div>
                           <div class="col-span-3">
                             Nike Football
@@ -191,7 +197,7 @@
                       <div class="accordion-item cursor-pointer" aria-controls="panel-5" id="trigger-5" data-project="nike-buatsi">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            Buatsi
+                            <span class="t-shimmer-hover" data-text="Buatsi">Buatsi</span>
                           </div>
                           <div class="col-span-3">
                             Nike London
@@ -214,7 +220,7 @@
                       <div class="accordion-item cursor-pointer" aria-controls="panel-6" id="trigger-6" data-project="inter-miami-cf">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
-                            Inter Miami CF
+                            <span class="t-shimmer-hover" data-text="Inter Miami CF">Inter Miami CF</span>
                           </div>
                           <div class="col-span-3">
                             DB Ventures
@@ -231,10 +237,57 @@
                               <li>video editing</li>
                             </ul>
                           <div class="text-sm">At AKQA London, we played an instrumental role in the launch of Inter Miami CF. Work included on-the-ground research, interviews and content production for social media moments and announcements.</div>
-                        </div>  
+                        </div>
                       </div>
 
-                    </div>    
+                      <div class="accordion-item cursor-pointer" aria-controls="panel-7" id="trigger-7" data-project="trace">
+                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                          <div class="col-span-8">
+                            <span class="t-shimmer-hover" data-text="Founder">Founder</span>
+                          </div>
+                          <div class="col-span-3">
+                            Trace
+                          </div>
+                          <div class="col-span-1 justify-self-end">
+                            <button class="accordion-trigger" aria-expanded="false">
+                            </button>
+                          </div>
+                        </div>
+                        <div id="panel-7" class="accordion-panel">
+                            <ul class="text-xs">
+                              <li>ios</li>
+                              <li>swift</li>
+                              <li>spatial computing</li>
+                              <li>product design</li>
+                            </ul>
+                          <div class="text-sm">iOS app for experiencing memories spatially. Work in progress.</div>
+                        </div>
+                      </div>
+
+                      <div class="accordion-item cursor-pointer" aria-controls="panel-8" id="trigger-8" data-project="ai-experiments">
+                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
+                          <div class="col-span-8">
+                            <span class="t-shimmer-hover" data-text="Creative Technologist">Creative Technologist</span>
+                          </div>
+                          <div class="col-span-3">
+                            Personal
+                          </div>
+                          <div class="col-span-1 justify-self-end">
+                            <button class="accordion-trigger" aria-expanded="false">
+                            </button>
+                          </div>
+                        </div>
+                        <div id="panel-8" class="accordion-panel">
+                            <ul class="text-xs">
+                              <li>stable diffusion</li>
+                              <li>agentic workflows</li>
+                              <li>elevenlabs</li>
+                            </ul>
+                          <div class="text-sm">Ongoing experiments with Stable Diffusion, agentic workflows, and ElevenLabs voice/audio tools.</div>
+                        </div>
+                      </div>
+
+                    </div>
                 </div>
               </div>  
           </section>
@@ -243,14 +296,14 @@
         <!--CONTENT-->
         <div class="md:mt-1.5 col-span-full md:col-span-6 z-10 md:z-0 flex justify-center">
             <div id="project-default" class="project-panel">
-              <div class="m-0">
+              <div class="box p-3">
               <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" controls loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-stills-portfolio" class="project-panel hidden">
               <div class="flex flex-col items-center justify-center">
-                <div class="slideshow-container w-full max-w-4xl px-4">
+                <div class="slideshow-container w-full max-w-4xl box p-3">
                 <div class="slide flex items-center justify-center">
                     <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-0.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-0.jpg" alt="HM-StillsPortfolio-0" loading="lazy" class="lazyload">
                 </div>
@@ -313,40 +366,109 @@
             </div>
 
             <div id="project-lapse" class="project-panel hidden">
-              <div class="flex flex-col items-center justify-center">
-                <!-- <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" autoplay muted playsinline></video> -->
-                <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" controls loop muted playsinline preload="metadata"></video>
-                <!-- <img src="assets/projects/lapse/snap-submissions-hof-grid-screenshot-overlay.png" alt="Lapse Snap Submissions HoF"> -->
+              <div class="case-study">
+                <div class="box p-3">
+                  <div class="cs-metrics">
+                    <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit" data-stagger="1">B</span><span class="t-digit" data-stagger="2">+</span></div><div class="cs-label">snaps</div></div>
+                    <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit" data-stagger="1">#</span><span class="t-digit" data-stagger="2">1</span></div><div class="cs-label">US App Store</div></div>
+                    <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit">$</span><span class="t-digit">4</span><span class="t-digit">2</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div><div class="cs-label">raised</div></div>
+                    <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit">.</span><span class="t-digit">5</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div><div class="cs-label">users</div></div>
+                  </div>
+                  <div class="cs-label mt-1.5">Backed by Greylock, GV</div>
+                </div>
+                <div class="box p-3">
+                  <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" controls loop muted playsinline preload="metadata"></video>
+                </div>
+                <div class="box p-3 font-sans text-sm">
+                  <div class="cs-label mb-1.5">What I built</div>
+                  Proprietary iOS image processing pipeline — Swift, Core Image, Metal compute shaders.
+                </div>
+                <div class="box p-3 font-sans text-sm">
+                  <div class="cs-label mb-1.5">Role</div>
+                  Founding member, Head of Camera — pipeline design, app direction, brand marketing, social strategy.
+                </div>
+                <div class="box p-3">
+                  <div class="cs-label mb-1.5">Processing — before / after</div>
+                  <div class="cs-compare">
+                    <div class="cs-placeholder">before-after-1-before.jpg</div>
+                    <div class="cs-placeholder">before-after-1-after.jpg</div>
+                    <div class="cs-placeholder">before-after-2-before.jpg</div>
+                    <div class="cs-placeholder">before-after-2-after.jpg</div>
+                  </div>
+                </div>
+                <div class="box p-3">
+                  <div class="cs-label mb-1.5">In the app</div>
+                  <img src="assets/projects/lapse/snap-submissions-hof-grid.png" alt="Lapse Snap Submissions Hall of Fame grid" loading="lazy">
+                  <video class="mt-1.5" src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" controls loop muted playsinline preload="metadata"></video>
+                  <div class="cs-placeholder mt-1.5">app-screenshot-1.png</div>
+                </div>
+                <div class="box p-3 font-mono text-sm">Dec 2021 – Oct 2025 · dream-project → Series A</div>
               </div>
             </div>
 
             <div id="project-nike-basketball" class="project-panel hidden">
-              <div class="m-0">
+              <div class="box p-3">
               <video id="nike-basketball" src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising-live.mp4" controls loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-sequence" class="project-panel hidden">
-              <div class="m-0">
+              <div class="box p-3">
               <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" controls loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-nike-football" class="project-panel hidden">
-              <div class="m-0">
+              <div class="box p-3">
               <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" controls loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-nike-buatsi" class="project-panel hidden">
-              <div class="m-0">
+              <div class="box p-3">
                 <video src="assets/projects/nike-uk-buatsi/nike_uk_'buatsi' (1080p).mp4" controls loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-inter-miami-cf" class="project-panel hidden">
-              <div class="m-0">
+              <div class="box p-3">
                 <img src="assets/stills-portfolio/HM-StillsPortfolio-12.jpg" alt="inter-miami-cf-image" loading="lazy">
+              </div>
+            </div>
+
+            <div id="project-trace" class="project-panel hidden">
+              <div class="case-study">
+                <div class="box p-3 font-sans text-sm">
+                  <div class="cs-label mb-1.5">Concept</div>
+                  iOS app for experiencing memories spatially. Work in progress.
+                </div>
+                <div class="box p-3">
+                  <div class="cs-compare">
+                    <div class="cs-placeholder">trace/screenshot-1.png</div>
+                    <div class="cs-placeholder">trace/screenshot-2.png</div>
+                  </div>
+                </div>
+                <div class="box p-3">
+                  <div class="cs-placeholder">tech stack — copy needed</div>
+                </div>
+              </div>
+            </div>
+
+            <div id="project-ai-experiments" class="project-panel hidden">
+              <div class="case-study">
+                <div class="box p-3">
+                  <div class="cs-label mb-1.5">Image experiments</div>
+                  <div class="cs-compare">
+                    <div class="cs-placeholder">ai-experiments/sd-sample-1.png</div>
+                    <div class="cs-placeholder">ai-experiments/sd-sample-2.png</div>
+                  </div>
+                </div>
+                <div class="box p-3">
+                  <div class="cs-label mb-1.5">ElevenLabs — voice / audio</div>
+                  <div class="cs-placeholder">elevenlabs-tts-sample-1.mp3</div>
+                  <div class="cs-placeholder mt-1.5">elevenlabs-dubbing-sample-1.mp3</div>
+                  <div class="cs-placeholder mt-1.5">elevenlabs-video-sample-1.mp4</div>
+                </div>
               </div>
             </div>
 
@@ -365,8 +487,8 @@
   <!-- Contact Footer -->
   <footer class="z-50 footer fixed bottom-0 left-0 right-0">
     <div class="grid grid-cols-12 m-1.5 gap-1.5 relative w-full font-sans text-sm">
-      <div class="col-span-4"><a href="mailto:hm@haleyma.com">Email</a></div>
-      <div class="col-span-4"><a href="https://www.instagram.com/haleyma/">Instagram</a></div>
+      <div class="col-span-4"><a href="mailto:hm@haleyma.com" class="t-shimmer-hover" data-text="Email">Email</a></div>
+      <div class="col-span-4"><a href="https://www.instagram.com/haleyma/" class="t-shimmer-hover" data-text="Instagram">Instagram</a></div>
     </div>
   </footer>
   <script src="script.js"></script>
