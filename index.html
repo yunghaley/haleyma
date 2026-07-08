@@ -21,6 +21,8 @@
 </head>
 <body class="flex flex-col min-h-screen">
   <div class="bg-shader" aria-hidden="true"></div>
+  <canvas id="dither-bg" aria-hidden="true"></canvas>
+  <video id="dither-src" src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true"></video>
   <div class="flex-1 flex flex-col items-center w-full">
   <!-- Header -->
   <header class="mb-1.5 z-50">
@@ -42,6 +44,13 @@
           <div data-target="info" class="cursor-pointer">
             <span class="t-shimmer-hover" data-text="INFO">INFO</span>
           </div>
+          <a href="mailto:hm@haleyma.com" aria-label="Email" class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M3 12h18"/>
+              <ellipse cx="12" cy="12" rx="4.5" ry="9"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
@@ -52,17 +61,17 @@
     <!-- TODO: fix below magic number on margin top property -->
       <div class="max-w-7xl w-full mt-[41px] grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
         <!--INFO & PROJECT ACCORDION-->
-        <div class="col-span-full md:col-span-6 flex flex-col">
-          <div data-section="info" class="md:block mt-1.5 md:z-0 w-full p-3 box">
-            <div class="font-sans text-sm font-semibold mb-1.5">Creative and Photography Direction for Tech, Fashion, and Sportswear</div>
+        <div class="mt-1.5 col-span-full md:col-span-4 flex flex-col gap-1.5 scroll-col">
+          <div data-section="info" class="md:block md:z-0 w-full p-3 box">
+            <div class="font-sans text-sm font-semibold mb-1.5"><span class="t-shimmer" data-text="Info">Info</span></div>
             <!-- Move to CV section??? -->
-            <div class="font-sans text-sm">Creative technologist and product builder. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring spatial computing and AI creative tools. Previously directed content for Nike, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, and British GQ.</div>
+            <div class="font-sans text-sm">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring spatial computing and AI creative tools. Previously directed work for clients including Nike, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, Inter Miami CF, and British GQ.</div>
           </div>
-          <div data-section="now" class="hidden md:block mt-1.5 md:z-0 w-full p-3 box">
+          <div data-section="now" class="hidden md:block md:z-0 w-full p-3 box">
             <div class="font-sans text-sm font-semibold mb-1.5"><span class="t-shimmer" data-text="Now">Now</span></div>
-            <div class="font-sans text-sm">Building Trace — an iOS app for experiencing memories spatially. Running AI creative experiments (Stable Diffusion, agentic workflows, ElevenLabs). Available for freelance production.</div>
+            <div class="font-sans text-sm">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</div>
           </div>
-          <section data-section="projects" class="hidden md:block mt-1.5 md:z-0 section">
+          <section data-section="projects" class="hidden md:block md:z-0 section">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
                   <!-- Description of Work Goes Here -->
@@ -118,7 +127,7 @@
                             <li>creative direction</li>
                             <li>brand marketing</li>
                           </ul>
-                          <div class="text-sm">Architected Lapse's proprietary image processing pipeline, transforming iPhone photos into film-like images driving over 1.5M users, 1B snaps, and $42M raised. As a founding member, my role also spanned multiple disciplines including product design, product management, creative, marketing and strategy.</div>
+                          <div class="text-sm">Architected Lapse's proprietary image processing pipeline, transforming iPhone photos into film-like images. Backed by Greylock, DST Global, Google Ventures, and others.</div>
                         </div>                 
                       </div>
 
@@ -294,10 +303,10 @@
         </div>
 
         <!--CONTENT-->
-        <div class="md:mt-1.5 col-span-full md:col-span-6 z-10 md:z-0 flex justify-center">
+        <div class="md:mt-1.5 col-span-full md:col-span-8 z-10 md:z-0 flex justify-center scroll-col">
             <div id="project-default" class="project-panel">
               <div class="box p-3">
-              <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" controls loop muted playsinline preload="metadata"></video>
+              <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" loop muted playsinline autoplay preload="metadata"></video>
               </div>
             </div>
 
@@ -374,10 +383,9 @@
                     <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit">$</span><span class="t-digit">4</span><span class="t-digit">2</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div><div class="cs-label">raised</div></div>
                     <div class="cs-stat"><div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit">.</span><span class="t-digit">5</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div><div class="cs-label">users</div></div>
                   </div>
-                  <div class="cs-label mt-1.5">Backed by Greylock, GV</div>
                 </div>
                 <div class="box p-3">
-                  <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" controls loop muted playsinline preload="metadata"></video>
+                  <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" loop muted playsinline preload="metadata"></video>
                 </div>
                 <div class="box p-3 font-sans text-sm">
                   <div class="cs-label mb-1.5">What I built</div>
@@ -385,48 +393,47 @@
                 </div>
                 <div class="box p-3 font-sans text-sm">
                   <div class="cs-label mb-1.5">Role</div>
-                  Founding member, Head of Camera — pipeline design, app direction, brand marketing, social strategy.
+                  As a founding member and Head of Camera, I was responsible for the design and development of the proprietary, dynamic image pipeline, creative direction, product vision, brand marketing and social strategy.
                 </div>
                 <div class="box p-3">
-                  <div class="cs-label mb-1.5">Processing — before / after</div>
+                  <div class="cs-label mb-1.5">Lapse Image Processing — before / after</div>
                   <div class="cs-compare">
-                    <div class="cs-placeholder">before-after-1-before.jpg</div>
-                    <div class="cs-placeholder">before-after-1-after.jpg</div>
-                    <div class="cs-placeholder">before-after-2-before.jpg</div>
-                    <div class="cs-placeholder">before-after-2-after.jpg</div>
+                    <img src="assets/projects/lapse/beforeAfter/tina-before-c.jpg" alt="Before" loading="lazy">
+                    <img src="assets/projects/lapse/beforeAfter/tina-after-c.jpg" alt="After" loading="lazy">
                   </div>
                 </div>
                 <div class="box p-3">
-                  <div class="cs-label mb-1.5">In the app</div>
-                  <img src="assets/projects/lapse/snap-submissions-hof-grid.png" alt="Lapse Snap Submissions Hall of Fame grid" loading="lazy">
-                  <video class="mt-1.5" src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" controls loop muted playsinline preload="metadata"></video>
-                  <div class="cs-placeholder mt-1.5">app-screenshot-1.png</div>
+                  <div class="cs-label mb-1.5">In-App Experience</div>
+                  <video class="mt-1.5" src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" loop muted playsinline preload="metadata"></video>
                 </div>
-                <div class="box p-3 font-mono text-sm">Dec 2021 – Oct 2025 · dream-project → Series A</div>
+                <div class="box p-3">
+                  <div class="cs-label mb-1.5">1B+ snaps taken on Lapse Image Pipeline</div>
+                  <img src="assets/projects/lapse/snap-submissions-hof-grid.png" alt="Lapse Snap Submissions Hall of Fame grid" loading="lazy">
+                </div>
               </div>
             </div>
 
             <div id="project-nike-basketball" class="project-panel hidden">
               <div class="box p-3">
-              <video id="nike-basketball" src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising-live.mp4" controls loop muted playsinline preload="metadata"></video>
+              <video id="nike-basketball" src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising-live.mp4" loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-sequence" class="project-panel hidden">
               <div class="box p-3">
-              <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" controls loop muted playsinline preload="metadata"></video>
+              <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-nike-football" class="project-panel hidden">
               <div class="box p-3">
-              <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" controls loop muted playsinline preload="metadata"></video>
+              <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
             <div id="project-nike-buatsi" class="project-panel hidden">
               <div class="box p-3">
-                <video src="assets/projects/nike-uk-buatsi/nike_uk_'buatsi' (1080p).mp4" controls loop muted playsinline preload="metadata"></video>
+                <video src="assets/projects/nike-uk-buatsi/nike_uk_'buatsi' (1080p).mp4" loop muted playsinline preload="metadata"></video>
               </div>
             </div>
 
@@ -484,14 +491,19 @@
     <!-- <img class="bg-item bg-item--flower" src="assets/misc/hibiscus-flower-hm.png" alt=""> -->
   </div>
 
-  <!-- Contact Footer -->
-  <footer class="z-50 footer fixed bottom-0 left-0 right-0">
-    <div class="grid grid-cols-12 m-1.5 gap-1.5 relative w-full font-sans text-sm">
-      <div class="col-span-4"><a href="mailto:hm@haleyma.com" class="t-shimmer-hover" data-text="Email">Email</a></div>
-      <div class="col-span-4"><a href="https://www.instagram.com/haleyma/" class="t-shimmer-hover" data-text="Instagram">Instagram</a></div>
-    </div>
-  </footer>
   <script src="script.js"></script>
+  <!-- Dither background: disabled for now
+  <script type="module">
+    import { createDitherBg } from './dither.js';
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      createDitherBg({
+        canvas: document.getElementById('dither-bg'),
+        video: document.getElementById('dither-src'),
+        config: { shapeColor: '#272727' },
+      });
+    }
+  </script>
+  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 </div>
 </body>
