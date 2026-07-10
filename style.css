@@ -2,6 +2,16 @@
 
 /* --- mobile-first :root --- */
 :root {
+  --c-bg: rgb(237, 237, 237);
+  --c-primary: rgb(106, 0, 255);
+  --c-border: rgb(39, 39, 39);
+  --c-faint: rgba(39,39,39,0.7);
+  --c-white-trans: rgb(255 255 255 / 0.6);
+  --c-overlay: rgb(39 39 39 / 0.55);
+  --bg-pattern: radial-gradient(40% 55% at 15% 20%, #9e8784 0%, transparent 100%),
+                radial-gradient(45% 60% at 85% 25%, #77998F 0%, transparent 100%),
+                radial-gradient(50% 55% at 25% 85%, #BAC7DF 0%, transparent 100%),
+                radial-gradient(45% 60% at 80% 80%, #C1C8D0 0%, transparent 100%);
   font-family: "Inter", sans-serif;
   font-feature-settings: "zero", "liga", "ss01";
   font-variation-settings: "wght" 200 400 600 800;
@@ -31,11 +41,11 @@
 }
 
 body {
-  background: rgb(237, 237, 237);
+  background: var(--c-bg);
 }
 
 a {
-  color: rgb(106, 0, 255);
+  color: var(--c-primary);
 }
 
 h2 {
@@ -121,7 +131,7 @@ li:before {
 .accordion-item {
   margin-top: 6px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgb(39, 39, 39);
+  border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
 }
 
@@ -141,7 +151,7 @@ li:before {
   font-size: 0.9rem;
   transform-origin: center;
   transition: transform 0.42s cubic-bezier(0.34, 1.28, 0.64, 1);
-  color: rgb(39,39,39);
+  color: var(--c-border);
 }
 
 .accordion-trigger[aria-expanded="true"]::after {
@@ -242,7 +252,7 @@ li:before {
 
 /* Shared surface — single source of truth for boxed sections/blocks */
 .box {
-  background: rgb(255 255 255 / 0.6);
+  background: var(--c-white-trans);
   backdrop-filter: blur(4px);
   color: oklch(26.8% 0.007 34.298);
   border: 1px solid #fff;
@@ -259,17 +269,23 @@ video {
 }
 
 /* Pastel mesh gradient + grain background (vanilla port of beUI shader-background) */
-.bg-shader {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: rgb(237, 237, 237);
+.bg-pattern {
   background-image:
     radial-gradient(40% 55% at 15% 20%, #9e8784 0%, transparent 100%),
     radial-gradient(45% 60% at 85% 25%, #77998F 0%, transparent 100%),
     radial-gradient(50% 55% at 25% 85%, #BAC7DF 0%, transparent 100%),
     radial-gradient(45% 60% at 80% 80%, #C1C8D0 0%, transparent 100%);
+  background-size: 160% 160%;
+  animation: bg-drift 40s ease-in-out infinite alternate;
+}
+
+.bg-shader {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--c-bg);
+  background-image: var(--bg-pattern);
   background-size: 160% 160%;
   animation: bg-drift 40s ease-in-out infinite alternate;
 }
@@ -405,6 +421,7 @@ img.lazyloaded {
   --shimmer-highlight: #0d0d0d;
   --shimmer-band: 400%;
   --shimmer-ease: linear;
+  --shimmer-primary: var(--c-primary);
 }
 
 .t-shimmer {
@@ -470,8 +487,8 @@ img.lazyloaded {
 }
 
 a.t-shimmer-hover {
-  --shimmer-hover-base: #b58aff;
-  --shimmer-hover-highlight: rgb(106, 0, 255);
+  --shimmer-hover-base: var(--c-primary);
+  --shimmer-hover-highlight: var(--c-primary);
 }
 
 a.t-shimmer-hover:hover,
@@ -516,8 +533,8 @@ a.t-shimmer-hover:hover::before,
 .video-shell button {
   font-family: "XanhMono", monospace;
   color: #fff;
-  background: rgb(39 39 39 / 0.55);
-  border: 1px solid rgb(255 255 255 / 0.4);
+  background: var(--c-overlay);
+  border: 1px solid rgba(255,255,255,0.4);
   border-radius: 0.375rem;
   cursor: pointer;
   backdrop-filter: blur(4px);
