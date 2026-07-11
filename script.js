@@ -210,6 +210,18 @@ if (spinnerEl) {
   setInterval(() => { frame = (frame + 1) % frames.length; spinnerEl.textContent = frames[frame]; }, interval);
 }
 
+// --- Nav marquee: pause on hover ---
+// Uses the Web Animations API instead of a CSS :hover play-state rule: pausing a
+// long-running compositor animation via style recalc can snap the track to a stale
+// position; animation.pause() freezes it exactly where it is.
+function initMarqueeHoverPause() {
+  const marquee = document.querySelector('.nav-marquee');
+  const track = marquee && marquee.querySelector('.nav-marquee-track');
+  if (!track) return;
+  marquee.addEventListener('mouseenter', () => track.getAnimations().forEach(a => a.pause()));
+  marquee.addEventListener('mouseleave', () => track.getAnimations().forEach(a => a.play()));
+}
+
 // --- Scroll fade: hint at overflow content below a scroll column ---
 function initScrollFade() {
   document.querySelectorAll('.scroll-col').forEach(col => {
@@ -231,4 +243,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideoControls();
   initCaseStudyReveal();
   initScrollFade();
+  initMarqueeHoverPause();
 });

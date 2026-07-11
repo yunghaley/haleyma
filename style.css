@@ -717,6 +717,50 @@ a.t-shimmer-hover:hover::before,
   }
 }
 
+/* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
+.content-offset {
+  margin-top: 82px;
+}
+
+/* Nav logo / static NOW label: fixed width, no shrink, no wrap */
+.nav-logo {
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: left;
+  align-self: center;
+}
+
+/* Nav marquee (NOW ticker between logo and nav buttons) */
+.nav-marquee {
+  min-width: 0;
+  overflow: hidden;
+  align-self: center;
+  --nav-marquee-pad: 0 var(--sp-4); /* adjustment knob: tweak marquee side padding */
+  padding: var(--nav-marquee-pad);
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+}
+
+.nav-marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: nav-marquee-scroll 60s linear infinite;
+}
+
+.nav-marquee-item {
+  padding-right: var(--sp-10);
+}
+
+@keyframes nav-marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-marquee-track {
+    animation: none;
+  }
+}
+
 /* Nav icon button (globe / email) */
 .nav-icon {
   display: inline-flex;

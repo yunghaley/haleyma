@@ -55,17 +55,12 @@
 
     <nav aria-label="Primary navigation">
     <div class="m-1.5 fixed inset-x-0 z-50 flex justify-center">
-      <div class="max-w-7xl w-full box">
-        <div class="flex w-full p-1.5 gap-1.5 font-mono text-xl">
-          <button data-project="default" class="cursor-pointer" aria-label="Home" aria-controls="project-default">
+      <div class="max-w-7xl w-full flex flex-col gap-1.5">
+        <div class="flex w-full p-1.5 gap-1.5 font-mono text-xl box">
+          <button data-project="default" class="cursor-pointer nav-logo" aria-label="Home" aria-controls="project-default">
             <span class="t-shimmer-hover" data-text="HALEY MA">HALEY MA</span>
           </button>
-          <div class="grow">
-            <!-- Spacer -->
-          </div>
-          <button data-target="now" class="cursor-pointer" aria-controls="section-now" aria-expanded="false">
-            <span class="t-shimmer-hover" data-text="NOW">NOW</span>
-          </button>
+          <div class="grow"><!-- Spacer --></div>
           <button data-target="projects" class="cursor-pointer" aria-controls="section-projects" aria-expanded="false">
             <span class="t-shimmer-hover" data-text="PROJECTS">PROJECTS</span>
           </button>
@@ -80,6 +75,15 @@
             </svg>
           </a>
         </div>
+        <div class="w-full box p-1.5 font-sans text-sm flex">
+          <span class="t-shimmer-hover nav-logo" data-text="NOW: ">NOW: </span>
+          <div class="grow nav-marquee">
+            <div class="nav-marquee-track">
+              <span class="nav-marquee-item">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
+              <span class="nav-marquee-item" aria-hidden="true">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 </nav>
@@ -90,17 +94,13 @@
   
     <div class="ml-1.5 mr-1.5 z-40">
     <!-- TODO: fix below magic number on margin top property -->
-      <div class="max-w-7xl w-full mt-[41px] grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
+      <div class="max-w-7xl w-full content-offset grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
         <!--INFO & PROJECT ACCORDION-->
         <div class="mt-1.5 col-span-full md:col-span-4 flex flex-col gap-1.5 scroll-col">
           <div data-section="info" class="md:block md:z-0 w-full p-3 box">
             <div class="font-sans text-sm font-semibold mb-1.5"><span class="t-shimmer" data-text="Info">Info</span></div>
             <!-- Move to CV section??? -->
             <div class="font-sans text-sm">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring spatial computing and AI creative tools. Previously directed work for clients including Nike, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, Inter Miami CF, and British GQ.</div>
-          </div>
-          <div data-section="now" class="hidden md:block md:z-0 w-full p-3 box">
-            <div class="font-sans text-sm font-semibold mb-1.5"><span class="t-shimmer" data-text="Now">Now</span></div>
-            <div class="font-sans text-sm">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</div>
           </div>
           <section data-section="projects" class="hidden md:block md:z-0 section">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
