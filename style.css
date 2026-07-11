@@ -31,6 +31,7 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
+  --fs-hero: clamp(2.75rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
 }
   --c-bg: rgb(237, 237, 237);
   --c-primary: rgb(106, 0, 255);
@@ -76,6 +77,19 @@ body {
 
 a {
   color: var(--c-primary);
+}
+
+h1 {
+  font-size: var(--fs-xl);
+  font-weight: 300;
+}
+
+/* Hero display text (Info statement) */
+.t-hero {
+  font-size: var(--fs-hero);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 h2 {
@@ -560,7 +574,8 @@ img.lazyloaded {
 
 a.t-shimmer-hover {
   --shimmer-hover-base: var(--c-primary);
-  --shimmer-hover-highlight: var(--c-primary);
+  /* Highlight must differ from the base colour or the sweep is invisible */
+  --shimmer-hover-highlight: #fff;
 }
 
 a.t-shimmer-hover:hover,
