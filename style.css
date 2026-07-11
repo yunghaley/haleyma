@@ -686,6 +686,13 @@ a.t-shimmer-hover:hover::before,
   }
 }
 
+/* Registered so --scroll-fade can transition (typed as a number, not a raw token) */
+@property --scroll-fade {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
 /* Desktop: left (info/now/projects) and right (content) columns scroll independently, bars hidden */
 @media (min-width: 768px) {
   .scroll-col {
@@ -697,10 +704,16 @@ a.t-shimmer-hover:hover::before,
   .scroll-col::-webkit-scrollbar {
     display: none;
   }
-  /* Fade bottom edge when more content is scrollable below (class toggled in script.js) */
+  /* Fade bottom edge when more content is scrollable below (class toggled in script.js).
+     Mask stays applied; --scroll-fade animates the end-stop alpha so the fade eases in/out. */
+  .scroll-col {
+    --scroll-fade: 1;
+    transition: --scroll-fade 300ms ease;
+    mask-image: linear-gradient(to bottom, black calc(100% - 56px), rgb(0 0 0 / var(--scroll-fade)));
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 56px), rgb(0 0 0 / var(--scroll-fade)));
+  }
   .scroll-col.has-more {
-    mask-image: linear-gradient(to bottom, black calc(100% - 56px), transparent);
-    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 56px), transparent);
+    --scroll-fade: 0;
   }
 }
 
