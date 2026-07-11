@@ -799,6 +799,37 @@ body:has(.overlay-section[style*="block"]) footer {
   max-height: none;
 }
 
+/* Keynote-style slide scroll for case studies (class toggled in script.js when the
+   active project panel contains a .case-study). Each block becomes one viewport-high
+   slide that snaps to centre; scroll-driven animation fades/scales it in as it enters.
+   ponytail: snap only works on desktop (.scroll-col is the scroll container there);
+   mobile scrolls the page, so it gets the slide animation but not the snap. */
+.snap-slides {
+  scroll-snap-type: y mandatory;
+}
+.snap-slides .case-study > * {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  min-height: calc(100svh - 94px); /* one slide per viewport; tracks .content-col offset */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@supports (animation-timeline: view()) {
+  .snap-slides .case-study > * {
+    animation: t-slide-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 70%;
+  }
+}
+@keyframes t-slide-in {
+  from { opacity: 0; transform: scale(0.94) translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snap-slides .case-study > * { animation: none !important; }
+}
+
 /* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
 .content-offset {
   margin-top: 82px;

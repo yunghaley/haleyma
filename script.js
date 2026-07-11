@@ -175,6 +175,7 @@ function hideAllProjectAssets() {
   });
   const defaultGroup = document.getElementById('project-default');
   if (defaultGroup) defaultGroup.classList.remove('hidden');
+  document.querySelectorAll('.snap-slides').forEach(el => el.classList.remove('snap-slides'));
 }
 
 function closeAllAccordions(except = null) {
@@ -198,7 +199,11 @@ function showProjectAssets(projectId) {
   if (assetGroup) {
     assetGroup.classList.remove('hidden');
     const scrollCol = assetGroup.closest('.scroll-col');
-    if (scrollCol) scrollCol.scrollTop = 0;
+    if (scrollCol) {
+      scrollCol.scrollTop = 0;
+      // Keynote-style slide scrolling for case-study projects
+      scrollCol.classList.toggle('snap-slides', !!assetGroup.querySelector('.case-study'));
+    }
     assetGroup.querySelectorAll('.t-digit-group').forEach(g => {
       g.classList.remove('is-animating');
       void g.offsetHeight;
