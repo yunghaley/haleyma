@@ -763,6 +763,27 @@ body:has(.overlay-section[style*="block"]) footer {
   -webkit-backdrop-filter: none;
 }
 
+/* Centre the visible project panel vertically in the viewport (all sizes).
+   min-height = viewport minus fixed header (magic number, tracks .content-offset).
+   margin-block auto (not align-items: center) so panels taller than the viewport
+   collapse the margins to 0 and still scroll from the top instead of clipping. */
+.content-col {
+  min-height: calc(100svh - 94px);
+}
+.content-col > .project-panel {
+  margin-block: auto;
+}
+
+/* Reel fills the full-width content column instead of shrinking to its natural size */
+#project-default,
+#project-default .box {
+  width: 100%;
+}
+#project-default video {
+  width: 100%;
+  max-height: none;
+}
+
 /* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
 .content-offset {
   margin-top: 82px;
