@@ -697,6 +697,11 @@ a.t-shimmer-hover:hover::before,
   .scroll-col::-webkit-scrollbar {
     display: none;
   }
+  /* Fade bottom edge when more content is scrollable below (class toggled in script.js) */
+  .scroll-col.has-more {
+    mask-image: linear-gradient(to bottom, black calc(100% - 56px), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 56px), transparent);
+  }
 }
 
 /* Nav icon button (globe / email) */

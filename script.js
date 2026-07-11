@@ -210,10 +210,25 @@ if (spinnerEl) {
   setInterval(() => { frame = (frame + 1) % frames.length; spinnerEl.textContent = frames[frame]; }, interval);
 }
 
+// --- Scroll fade: hint at overflow content below a scroll column ---
+function initScrollFade() {
+  document.querySelectorAll('.scroll-col').forEach(col => {
+    const update = () => {
+      col.classList.toggle('has-more', col.scrollHeight - col.scrollTop - col.clientHeight > 1);
+    };
+    col.addEventListener('scroll', update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(col);
+    [...col.children].forEach(child => ro.observe(child)); // accordion/panel toggles change content height
+    update();
+  });
+}
+
 // Initialise all modules on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initAccordion();
   initVideoControls();
   initCaseStudyReveal();
+  initScrollFade();
 });
