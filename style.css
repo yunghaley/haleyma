@@ -3,16 +3,16 @@
 /* --- mobile-first :root --- */
 :root {
   /* Colors */
-  --c-bg: rgb(237, 237, 237);
-  --c-primary: rgb(106, 0, 255);
-  --c-border: rgb(39, 39, 39);
+  --c-bg: rgb(0, 0, 0);
+  --c-primary: rgb(218, 192, 255);
+  --c-border: rgb(255, 255, 255);
   --c-faint: rgba(39,39,39,0.7);
-  --c-white-trans: rgb(255 255 255 / 0.6);
+  --c-white-trans: rgb(255 255 255 / 0);
   --c-overlay: rgb(39 39 39 / 0.55);
-  --bg-pattern: radial-gradient(40% 55% at 15% 20%, #9e8784 0%, transparent 100%),
-                radial-gradient(45% 60% at 85% 25%, #77998F 0%, transparent 100%),
-                radial-gradient(50% 55% at 25% 85%, #BAC7DF 0%, transparent 100%),
-                radial-gradient(45% 60% at 80% 80%, #C1C8D0 0%, transparent 100%);
+  --bg-pattern: radial-gradient(40% 55% at 15% 20%, #160808 0%, transparent 100%),
+                radial-gradient(45% 60% at 85% 25%, #0d1a16 0%, transparent 100%),
+                radial-gradient(50% 55% at 25% 85%, #0e0f10 0%, transparent 100%),
+                radial-gradient(45% 60% at 80% 80%, #0b0c0d 0%, transparent 100%);
   font-family: "Inter", sans-serif;
   font-feature-settings: "zero", "liga", "ss01";
   font-variation-settings: "wght" 200 400 600 800;
@@ -285,8 +285,8 @@ li:before {
 .box {
   background: var(--c-white-trans);
   backdrop-filter: blur(4px);
-  color: oklch(26.8% 0.007 34.298);
-  border: 1px solid #fff;
+  color: oklch(100% 0.00011 271.152);
+  /* border: 1px solid #fff; */
   border-radius: 0 0 0.375rem 0.375rem;
 }
 
