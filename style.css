@@ -717,6 +717,52 @@ a.t-shimmer-hover:hover::before,
   }
 }
 
+/* INFO & PROJECTS render as a full-width centred viewport overlay on all sizes.
+   Toggled via inline style.display in script.js (overrides the display:none below). */
+.overlay-section {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 45;
+  width: calc(100vw - 12px); /* aligns with the nav bar's m-1.5 (6px) side insets */
+  max-width: 80rem; /* matches nav's max-w-7xl cap on very large displays */
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Left column's children are now fixed-position overlays, so it renders nothing —
+   drop it from the grid track so the content column isn't pushed or gapped. */
+.content-offset > div:first-child {
+  display: contents;
+}
+
+/* Blur the whole page behind an open overlay. Blur is applied to the overlay's
+   siblings (content, bg layers, footer) — never an ancestor, since filter would
+   blur the overlay too and break its fixed positioning. Nav is z-50, above it all.
+   JS opens overlays via inline style.display = 'block', hence the [style*=] hook. */
+.content-col,
+.bg-shader,
+#dither-bg,
+footer {
+  transition: filter 350ms ease;
+}
+body:has(.overlay-section[style*="block"]) .content-col,
+body:has(.overlay-section[style*="block"]) .bg-shader,
+body:has(.overlay-section[style*="block"]) #dither-bg,
+body:has(.overlay-section[style*="block"]) footer {
+  filter: blur(8px);
+}
+
+/* The page behind is already blurred — drop the .box backdrop blur inside overlays
+   so it doesn't double up (nav/marquee boxes keep theirs). */
+.overlay-section,
+.overlay-section .box {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 /* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
 .content-offset {
   margin-top: 82px;

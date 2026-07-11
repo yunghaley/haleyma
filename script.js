@@ -9,11 +9,9 @@ function initNav() {
       const sectionType = toggleElement.getAttribute('data-target');
       const target = document.querySelector(`[data-section="${sectionType}"]`);
       if (target) {
-        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
         const isHidden = getComputedStyle(target).display === 'none';
-        if (!isDesktop) {
-          document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
-        }
+        // Overlays are mutually exclusive: opening one dismisses the other.
+        document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
         target.style.display = isHidden ? 'block' : 'none';
       }
     } else if (logoElement) {
@@ -29,46 +27,66 @@ function initNav() {
         }
       }
       closeAllAccordions();
-      if (!window.matchMedia('(min-width: 768px)').matches) {
-        document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
-      }
+      // Logo resets home: dismiss all overlays.
+      document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
     }
   });
 }
 
 // --- Accordion handling ---
+// Hover-capable devices: hovering an item expands it and previews the project
+// content behind the overlay; clicking commits (closes the overlay).
+// Touch devices: tap expands, previews, and closes the overlay in one go.
+function expandAccordionItem(accordionItem) {
+  closeAllAccordions(accordionItem);
+  accordionItem.setAttribute('aria-expanded', 'true');
+  const trigger = accordionItem.querySelector('.accordion-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', 'true');
+  const panel = document.getElementById(accordionItem.getAttribute('aria-controls'));
+  if (panel) {
+    panel.classList.add('is-open');
+    panel.setAttribute('aria-hidden', 'false');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+  }
+  showProjectAssets(accordionItem.getAttribute('data-project'));
+}
+
+function closeProjectsOverlay() {
+  const projectsSection = document.querySelector('[data-section="projects"]');
+  if (projectsSection) projectsSection.style.display = 'none';
+}
+
 function initAccordion() {
+  const canHover = window.matchMedia('(hover: hover)').matches;
   document.addEventListener('click', function(event) {
     const accordionItem = event.target.closest('.accordion-item');
-    if (!accordionItem) return;
-    const panel = document.getElementById(accordionItem.getAttribute('aria-controls'));
-    const trigger = accordionItem.querySelector('.accordion-trigger');
-    const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
-    const triggerOpen = trigger.getAttribute('aria-expanded') === 'true';
-
-    trigger.setAttribute('aria-expanded', (!triggerOpen).toString());
-    if (isOpen) {
-      // close
-      accordionItem.setAttribute('aria-expanded', 'false');
-      if (panel) {
-        panel.style.maxHeight = null;
-        panel.setAttribute('aria-hidden', 'true');
-        panel.classList.remove('is-open');
+    if (accordionItem) {
+      const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        // Desktop: click after hover-expand. Touch: second tap. Either way — commit.
+        closeProjectsOverlay();
+      } else {
+        expandAccordionItem(accordionItem);
+        // Desktop click commits immediately; touch first tap keeps the overlay
+        // open (two-tap: expand + preview first, commit on the second tap).
+        if (canHover) closeProjectsOverlay();
       }
-      hideAllProjectAssets();
-    } else {
-      // open – close others first
-      closeAllAccordions(accordionItem);
-      accordionItem.setAttribute('aria-expanded', 'true');
-      if (panel) {
-        panel.classList.add('is-open');
-        panel.setAttribute('aria-hidden', 'false');
-        panel.style.maxHeight = panel.scrollHeight + 'px';
-      }
-      const projectID = accordionItem.getAttribute('data-project');
-      showProjectAssets(projectID);
+      return;
     }
+    // Click/tap outside the open PROJECTS overlay dismisses it and reveals the
+    // current preview/selection — except in the nav, whose buttons self-manage.
+    const projectsSection = document.querySelector('[data-section="projects"]');
+    if (!projectsSection || getComputedStyle(projectsSection).display === 'none') return;
+    if (event.target.closest('[data-section="projects"]') || event.target.closest('nav')) return;
+    closeProjectsOverlay();
   });
+  if (canHover) {
+    document.addEventListener('mouseover', function(event) {
+      const accordionItem = event.target.closest('.accordion-item');
+      if (!accordionItem || accordionItem.getAttribute('aria-expanded') === 'true') return;
+      expandAccordionItem(accordionItem);
+    });
+  }
 }
 
 // --- Video controls (play / pause, mute) ---
