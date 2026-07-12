@@ -142,6 +142,7 @@ function initVideoControls() {
       };
       shell.addEventListener('click', showControls);
       video.addEventListener('play', showControls);
+      showControls();
     }
     sync();
   });
@@ -247,9 +248,10 @@ function initMarqueeHoverPause() {
 
 // --- Scroll fade: hint at overflow content below a scroll column ---
 function initScrollFade() {
-  document.querySelectorAll('.scroll-col').forEach(col => {
+  document.querySelectorAll('.scroll-fade').forEach(col => {
     const update = () => {
       col.classList.toggle('has-more', col.scrollHeight - col.scrollTop - col.clientHeight > 1);
+      col.classList.toggle('has-prev', col.scrollTop > 1);
     };
     col.addEventListener('scroll', update, { passive: true });
     const ro = new ResizeObserver(update);

@@ -4,7 +4,7 @@
 :root {
   /* Colors */
   --c-bg: rgb(0, 0, 0);
-  --c-primary: rgb(218, 192, 255);
+  --c-primary: rgb(65, 13, 255);
   --c-border: rgb(255, 255, 255);
   --c-faint: rgba(39,39,39,0.7);
   --c-white-trans: rgb(255 255 255 / 0);
@@ -31,7 +31,10 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
-  --fs-hero: clamp(2.75rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero: clamp(2.35rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
+  /* Overlay background blur */
+  --overlay-bg-blur: 8px;
+  --overlay-bg-dim: 0.5; /* brightness behind an open overlay: 1 = none, 0 = black */
 }
   --c-bg: rgb(237, 237, 237);
   --c-primary: rgb(106, 0, 255);
@@ -298,7 +301,6 @@ li:before {
 /* Shared surface — single source of truth for boxed sections/blocks */
 .box {
   background: var(--c-white-trans);
-  backdrop-filter: blur(4px);
   color: oklch(100% 0.00011 271.152);
   /* border: 1px solid #fff; */
   border-radius: 0 0 0.375rem 0.375rem;
@@ -311,46 +313,6 @@ video {
   width: auto;
   max-width: 100%;
   margin-inline: auto;
-}
-
-/* Video controls – mute always visible, play shown on hover or touch */
-.video-shell {
-  position: relative;
-  overflow: hidden;
-}
-.video-shell .video-play {
-  position: absolute;
-  bottom: 0.8rem;
-  right: 0.8rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: #fff;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  font-size: 1rem;
-}
-.video-shell .video-mute {
-  position: absolute;
-  bottom: 0.8rem;
-  right: 0.8rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: #fff;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  font-size: 1rem;
-}
-.video-shell:hover .video-play,
-.video-shell:hover .video-mute,
-.video-shell.controls-visible .video-play,
-.video-shell.controls-visible .video-mute {
-  opacity: 1;
 }
 
 /* Pastel mesh gradient + grain background (vanilla port of beUI shader-background) */
@@ -413,7 +375,7 @@ video {
   .reveal {
     opacity: 0;
     transform: translateY(16px);
-    filter: blur(8px);
+    filter: blur(var(--overlay-bg-blur));
     transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
   }
   .reveal.revealed {
@@ -434,7 +396,7 @@ video {
 
 img.lazyload,
 img.lazyloading {
-  filter: blur(12px);
+  filter: blur(var(--overlay-bg-blur));
 }
 
 img.lazyloaded {
@@ -578,14 +540,25 @@ a.t-shimmer-hover {
   --shimmer-hover-highlight: #fff;
 }
 
-a.t-shimmer-hover:hover,
-:is([data-target], [data-project="default"], .accordion-item):hover .t-shimmer-hover {
-  color: var(--shimmer-hover-base, var(--shimmer-base));
+/* Hover shimmer only on devices with real hover — touch browsers make :hover
+   stick after a tap. Touch gets a plain :active colour change instead (below). */
+@media (hover: hover) {
+  a.t-shimmer-hover:hover,
+  :is([data-target], [data-project="default"], .accordion-item):hover .t-shimmer-hover {
+    color: var(--shimmer-hover-base, var(--shimmer-base));
+  }
+  a.t-shimmer-hover:hover::before,
+  :is([data-target], [data-project="default"], .accordion-item):hover .t-shimmer-hover::before {
+    opacity: 1;
+    animation: t-shimmer var(--shimmer-dur) var(--shimmer-ease) infinite;
+  }
 }
-a.t-shimmer-hover:hover::before,
-:is([data-target], [data-project="default"], .accordion-item):hover .t-shimmer-hover::before {
-  opacity: 1;
-  animation: t-shimmer var(--shimmer-dur) var(--shimmer-ease) infinite;
+/* Touch: plain colour change while the finger is down — no shimmer sweep */
+@media (hover: none) {
+  a.t-shimmer-hover:active,
+  :is([data-target], [data-project="default"], .accordion-item):active .t-shimmer-hover {
+    color: var(--shimmer-hover-base, var(--shimmer-base));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -615,16 +588,17 @@ a.t-shimmer-hover:hover::before,
   position: relative;
   width: fit-content;
   margin-inline: auto;
+  /* Single source of truth for every control button's hit box + icon size */
+  --video-ctrl-size: 28px;
+  --video-ctrl-icon-size: 16px;
 }
 
 .video-shell button {
-  font-family: "XanhMono", monospace;
   color: #fff;
-  background: var(--c-overlay);
-  border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 0.375rem;
+  background: none;
+  border: none;
   cursor: pointer;
-  backdrop-filter: blur(4px);
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.5));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -632,10 +606,10 @@ a.t-shimmer-hover:hover::before,
 
 .video-play {
   position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 56px;
-  height: 56px;
+  left: var(--sp-2);
+  bottom: var(--sp-2);
+  width: var(--video-ctrl-size);
+  height: var(--video-ctrl-size);
   transition: opacity 150ms ease;
 }
 
@@ -643,16 +617,22 @@ a.t-shimmer-hover:hover::before,
   opacity: 0;
 }
 
-.video-shell.is-playing:hover .video-play,
 .video-shell.is-playing .video-play:focus-visible {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .video-shell.is-playing:hover .video-play {
+    opacity: 1;
+  }
 }
 
 .video-mute {
   position: absolute;
   right: var(--sp-2);
   bottom: var(--sp-2);
-  padding: var(--sp-2);
+  width: var(--video-ctrl-size);
+  height: var(--video-ctrl-size);
   transition: opacity 150ms ease;
 }
 
@@ -665,8 +645,7 @@ a.t-shimmer-hover:hover::before,
     transition: opacity 150ms ease;
   }
   .video-shell.controls-visible .video-play,
-  .video-shell.controls-visible .video-mute,
-  .video-shell:not(.is-playing) .video-play {
+  .video-shell.controls-visible .video-mute {
     opacity: 1;
     pointer-events: auto;
   }
@@ -680,14 +659,10 @@ a.t-shimmer-hover:hover::before,
 }
 
 /* Video control icons (SF Symbols-style inline SVG) */
-.video-play svg {
-  width: 22px;
-  height: 22px;
-}
-
+.video-play svg,
 .video-mute svg {
-  width: 14px;
-  height: 14px;
+  width: var(--video-ctrl-icon-size);
+  height: var(--video-ctrl-icon-size);
   display: block;
 }
 
@@ -707,6 +682,11 @@ a.t-shimmer-hover:hover::before,
   inherits: false;
   initial-value: 1;
 }
+@property --scroll-fade-top {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
 
 /* Desktop: left (info/now/projects) and right (content) columns scroll independently, bars hidden */
 @media (min-width: 768px) {
@@ -719,18 +699,26 @@ a.t-shimmer-hover:hover::before,
   .scroll-col::-webkit-scrollbar {
     display: none;
   }
-  /* Fade bottom edge when more content is scrollable below (class toggled in script.js).
-     Mask stays applied; --scroll-fade animates the end-stop alpha so the fade eases in/out. */
-  .scroll-col {
-    --scroll-fade: 1;
-    transition: --scroll-fade 300ms ease;
-    mask-image: linear-gradient(to bottom, black calc(100% - 56px), rgb(0 0 0 / var(--scroll-fade)));
-    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 56px), rgb(0 0 0 / var(--scroll-fade)));
-  }
-  .scroll-col.has-more {
-    --scroll-fade: 0;
-  }
 }
+
+/* Scroll-edge fade — single source of truth for every scrollable surface.
+   script.js (initScrollFade) toggles has-prev/has-more; each edge's alpha is a
+   registered --scroll-fade* var so it eases independently. Mask is inert when
+   nothing scrolls (both vars stay 1 = fully opaque). */
+.scroll-fade {
+  --scroll-fade-top: 1;
+  --scroll-fade: 1;
+  --scroll-fade-size: 56px;
+  transition: --scroll-fade 300ms ease, --scroll-fade-top 300ms ease;
+  mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / var(--scroll-fade-top)), black var(--scroll-fade-size),
+    black calc(100% - var(--scroll-fade-size)), rgb(0 0 0 / var(--scroll-fade)));
+  -webkit-mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / var(--scroll-fade-top)), black var(--scroll-fade-size),
+    black calc(100% - var(--scroll-fade-size)), rgb(0 0 0 / var(--scroll-fade)));
+}
+.scroll-fade.has-more { --scroll-fade: 0; }
+.scroll-fade.has-prev { --scroll-fade-top: 0; }
 
 /* INFO & PROJECTS render as a full-width centred viewport overlay on all sizes.
    Toggled via inline style.display in script.js (overrides the display:none below). */
@@ -743,7 +731,9 @@ a.t-shimmer-hover:hover::before,
   z-index: 45;
   width: calc(100vw - 12px); /* aligns with the nav bar's m-1.5 (6px) side insets */
   max-width: 80rem; /* matches nav's max-w-7xl cap on very large displays */
-  max-height: 85vh;
+  /* Centred at 50svh, so cap height at 2 × the 94px header clearance —
+     the overlay can grow tall on small viewports but never under the nav/marquee */
+  max-height: calc(100svh - 188px);
   overflow-y: auto;
 }
 
@@ -767,7 +757,8 @@ body:has(.overlay-section[style*="block"]) .content-col,
 body:has(.overlay-section[style*="block"]) .bg-shader,
 body:has(.overlay-section[style*="block"]) #dither-bg,
 body:has(.overlay-section[style*="block"]) footer {
-  filter: blur(8px);
+  /* One declaration — a second filter: line would replace the first, not stack */
+  filter: blur(var(--overlay-bg-blur)) brightness(var(--overlay-bg-dim));
 }
 
 /* The page behind is already blurred — drop the .box backdrop blur inside overlays
@@ -847,7 +838,6 @@ body:has(.overlay-section[style*="block"]) footer {
 .nav-marquee {
   min-width: 0;
   overflow: hidden;
-  align-self: center;
   --nav-marquee-pad: 0 var(--sp-4); /* adjustment knob: tweak marquee side padding */
   padding: var(--nav-marquee-pad);
   mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
