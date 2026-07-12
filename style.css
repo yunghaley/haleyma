@@ -77,6 +77,20 @@
 
 body {
   background: var(--c-bg);
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbars on all scrollable elements */
+.overlay-section,
+.scroll-col {
+  scrollbar-width: none;
+}
+.overlay-section::-webkit-scrollbar,
+.scroll-col::-webkit-scrollbar {
+  display: none;
 }
 
 a {
