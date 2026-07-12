@@ -32,6 +32,7 @@
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
   --fs-hero: clamp(2.35rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero-sub: clamp(1.5rem, 4.5vw, 2.25rem); /* H2 scale: 24px mobile → 36px wide desktop */
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
   --overlay-bg-dim: 0.5; /* brightness behind an open overlay: 1 = none, 0 = black */
@@ -92,6 +93,14 @@ h1 {
   font-size: var(--fs-hero);
   font-weight: 400;
   line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* H2-scale hero text — sits under .t-hero's H1 size in the same fluid family */
+.t-hero-sub {
+  font-size: var(--fs-hero-sub);
+  font-weight: 400;
+  line-height: 1.2;
   letter-spacing: -0.01em;
 }
 
