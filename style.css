@@ -269,7 +269,40 @@ li:before {
   gap: 6px;
   width: 100%;
 }
+@media (min-width: 768px) {
+  .case-study {
+    max-width: 56rem; /* adjustment knob: caps case-study reading width on desktop */
+    margin-inline: auto;
+  }
+}
 
+
+/* Case-study hero: vertical sizzle reel + heading. Stacked on mobile,
+   side-by-side on desktop since the video's tall/narrow aspect leaves
+   room for copy next to it rather than above/below. */
+.cs-hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.cs-hero-video {
+  flex-shrink: 0;
+  /* Global `video { margin-inline: auto }` fights flex row layout — an
+     auto margin on the main axis eats all free space, so cancel it here. */
+  margin-inline: 0;
+}
+.cs-hero-copy {
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .cs-hero {
+    flex-direction: row;
+  }
+  .cs-hero-copy {
+    flex: 1;
+  }
+}
 
 .cs-metrics {
   display: grid;
