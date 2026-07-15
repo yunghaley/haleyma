@@ -203,12 +203,10 @@ li:before {
   padding-bottom: var(--sp-2);
   border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
-  /* Mobile: the page itself scrolls, so scrollIntoView({block:'start'}) aligns
-     to the viewport top — offset it past the fixed nav (matches .content-offset).
-     Desktop overrides this to 0 (see the min-width: 768px .scroll-col block):
-     there .content-col is the scroll container and its top edge already clears
-     the nav, so any extra margin double-counts the clearance. */
-  scroll-margin-top: 54px;
+  /* .content-col is its own clipped scroll container at every width (see
+     .scroll-col below), so its top edge already clears the fixed nav — no
+     extra scroll-margin needed, that would just double-count the clearance. */
+  scroll-margin-top: 0;
 }
 
 .accordion-trigger {
@@ -836,19 +834,16 @@ a.t-shimmer-hover {
   initial-value: 1;
 }
 
-/* Desktop: left (info/now/projects) and right (content) columns scroll independently, bars hidden */
-@media (min-width: 768px) {
-  .scroll-col {
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    scroll-behavior: smooth;
-  }
-  /* .content-col is the scroll container here and its top edge already sits
-     just below the fixed nav — scrollIntoView aligns to the container, not the
-     viewport, so the mobile 54px offset would double-count the nav clearance. */
-  .accordion-item {
-    scroll-margin-top: 0;
-  }
+/* Every .scroll-col (content-col chief among them) is its own clipped scroll
+   region at every width — not just desktop. Without this, mobile has no
+   clipping boundary and scrolling a deep accordion item into view lets the
+   item just above it slide up behind the (transparent) fixed nav instead of
+   being hidden by a real edge, same as desktop's independently-scrolling
+   columns get for free from their own overflow. */
+.scroll-col {
+  max-height: calc(100svh - 54px);
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* Scroll-edge fade — single source of truth for every scrollable surface.
