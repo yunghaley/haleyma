@@ -11,7 +11,9 @@ function initNav() {
       if (target) {
         const isHidden = getComputedStyle(target).display === 'none';
         // Overlays are mutually exclusive: opening one dismisses the other.
-        document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
+        // PROJECTS isn't a dismissible overlay anymore (always-visible accordion),
+        // so it's excluded — INFO shouldn't hide it.
+        document.querySelectorAll('[data-section]:not([data-section="projects"])').forEach(sec => sec.style.display = 'none');
         target.style.display = isHidden ? 'block' : 'none';
       }
     } else if (logoElement) {
@@ -19,7 +21,7 @@ function initNav() {
       // project-default (the homepage reel) is never hidden or paused by
       // anything else, so there's nothing else to reset here.
       closeAllAccordions();
-      document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
+      document.querySelectorAll('[data-section]:not([data-section="projects"])').forEach(sec => sec.style.display = 'none');
     }
   });
 }
@@ -68,11 +70,6 @@ function expandAccordionItem(accordionItem) {
   panel.addEventListener('transitionend', onOpened);
 }
 
-function closeProjectsOverlay() {
-  const projectsSection = document.querySelector('[data-section="projects"]');
-  if (projectsSection) projectsSection.style.display = 'none';
-}
-
 function initAccordion() {
   document.addEventListener('click', function(event) {
     // Clicks on rich content inside an open panel (video controls, links,
@@ -83,14 +80,9 @@ function initAccordion() {
       const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
       if (isOpen) closeAllAccordions();
       else expandAccordionItem(accordionItem);
-      return;
     }
-    // Click/tap outside the open PROJECTS overlay dismisses it — except in
-    // the nav, whose buttons self-manage.
-    const projectsSection = document.querySelector('[data-section="projects"]');
-    if (!projectsSection || getComputedStyle(projectsSection).display === 'none') return;
-    if (event.target.closest('[data-section="projects"]') || event.target.closest('nav')) return;
-    closeProjectsOverlay();
+    // PROJECTS is always-visible now (not a dismissible overlay), so there's
+    // no outside-click-to-close behavior to handle here anymore.
   });
 }
 
