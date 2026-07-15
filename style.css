@@ -203,6 +203,9 @@ li:before {
   padding-bottom: var(--sp-2);
   border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
+  /* So scrollIntoView({block:'start'}) on open stops just below the fixed nav
+     instead of flush with the actual viewport top. */
+  scroll-margin-top: 54px;
 }
 
 .accordion-trigger {
@@ -430,6 +433,13 @@ li:before {
 
 .project-panel:has(.case-study) {
   width: 100%;
+}
+
+/* Project content scrolls in its own region so the accordion item's header
+   and blurb (its "context") stay put above it while the user reads through. */
+.project-panel {
+  max-height: calc(100svh - 154px);
+  overflow-y: auto;
 }
 
 /* Shared surface — single source of truth for boxed sections/blocks */
@@ -918,9 +928,10 @@ body:has(.overlay-section[style*="block"]) footer {
 }
 
 
-/* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
+/* Clears the fixed header — magic number, matches header height.
+   NOW marquee is hidden for now, so this is just the single nav row. */
 .content-offset {
-  margin-top: 82px;
+  margin-top: 54px;
 }
 
 /* Nav logo / static NOW label: fixed width, no shrink, no wrap */
