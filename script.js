@@ -15,40 +15,57 @@ function initNav() {
         target.style.display = isHidden ? 'block' : 'none';
       }
     } else if (logoElement) {
-      // Reset to default project
-      hideAllProjectAssets();
-      const defaultGroup = document.getElementById('project-default');
-      if (defaultGroup) {
-        defaultGroup.classList.remove('hidden');
-        const video = defaultGroup.querySelector('video');
-        if (video) {
-          video.muted = true;
-          video.play().catch(e => console.log('Default video play failed:', e));
-        }
-      }
+      // Logo resets home: collapse any open project and dismiss all overlays.
+      // project-default (the homepage reel) is never hidden or paused by
+      // anything else, so there's nothing else to reset here.
       closeAllAccordions();
-      // Logo resets home: dismiss all overlays.
       document.querySelectorAll('[data-section]').forEach(sec => sec.style.display = 'none');
     }
   });
 }
 
 // --- Accordion handling ---
-// Hover-capable devices: hovering an item expands it and previews the project
-// content behind the overlay; clicking commits (closes the overlay).
-// Touch devices: tap expands, previews, and closes the overlay in one go.
+// Clicking a project expands its full content inline, in place (hover already
+// gets a lightweight preview for free from the .t-shimmer-hover CSS — no JS
+// needed for that). The project's rich content (video/case-study) lives
+// directly inside its .accordion-panel now, so opening it just means playing
+// its media and scrolling it into view once the open transition settles.
+function revealProjectContent(panel) {
+  panel.querySelectorAll('.t-digit-group').forEach(g => {
+    g.classList.remove('is-animating');
+    void g.offsetHeight;
+    g.classList.add('is-animating');
+  });
+  panel.querySelectorAll('video').forEach(v => {
+    v.muted = true;
+    v.play().catch(e => console.log('Autoplay failed:', e));
+  });
+}
+
 function expandAccordionItem(accordionItem) {
   closeAllAccordions(accordionItem);
   accordionItem.setAttribute('aria-expanded', 'true');
   const trigger = accordionItem.querySelector('.accordion-trigger');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
   const panel = document.getElementById(accordionItem.getAttribute('aria-controls'));
-  if (panel) {
-    panel.classList.add('is-open');
-    panel.setAttribute('aria-hidden', 'false');
-    panel.style.maxHeight = panel.scrollHeight + 'px';
-  }
-  showProjectAssets(accordionItem.getAttribute('data-project'));
+  if (!panel) return;
+  panel.classList.add('is-open');
+  panel.setAttribute('aria-hidden', 'false');
+  panel.removeAttribute('inert');
+  panel.style.maxHeight = panel.scrollHeight + 'px';
+
+  const onOpened = (event) => {
+    if (event.target !== panel || event.propertyName !== 'max-height') return;
+    panel.removeEventListener('transitionend', onOpened);
+    // Un-cap height once open: late-loading media (lazyload images, video
+    // metadata) would otherwise stay clipped at the height measured pre-load.
+    panel.style.maxHeight = 'none';
+    revealProjectContent(panel);
+    // Scroll the whole item (header + panel), not just the panel, so the
+    // project name/details land flush at the top instead of scrolling past them.
+    accordionItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  panel.addEventListener('transitionend', onOpened);
 }
 
 function closeProjectsOverlay() {
@@ -57,36 +74,24 @@ function closeProjectsOverlay() {
 }
 
 function initAccordion() {
-  const canHover = window.matchMedia('(hover: hover)').matches;
   document.addEventListener('click', function(event) {
+    // Clicks on rich content inside an open panel (video controls, links,
+    // scrolling the case study) shouldn't toggle the accordion item closed.
+    if (event.target.closest('.accordion-panel')) return;
     const accordionItem = event.target.closest('.accordion-item');
     if (accordionItem) {
       const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
-      if (isOpen) {
-        // Desktop: click after hover-expand. Touch: second tap. Either way — commit.
-        closeProjectsOverlay();
-      } else {
-        expandAccordionItem(accordionItem);
-        // Desktop click commits immediately; touch first tap keeps the overlay
-        // open (two-tap: expand + preview first, commit on the second tap).
-        if (canHover) closeProjectsOverlay();
-      }
+      if (isOpen) closeAllAccordions();
+      else expandAccordionItem(accordionItem);
       return;
     }
-    // Click/tap outside the open PROJECTS overlay dismisses it and reveals the
-    // current preview/selection — except in the nav, whose buttons self-manage.
+    // Click/tap outside the open PROJECTS overlay dismisses it — except in
+    // the nav, whose buttons self-manage.
     const projectsSection = document.querySelector('[data-section="projects"]');
     if (!projectsSection || getComputedStyle(projectsSection).display === 'none') return;
     if (event.target.closest('[data-section="projects"]') || event.target.closest('nav')) return;
     closeProjectsOverlay();
   });
-  if (canHover) {
-    document.addEventListener('mouseover', function(event) {
-      const accordionItem = event.target.closest('.accordion-item');
-      if (!accordionItem || accordionItem.getAttribute('aria-expanded') === 'true') return;
-      expandAccordionItem(accordionItem);
-    });
-  }
 }
 
 // --- Video controls (play / pause, mute) ---
@@ -166,19 +171,6 @@ function initCaseStudyReveal() {
 }
 
 // --- Helper utilities (moved from original script) ---
-function hideAllProjectAssets() {
-  document.querySelectorAll('.project-panel').forEach(group => {
-    group.classList.add('hidden');
-    group.querySelectorAll('video, audio').forEach(media => {
-      media.muted = true;
-      media.pause();
-    });
-  });
-  const defaultGroup = document.getElementById('project-default');
-  if (defaultGroup) defaultGroup.classList.remove('hidden');
-  document.querySelectorAll('.snap-slides').forEach(el => el.classList.remove('snap-slides'));
-}
-
 function closeAllAccordions(except = null) {
   document.querySelectorAll('.accordion-item').forEach(item => {
     if (item === except) return;
@@ -188,33 +180,13 @@ function closeAllAccordions(except = null) {
       panel.style.maxHeight = null;
       panel.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
+      panel.setAttribute('inert', '');
+      panel.querySelectorAll('video, audio').forEach(media => {
+        media.muted = true;
+        media.pause();
+      });
     }
   });
-}
-
-function showProjectAssets(projectId) {
-  hideAllProjectAssets();
-  const defaultGroup = document.getElementById('project-default');
-  if (defaultGroup) defaultGroup.classList.add('hidden');
-  const assetGroup = document.getElementById(`project-${projectId}`);
-  if (assetGroup) {
-    assetGroup.classList.remove('hidden');
-    const scrollCol = assetGroup.closest('.scroll-col');
-    if (scrollCol) {
-      scrollCol.scrollTop = 0;
-      // Keynote-style slide scrolling for case-study projects
-      scrollCol.classList.toggle('snap-slides', !!assetGroup.querySelector('.case-study'));
-    }
-    assetGroup.querySelectorAll('.t-digit-group').forEach(g => {
-      g.classList.remove('is-animating');
-      void g.offsetHeight;
-      g.classList.add('is-animating');
-    });
-    assetGroup.querySelectorAll('video').forEach(v => {
-      v.muted = true;
-      v.play().catch(e => console.log('Autoplay failed:', e));
-    });
-  }
 }
 
 // --- Slideshow (unchanged) ---

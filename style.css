@@ -266,7 +266,7 @@ li:before {
 .case-study {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--sp-8);
   width: 100%;
 }
 @media (min-width: 768px) {
@@ -277,13 +277,13 @@ li:before {
 }
 
 
-/* Case-study hero: vertical sizzle reel + heading. Stacked on mobile,
-   side-by-side on desktop since the video's tall/narrow aspect leaves
-   room for copy next to it rather than above/below. */
-.cs-hero {
+/* Case-study hero: media beside copy. .cs-hero is just the slide box (sized by
+   the generic .case-study > * slide rule); .cs-hero-row is the actual media+copy
+   row nested inside it, sized by its own content and centered within the slide. */
+.cs-hero-row {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   gap: var(--sp-4);
 }
 .cs-hero-video {
@@ -292,38 +292,116 @@ li:before {
      auto margin on the main axis eats all free space, so cancel it here. */
   margin-inline: 0;
 }
+
+/* Image-placeholder variant of .cs-hero-video — same row-with-stretch template,
+   but sized off aspect-ratio instead of a fixed viewport height since the row's
+   height here comes from the copy column's content, not a video. */
+.cs-hero-media {
+  flex-shrink: 0;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* iPhone frame overlay — bezel PNG sits on top of the video, cropped to the
+   screen cutout. Inset %s measured from the PNG's actual transparent screen
+   area (1350×2760 source, cutout at x:72–1277, y:220–2690). A full-size black
+   layer sits behind everything so any gap between the video's aspect ratio
+   and the screen cutout (or edge feathering on the cutout) reads as bezel
+   black instead of the page background showing through. */
+.phone-frame {
+  position: relative;
+  height: 70svh;
+  max-height: 70svh;
+  aspect-ratio: 1350 / 2760;
+}
+.phone-frame-bg,
+.phone-frame-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.phone-frame-bg {
+  background: #000;
+  /* Clip to the bezel PNG's own silhouette so this doesn't show as a hard
+     black rectangle behind the phone's rounded corners / transparent margin. */
+  -webkit-mask-image: url("assets/misc/iphone17pro-silver-portrait.png");
+  mask-image: url("assets/misc/iphone17pro-silver-portrait.png");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.phone-frame-overlay {
+  z-index: 2;
+  pointer-events: none;
+}
+.phone-frame-screen {
+  position: absolute;
+  left: 5.33%;
+  right: 5.41%;
+  top: 7.97%;
+  bottom: 2.54%;
+  z-index: 1;
+  overflow: hidden;
+}
+.phone-frame-screen .video-shell {
+  width: 100%;
+  height: 100%;
+  margin-inline: 0;
+}
+.phone-frame-screen video {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  margin-inline: 0;
+}
 .cs-hero-copy {
   margin: 0;
 }
-@media (min-width: 768px) {
-  .cs-hero {
-    flex-direction: row;
-  }
-  .cs-hero-copy {
-    flex: 1;
-  }
+.cs-hero-copy-col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-6);
 }
 
 .cs-metrics {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-}
-
-@media (min-width: 1024px) {
-  .cs-metrics { grid-template-columns: repeat(4, 1fr); }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2);
 }
 
 .cs-stat {
   border: 1px solid var(--c-border);
-  border-radius: 0.375rem;
-  padding: var(--sp-2);
+  border-radius: 0.5rem;
+  padding: var(--sp-6) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cs-stat-icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.55;
+}
+.cs-stat-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .cs-stat .cs-num {
-  font-family: "XanhMono", monospace;
-  font-size: 1.5rem;
-  line-height: 1.1;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 .cs-label {
@@ -822,6 +900,19 @@ body:has(.overlay-section[style*="block"]) footer {
   -webkit-backdrop-filter: none;
 }
 
+/* PROJECTS takes over the full viewport instead of floating as a centred card:
+   there's no reel-behind-blur worth preserving space for, and case studies need
+   real scroll height. top/height clear the fixed nav; INFO keeps the card look. */
+[data-section="projects"] {
+  top: 82px;
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: none;
+  height: calc(100svh - 82px);
+  max-height: none;
+}
+
 /* Centre the visible project panel vertically in the viewport (all sizes).
    min-height = viewport minus fixed header (magic number, tracks .content-offset).
    margin-block auto (not align-items: center) so panels taller than the viewport
@@ -843,36 +934,6 @@ body:has(.overlay-section[style*="block"]) footer {
   max-height: none;
 }
 
-/* Keynote-style slide scroll for case studies (class toggled in script.js when the
-   active project panel contains a .case-study). Each block becomes one viewport-high
-   slide that snaps to centre; scroll-driven animation fades/scales it in as it enters.
-   ponytail: snap only works on desktop (.scroll-col is the scroll container there);
-   mobile scrolls the page, so it gets the slide animation but not the snap. */
-.snap-slides {
-  scroll-snap-type: y mandatory;
-}
-.snap-slides .case-study > * {
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
-  min-height: calc(100svh - 94px); /* one slide per viewport; tracks .content-col offset */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-@supports (animation-timeline: view()) {
-  .snap-slides .case-study > * {
-    animation: t-slide-in linear both;
-    animation-timeline: view();
-    animation-range: entry 10% entry 70%;
-  }
-}
-@keyframes t-slide-in {
-  from { opacity: 0; transform: scale(0.94) translateY(24px); }
-  to   { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .snap-slides .case-study > * { animation: none !important; }
-}
 
 /* Clears the fixed header (nav row + NOW marquee bar) — magic number, matches header height */
 .content-offset {
