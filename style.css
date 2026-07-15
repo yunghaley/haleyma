@@ -77,19 +77,14 @@
 
 body {
   background: var(--c-bg);
-  scrollbar-width: none;
-}
-body::-webkit-scrollbar {
-  display: none;
 }
 
-/* Hide scrollbars on all scrollable elements */
-.overlay-section,
-.scroll-col {
+/* Hide scrollbars everywhere — any scrollable element, not just the known
+   ones (.scroll-col, .overlay-section, .project-panel, etc). */
+* {
   scrollbar-width: none;
 }
-.overlay-section::-webkit-scrollbar,
-.scroll-col::-webkit-scrollbar {
+*::-webkit-scrollbar {
   display: none;
 }
 
