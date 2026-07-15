@@ -436,6 +436,7 @@ li:before {
 .project-panel {
   max-height: calc(100svh - 154px);
   overflow-y: auto;
+  margin-top: var(--sp-6);
 }
 
 /* Shared surface — single source of truth for boxed sections/blocks */

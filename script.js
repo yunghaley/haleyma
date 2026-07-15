@@ -166,9 +166,18 @@ function initCaseStudyReveal() {
 function closeAllAccordions(except = null) {
   document.querySelectorAll('.accordion-item').forEach(item => {
     if (item === except) return;
+    const wasOpen = item.getAttribute('aria-expanded') === 'true';
     item.setAttribute('aria-expanded', 'false');
     const panel = document.getElementById(item.getAttribute('aria-controls'));
     if (panel) {
+      if (wasOpen) {
+        // Open panels sit at max-height: none (see expandAccordionItem) so
+        // late-loading media isn't clipped — but 'none' can't be transitioned
+        // from directly. Give it a concrete starting height, force layout,
+        // then collapse it so the close actually animates.
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        void panel.offsetHeight;
+      }
       panel.style.maxHeight = null;
       panel.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
