@@ -421,6 +421,63 @@ li:before {
   opacity: 0.7;
 }
 
+/* Shot-on-Lapse wall — square tiles, two stacked images per cell crossfade
+   on an infinite loop. Each cell's negative animation-delay is offset by
+   --d (its index) so tiles desync instead of flipping in unison. */
+.lapse-wall {
+  display: grid;
+  /* Fixed column counts (all divisors of the 24-cell wall) instead of
+     auto-fill, which sized columns off a min-width and left a ragged last
+     row whenever the fit didn't divide evenly. */
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-1);
+}
+@media (min-width: 768px) {
+  .lapse-wall {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 1200px) {
+  .lapse-wall {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+.lapse-wall-cell {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.25rem;
+}
+.lapse-wall-cell img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: lapse-wall-fade 16s ease-in-out infinite;
+}
+.lapse-wall-cell img:first-child {
+  animation-delay: calc(var(--d) * -1.7s);
+}
+.lapse-wall-cell img:last-child {
+  animation-delay: calc(var(--d) * -1.7s - 8s);
+}
+@keyframes lapse-wall-fade {
+  0%, 40% { opacity: 1; }
+  50%, 90% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lapse-wall-cell img {
+    animation: none;
+    opacity: 0;
+  }
+  .lapse-wall-cell img:first-child {
+    opacity: 1;
+  }
+}
+
 .cs-compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
