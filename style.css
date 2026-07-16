@@ -348,6 +348,17 @@ li:before {
   object-fit: cover;
   margin-inline: 0;
 }
+/* The iPhone-15-Pro viewport recording has UI at its very edges; filling the
+   full frame (cover) over-scales it and crops that UI. Constrain it to the
+   mask's screen opening (1206x2622 in the 1350x2760 canvas = 89.333% x 95%,
+   centred) so its ~matching aspect maps almost 1:1 with no crop. */
+.phone-frame-screen video[src*="iPhone-15-Pro-Viewport"] {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 89.333%;
+  height: 95%;
+}
 .cs-hero-copy {
   margin: 0;
 }
