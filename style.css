@@ -275,9 +275,14 @@ li:before {
    row nested inside it, sized by its own content and centered within the slide. */
 .cs-hero-row {
   display: flex;
-  flex-direction: row;
+  /* Phone is first in source (so it stacks on top on mobile); row-reverse
+     puts it on the right with copy on the left on desktop. */
+  flex-direction: row-reverse;
   align-items: stretch;
-  gap: var(--sp-4);
+  gap: var(--sp-8);
+  /* Stop the row spreading across ultra-wide viewports. */
+  max-width: 1000px;
+  margin-inline: auto;
 }
 .cs-hero-video {
   flex-shrink: 0;
@@ -297,51 +302,39 @@ li:before {
   justify-content: center;
 }
 
-/* iPhone frame overlay — bezel PNG sits on top of the video, video is
-   clipped to the screen cutout with percentage insets + border-radius
-   measured off the bezel art's alpha channel (hole: 1206x2622 at 72,69 in
-   1350x2760, corner radius ~210px). The old mask-PNG approach clipped to the
-   whole phone body, so video bled through the ring's semi-transparent inner
-   edge. A full-size black layer sits behind everything so any gap between
-   the video's aspect ratio and the screen cutout (or edge feathering on the
-   cutout) reads as bezel black instead of the page background showing
-   through. */
+/* iPhone frame — two same-canvas (1350x2760) rasters exported from Apple's
+   PSD, both scaled to 100% of the frame box, so they register perfectly at
+   any size (no CSS-measured cutout to drift against the raster art):
+     - screen mask (alpha PNG, white screen shape): clips the video to the
+       exact screen squircle. The video group is masked, so any letterbox
+       reads as the black backing behind it, never the page background.
+     - bezel PNG (transparent body + dynamic island + status bar): drawn on
+       top, so the island/status bar composite over the playing video. */
 .phone-frame {
   position: relative;
-  height: 70svh;
-  max-height: 70svh;
+  /* Cap desktop width at the mobile 320px cap: express it as a height (the
+     only explicit dimension, so aspect-ratio derives width and never
+     distorts). 320px wide == 320*2760/1350 tall. Still shrinks to 70svh on
+     shorter viewports. */
+  height: min(70svh, calc(320px * 2760 / 1350));
   aspect-ratio: 1350 / 2760;
 }
-.phone-frame-bg,
+.phone-frame-screen,
 .phone-frame-overlay {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
-.phone-frame-bg {
-  background: #000;
-  /* Clip to the bezel PNG's own silhouette so this doesn't show as a hard
-     black rectangle behind the phone's rounded corners / transparent margin. */
-  -webkit-mask-image: url("assets/misc/iphone17pro-cosmicOrange-portrait.png");
-  mask-image: url("assets/misc/iphone17pro-cosmicOrange-portrait.png");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
 .phone-frame-overlay {
   z-index: 2;
   pointer-events: none;
 }
 .phone-frame-screen {
-  position: absolute;
-  inset: 2.5% 5.333%;
   z-index: 1;
-  overflow: hidden;
-  /* 210px radius as % of the hole's own 1206x2622 box, so corners stay
-     circular at any uniform scale (frame aspect-ratio is locked). */
-  border-radius: 17.4% / 8%;
+  background: #000;
+  -webkit-mask: url("assets/misc/iphone17pro-screen-mask.png") center / 100% 100% no-repeat;
+          mask: url("assets/misc/iphone17pro-screen-mask.png") center / 100% 100% no-repeat;
 }
 .phone-frame-screen .video-shell {
   width: 100%;
@@ -376,23 +369,11 @@ li:before {
 }
 
 .cs-stat {
-  border: 1px solid var(--c-border);
-  border-radius: 0.5rem;
-  padding: var(--sp-6) var(--sp-5);
+  border-top: 1px solid var(--c-border);
+  padding: var(--sp-6) 0;
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-}
-
-.cs-stat-icon {
-  width: 28px;
-  height: 28px;
-  opacity: 0.55;
-}
-.cs-stat-icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
 }
 
 .cs-stat .cs-num {
@@ -478,10 +459,68 @@ li:before {
   }
 }
 
+/* Expanded tile (mobile): tap a tile to blow it up full-width and slideshow
+   the whole shot-on-lapse folder (see initLapseWall in script.js). The tile's
+   two <img> act as A/B crossfade buffers; JS drives .lw-show for opacity and
+   swaps src, so the CSS wall-fade animation is disabled while expanded. */
+.lapse-wall-cell.is-expanded img {
+  animation: none;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+.lapse-wall-cell.is-expanded img.lw-show {
+  opacity: 1;
+}
+@media (max-width: 767px) {
+  .lapse-wall-cell {
+    cursor: pointer;
+  }
+  .lapse-wall-cell.is-expanded {
+    grid-column: 1 / -1;
+    aspect-ratio: 3 / 4;
+  }
+  .lapse-wall:has(.is-expanded) .lapse-wall-cell:not(.is-expanded) {
+    display: none;
+  }
+}
+
+/* Tap-to-expand transitions should animate ONLY the named tile/frame, never
+   the whole page. Disabling the root group's animation stops the full-page
+   cross-fade that otherwise flashes on collapse (short grid -> tall grid as
+   siblings reappear) and reads as a scroll/refresh glitch. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
 .cs-compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-2);
+}
+
+/* Before/after: each frame stacks its images (before + one or more afters) in
+   one spot and cycles through them on an interval (see initCrossfades in
+   script.js), so the user compares them without eye travel. JS toggles
+   .is-active; only that image is opaque. */
+.cs-crossfade-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-2);
+}
+.cs-crossfade {
+  display: grid;
+}
+.cs-crossfade img {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  border-radius: 0.25rem;
+}
+.cs-crossfade img.is-active {
+  opacity: 1;
 }
 
 /* Stack every 2-column case-study layout (hero media+copy, before/after
@@ -500,7 +539,28 @@ li:before {
   .cs-compare {
     grid-template-columns: 1fr;
   }
+  /* Before/after frames: 2x2 on mobile; tap one to expand it full-width,
+     tap again to restore (toggled by initCrossfades in script.js). */
+  .cs-crossfade-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cs-crossfade {
+    cursor: pointer;
+  }
+  .cs-crossfade.is-expanded {
+    grid-column: 1 / -1;
+  }
+  /* When one frame is expanded, hide the other three. */
+  .cs-crossfade-row:has(.is-expanded) .cs-crossfade:not(.is-expanded) {
+    display: none;
+  }
+  /* Only the frame being tapped is named (added by JS for the transition's
+     duration), so it's the sole named group — it morphs cell<->full-width and
+     always paints above the root snapshot (the other frames). Naming all four
+     would stack them in DOM order and let siblings cover the expanding one. */
+  .cs-crossfade.vt-active { view-transition-name: baf-top; }
 }
+::view-transition-group(baf-top) { z-index: 2147483647; }
 
 .project-panel:has(.case-study) {
   width: 100%;
@@ -520,6 +580,13 @@ li:before {
   color: oklch(100% 0.00011 271.152);
   /* border: 1px solid #fff; */
   border-radius: 0 0 0.375rem 0.375rem;
+}
+
+/* The fixed nav is a .box, but --c-white-trans is transparent, so page
+   content scrolling under it (single-column mobile especially) bleeds
+   through. Give the nav bar an opaque page-black backing on every viewport. */
+nav .box {
+  background: var(--c-bg);
 }
 
 /* Cap video height so portrait/vertical videos fit the viewport; landscape unaffected */

@@ -123,6 +123,11 @@ function initVideoControls() {
     });
     muteBtn.addEventListener('click', () => {
       video.muted = !video.muted;
+      if (!video.muted) {
+        document.querySelectorAll('video').forEach(other => {
+          if (other !== video) other.muted = true;
+        });
+      }
       sync();
     });
     video.addEventListener('play', sync);
@@ -234,6 +239,144 @@ function initScrollFade() {
   });
 }
 
+// --- Before/after crossfade: cycle each frame's stacked images on an interval ---
+function initCrossfades() {
+  const INTERVAL = 3000;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const frames = document.querySelectorAll('.cs-crossfade');
+  frames.forEach((frame, i) => {
+    const imgs = frame.querySelectorAll('img');
+    if (!imgs.length) return;
+    // Tap to expand full-width (2x2 mobile grid), tap again to restore. Only
+    // one frame expanded at a time. Styling is mobile-only (see CSS).
+    frame.addEventListener('click', () => {
+      const willExpand = !frame.classList.contains('is-expanded');
+      const apply = () => {
+        frames.forEach(f => f.classList.remove('is-expanded'));
+        if (willExpand) frame.classList.add('is-expanded');
+      };
+      // View Transitions animate the grid reflow (expanding frame morphs, the
+      // other 3 fade out) for free; fall back to an instant toggle otherwise.
+      // .vt-active names only this frame's group so it stays layered on top
+      // (see CSS) instead of being covered by sibling snapshots mid-morph.
+      if (!reduce && document.startViewTransition) {
+        frame.classList.add('vt-active');
+        document.startViewTransition(apply).finished.finally(() => frame.classList.remove('vt-active'));
+      } else {
+        apply();
+      }
+    });
+    let idx = 0;
+    imgs[0].classList.add('is-active');
+    if (reduce || imgs.length < 2) return; // static: show the "before"
+    const advance = () => {
+      imgs[idx].classList.remove('is-active');
+      idx = (idx + 1) % imgs.length;
+      imgs[idx].classList.add('is-active');
+    };
+    // Stagger each frame's start so they don't all flip in unison.
+    setTimeout(() => setInterval(advance, INTERVAL), i * 800);
+  });
+}
+
+// --- Shot-on-Lapse wall: tap a tile (mobile) to expand it full-width and
+// slideshow the whole folder (window.LAPSE_IMAGES). Tap again to restore. ---
+function initLapseWall() {
+  const wall = document.querySelector('.lapse-wall');
+  if (!wall) return;
+  const all = window.LAPSE_IMAGES || [];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const expand = (cell) => {
+    const imgs = cell.querySelectorAll('img');
+    if (imgs.length < 2 || !all.length) return;
+    cell._orig = [...imgs].map(i => i.getAttribute('src'));
+    let i = Math.max(0, all.indexOf(cell._orig[0])); // start at this tile's shot
+    let front = imgs[0], back = imgs[1];
+    front.setAttribute('src', all[i]);
+    front.classList.add('lw-show');
+    back.classList.remove('lw-show');
+    cell.classList.add('is-expanded');
+    cell._timer = setInterval(() => {
+      i = (i + 1) % all.length;
+      back.setAttribute('src', all[i]);
+      back.classList.add('lw-show');
+      front.classList.remove('lw-show');
+      [front, back] = [back, front];
+    }, 3000);
+  };
+  const collapse = (cell) => {
+    clearInterval(cell._timer);
+    cell._timer = null;
+    cell.classList.remove('is-expanded');
+    cell.querySelectorAll('img').forEach((img, k) => {
+      img.classList.remove('lw-show');
+      if (cell._orig) img.setAttribute('src', cell._orig[k]); // restore wall tile
+    });
+  };
+
+  // FLIP the tile (transform) AND the wall's real height together, so the tile
+  // morphs cell<->full-width while the content below eases with the wall's
+  // changing height (View Transitions can't reflow surrounding content — they
+  // freeze a snapshot, which is what caused the scroll-length glitch).
+  const DUR = 460;
+  const EASE = 'cubic-bezier(0.34, 1.26, 0.64, 1)';
+
+  wall.querySelectorAll('.lapse-wall-cell').forEach(cell => {
+    cell.addEventListener('click', () => {
+      if (!window.matchMedia('(max-width: 767px)').matches) return; // mobile only
+      const willExpand = !cell.classList.contains('is-expanded');
+
+      // FIRST: geometry before the layout change.
+      const firstTile = cell.getBoundingClientRect();
+      const firstWallH = wall.getBoundingClientRect().height;
+
+      // Apply the new layout instantly.
+      wall.querySelectorAll('.lapse-wall-cell.is-expanded').forEach(c => { if (c !== cell) collapse(c); });
+      if (willExpand) expand(cell); else collapse(cell);
+
+      if (reduce) return; // honour reduced-motion: snap, no animation
+
+      // LAST: geometry after.
+      const lastTile = cell.getBoundingClientRect();
+      const lastWallH = wall.getBoundingClientRect().height;
+
+      // Animate the wall's height (clip overflow so the grid reveals/collapses
+      // cleanly and the content below follows).
+      wall.style.overflow = 'hidden';
+      wall.style.height = firstWallH + 'px';
+      void wall.offsetWidth; // reflow
+      wall.style.transition = `height ${DUR}ms ${EASE}`;
+      wall.style.height = lastWallH + 'px';
+
+      // INVERT + PLAY the tile.
+      const dx = firstTile.left - lastTile.left;
+      const dy = firstTile.top - lastTile.top;
+      const sx = firstTile.width / lastTile.width;
+      const sy = firstTile.height / lastTile.height;
+      cell.style.transformOrigin = 'top left';
+      cell.style.transition = 'none';
+      cell.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+      cell.style.zIndex = '5';
+      void cell.offsetWidth; // reflow
+      cell.style.transition = `transform ${DUR}ms ${EASE}`;
+      cell.style.transform = 'none';
+
+      let done = false;
+      const cleanup = () => {
+        if (done) return;
+        done = true;
+        wall.style.transition = wall.style.height = wall.style.overflow = '';
+        cell.style.transition = cell.style.transform = cell.style.transformOrigin = cell.style.zIndex = '';
+        cell.removeEventListener('transitionend', onEnd);
+      };
+      const onEnd = (e) => { if (e.target === cell && e.propertyName === 'transform') cleanup(); };
+      cell.addEventListener('transitionend', onEnd);
+      setTimeout(cleanup, DUR + 80); // fallback if transform is a no-op
+    });
+  });
+}
+
 // Initialise all modules on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
@@ -242,4 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initCaseStudyReveal();
   initScrollFade();
   initMarqueeHoverPause();
+  initCrossfades();
+  initLapseWall();
 });
