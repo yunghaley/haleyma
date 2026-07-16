@@ -268,12 +268,6 @@ li:before {
   gap: var(--sp-8);
   width: 100%;
 }
-@media (min-width: 768px) {
-  .case-study {
-    max-width: 56rem; /* adjustment knob: caps case-study reading width on desktop */
-    margin-inline: auto;
-  }
-}
 
 
 /* Case-study hero: media beside copy. .cs-hero is just the slide box (sized by
@@ -303,12 +297,15 @@ li:before {
   justify-content: center;
 }
 
-/* iPhone frame overlay — bezel PNG sits on top of the video, cropped to the
-   screen cutout. Inset %s measured from the PNG's actual transparent screen
-   area (1350×2760 source, cutout at x:72–1277, y:220–2690). A full-size black
-   layer sits behind everything so any gap between the video's aspect ratio
-   and the screen cutout (or edge feathering on the cutout) reads as bezel
-   black instead of the page background showing through. */
+/* iPhone frame overlay — bezel PNG sits on top of the video, video is
+   clipped to the screen cutout with percentage insets + border-radius
+   measured off the bezel art's alpha channel (hole: 1206x2622 at 72,69 in
+   1350x2760, corner radius ~210px). The old mask-PNG approach clipped to the
+   whole phone body, so video bled through the ring's semi-transparent inner
+   edge. A full-size black layer sits behind everything so any gap between
+   the video's aspect ratio and the screen cutout (or edge feathering on the
+   cutout) reads as bezel black instead of the page background showing
+   through. */
 .phone-frame {
   position: relative;
   height: 70svh;
@@ -326,8 +323,8 @@ li:before {
   background: #000;
   /* Clip to the bezel PNG's own silhouette so this doesn't show as a hard
      black rectangle behind the phone's rounded corners / transparent margin. */
-  -webkit-mask-image: url("assets/misc/iphone17pro-silver-portrait.png");
-  mask-image: url("assets/misc/iphone17pro-silver-portrait.png");
+  -webkit-mask-image: url("assets/misc/iphone17pro-cosmicOrange-portrait.png");
+  mask-image: url("assets/misc/iphone17pro-cosmicOrange-portrait.png");
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
@@ -339,12 +336,12 @@ li:before {
 }
 .phone-frame-screen {
   position: absolute;
-  left: 5.33%;
-  right: 5.41%;
-  top: 7.97%;
-  bottom: 2.54%;
+  inset: 2.5% 5.333%;
   z-index: 1;
   overflow: hidden;
+  /* 210px radius as % of the hole's own 1206x2622 box, so corners stay
+     circular at any uniform scale (frame aspect-ratio is locked). */
+  border-radius: 17.4% / 8%;
 }
 .phone-frame-screen .video-shell {
   width: 100%;
@@ -355,7 +352,7 @@ li:before {
   width: 100%;
   height: 100%;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
   margin-inline: 0;
 }
 .cs-hero-copy {
@@ -367,6 +364,9 @@ li:before {
   flex-direction: column;
   justify-content: space-between;
   gap: var(--sp-6);
+}
+.cs-hero-copy-col--center {
+  justify-content: center;
 }
 
 .cs-metrics {
@@ -484,6 +484,24 @@ li:before {
   gap: var(--sp-2);
 }
 
+/* Stack every 2-column case-study layout (hero media+copy, before/after
+   compare) into a single column below the site's md breakpoint. */
+@media (max-width: 767px) {
+  .cs-hero-row {
+    flex-direction: column;
+  }
+  .phone-frame {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    max-height: none;
+    margin-inline: auto;
+  }
+  .cs-compare {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-panel:has(.case-study) {
   width: 100%;
 }
@@ -583,9 +601,12 @@ video {
   }
 }
 
-/* Standard image container spec — stills gallery slides + any case-study image */
+/* Standard image container spec — stills gallery slides + any case-study image.
+   Excludes the phone bezel overlay: it must stay exactly 100% of .phone-frame
+   (height:auto + max-height:70svh shrinks it out of sync with the video/mask
+   when the frame is width-driven on mobile). */
 .slide img,
-.case-study img {
+.case-study img:not(.phone-frame-overlay) {
   width: 100%;
   height: auto;
   max-height: 70vh;
