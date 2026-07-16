@@ -63,9 +63,18 @@ function expandAccordionItem(accordionItem) {
     // metadata) would otherwise stay clipped at the height measured pre-load.
     panel.style.maxHeight = 'none';
     revealProjectContent(panel);
-    // Scroll the whole item (header + panel), not just the panel, so the
-    // project name/details land flush at the top instead of scrolling past them.
-    accordionItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Bring the item's top flush to the top of its own scroll column (header +
+    // panel), so the project name/details land just below the nav. Scroll ONLY
+    // the column, not via scrollIntoView — that also scrolls the window, and on
+    // mobile (where the page itself scrolls) it drags the item up under the
+    // fixed nav. The column's top already clears the nav on every width.
+    const col = accordionItem.closest('.scroll-col');
+    if (col) {
+      const delta = accordionItem.getBoundingClientRect().top - col.getBoundingClientRect().top;
+      col.scrollTo({ top: col.scrollTop + delta, behavior: 'smooth' });
+    } else {
+      accordionItem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
   panel.addEventListener('transitionend', onOpened);
 }

@@ -1077,9 +1077,32 @@ body:has(.overlay-section[style*="block"]) footer {
 
 
 /* Clears the fixed header — magic number, matches header height.
-   NOW marquee is hidden for now, so this is just the single nav row. */
+   NOW marquee is hidden for now, so this is just the single nav row.
+   Add the top safe-area inset so content still clears the nav once the nav
+   itself is pushed below the notch (see .nav-safe). */
 .content-offset {
-  margin-top: 54px;
+  margin-top: calc(54px + env(safe-area-inset-top, 0px));
+}
+
+/* viewport-fit=cover lets page content sit under the status bar / notch.
+   Push the floating nav down by the safe-area inset so it stays below the
+   status bar (its 6px m-1.5 gap is preserved on top of the inset). */
+.nav-safe {
+  margin-top: calc(0.375rem + env(safe-area-inset-top, 0px));
+}
+
+/* Opaque cover over the status-bar / notch strip so content scrolling under
+   it doesn't show through above the nav. Sits above content, below the nav. */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--c-bg);
+  z-index: 45;
+  pointer-events: none;
 }
 
 /* Nav logo / static NOW label: fixed width, no shrink, no wrap */
