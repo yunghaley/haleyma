@@ -26,6 +26,17 @@ function initNav() {
   });
 }
 
+// --- INFO overlay: tap anywhere that isn't a link or a nav toggle to dismiss ---
+function initInfoDismiss() {
+  document.addEventListener('click', (event) => {
+    const info = document.querySelector('[data-section="info"]');
+    if (!info || getComputedStyle(info).display === 'none') return; // not open
+    // Links keep working; nav toggles ([data-target]) manage the overlay themselves.
+    if (event.target.closest('a') || event.target.closest('[data-target]')) return;
+    info.style.display = 'none';
+  });
+}
+
 // --- Accordion handling ---
 // Clicking a project expands its full content inline, in place (hover already
 // gets a lightweight preview for free from the .t-shimmer-hover CSS — no JS
@@ -44,8 +55,98 @@ function revealProjectContent(panel) {
   });
 }
 
+// --- Desktop project stage (portal) ---
+// On desktop the opened project's content (#project-<slug>) is moved into the
+// right-hand #project-stage so it shows beside the nav rail; on mobile it stays
+// inline in the accordion panel (unchanged behaviour).
+function isDesktopSplit() {
+  return window.matchMedia('(min-width: 768px)').matches;
+}
+
+// Nearest scrollable ancestor — the left rail on desktop, the content column on
+// mobile. Used so we scroll the right container (never the window, which on
+// mobile drags the item under the fixed nav).
+function scrollParent(el) {
+  let p = el.parentElement;
+  while (p) {
+    const oy = getComputedStyle(p).overflowY;
+    if ((oy === 'auto' || oy === 'scroll') && p.scrollHeight > p.clientHeight) return p;
+    p = p.parentElement;
+  }
+  return null;
+}
+
+// Deferred restore state: closing content must re-enter its (now-collapsed)
+// panel only AFTER the close animation, or it flashes in the shrinking panel.
+let pendingRestore = null;
+function flushPendingRestore() {
+  if (!pendingRestore) return;
+  clearTimeout(pendingRestore.timer);
+  pendingRestore.putBack();
+  pendingRestore = null;
+}
+
+// Immediate restore (viewport crossover): move staged content back inline now.
+function restoreStage() {
+  flushPendingRestore();
+  const stage = document.getElementById('project-stage');
+  if (!stage) return;
+  const moved = stage.firstElementChild;
+  if (moved && moved._home) {
+    moved.querySelectorAll('video, audio').forEach(m => { m.muted = true; m.pause(); });
+    const home = moved._home; moved._home = null;
+    home.parent.insertBefore(moved, home.next);
+    moved.style.display = '';
+  }
+  const reel = document.getElementById('project-default');
+  if (reel) reel.style.display = '';
+}
+
+// Close restore: hide staged content immediately (so it neither flashes in the
+// collapsing left panel nor lingers over the reel) and show the reel; move the
+// content home only after the collapse settles (into the closed, clipped panel).
+function deferStageRestore() {
+  flushPendingRestore();
+  const reel = document.getElementById('project-default');
+  if (reel) reel.style.display = '';
+  const stage = document.getElementById('project-stage');
+  const moved = stage && stage.firstElementChild;
+  if (!moved || !moved._home) return;
+  moved.querySelectorAll('video, audio').forEach(m => { m.muted = true; m.pause(); });
+  moved.style.display = 'none';
+  const home = moved._home; moved._home = null;
+  const putBack = () => { home.parent.insertBefore(moved, home.next); moved.style.display = ''; };
+  pendingRestore = { timer: setTimeout(() => { putBack(); pendingRestore = null; }, 600), putBack };
+}
+
+function moveProjectToStage(item) {
+  if (!isDesktopSplit()) return null;
+  flushPendingRestore();
+  const stage = document.getElementById('project-stage');
+  const content = document.getElementById('project-' + item.dataset.project);
+  if (!stage || !content) return null;
+  content.style.display = '';
+  content._home = { parent: content.parentNode, next: content.nextSibling };
+  stage.appendChild(content);
+  const reel = document.getElementById('project-default');
+  if (reel) reel.style.display = 'none';
+  return content;
+}
+
+function initProjectStage() {
+  const mq = window.matchMedia('(min-width: 768px)');
+  mq.addEventListener('change', () => {
+    const open = document.querySelector('.accordion-item[aria-expanded="true"]');
+    restoreStage(); // put content back inline + show reel, then re-place for the new width
+    if (open && mq.matches) {
+      const staged = moveProjectToStage(open);
+      if (staged) revealProjectContent(staged);
+    }
+  });
+}
+
 function expandAccordionItem(accordionItem) {
-  closeAllAccordions(accordionItem);
+  closeAllAccordions(accordionItem); // also restores any staged content + shows reel
   accordionItem.setAttribute('aria-expanded', 'true');
   const trigger = accordionItem.querySelector('.accordion-trigger');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
@@ -54,6 +155,12 @@ function expandAccordionItem(accordionItem) {
   panel.classList.add('is-open');
   panel.setAttribute('aria-hidden', 'false');
   panel.removeAttribute('inert');
+
+  // Desktop: portal the project's content to the right stage before measuring,
+  // so the left panel only animates to its (shorter) nav height.
+  const staged = moveProjectToStage(accordionItem);
+  if (staged) revealProjectContent(staged);
+
   panel.style.maxHeight = panel.scrollHeight + 'px';
 
   const onOpened = (event) => {
@@ -62,13 +169,12 @@ function expandAccordionItem(accordionItem) {
     // Un-cap height once open: late-loading media (lazyload images, video
     // metadata) would otherwise stay clipped at the height measured pre-load.
     panel.style.maxHeight = 'none';
-    revealProjectContent(panel);
-    // Bring the item's top flush to the top of its own scroll column (header +
-    // panel), so the project name/details land just below the nav. Scroll ONLY
-    // the column, not via scrollIntoView — that also scrolls the window, and on
-    // mobile (where the page itself scrolls) it drags the item up under the
-    // fixed nav. The column's top already clears the nav on every width.
-    const col = accordionItem.closest('.scroll-col');
+    if (!staged) revealProjectContent(panel); // mobile: content is still inline
+    // Bring the item's top flush to the top of its own scroll container (the
+    // left rail on desktop, the content column on mobile) — never via
+    // scrollIntoView, which also scrolls the window and drags the item under
+    // the fixed nav on mobile.
+    const col = scrollParent(accordionItem);
     if (col) {
       const delta = accordionItem.getBoundingClientRect().top - col.getBoundingClientRect().top;
       col.scrollTo({ top: col.scrollTop + delta, behavior: 'smooth' });
@@ -178,6 +284,7 @@ function initCaseStudyReveal() {
 
 // --- Helper utilities (moved from original script) ---
 function closeAllAccordions(except = null) {
+  deferStageRestore(); // hide staged content + show reel now; move it home after collapse
   document.querySelectorAll('.accordion-item').forEach(item => {
     if (item === except) return;
     const wasOpen = item.getAttribute('aria-expanded') === 'true';
@@ -389,7 +496,9 @@ function initLapseWall() {
 // Initialise all modules on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
+  initInfoDismiss();
   initAccordion();
+  initProjectStage();
   initVideoControls();
   initCaseStudyReveal();
   initScrollFade();

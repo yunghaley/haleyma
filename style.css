@@ -1088,6 +1088,36 @@ body:has(.overlay-section[style*="block"]) footer {
   min-height: calc(100svh - 94px);
 }
 
+/* --- Desktop split: 25% projects-nav rail | 75% content stage ---
+   Mobile is untouched: content-col stays a single flex-col scroll box
+   (.scroll-col) with the reel/stage on top and the accordion below, and the
+   rail/stage are plain in-flow blocks. On desktop the column becomes a 2-track
+   grid and each side scrolls independently. */
+@media (min-width: 768px) {
+  .content-col {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */
+    align-items: start;
+    max-height: none;   /* override .scroll-col: columns scroll, not the wrap */
+    overflow: visible;
+  }
+  .left-rail,
+  .right-stage {
+    grid-row: 1;
+    min-height: 0;      /* let grid children shrink so overflow can scroll */
+    max-height: calc(100svh - 54px);
+    overflow-y: auto;
+  }
+  .left-rail  { grid-column: 1; }
+  .right-stage { grid-column: 2; }
+}
+/* Wide desktop: give the stage more room, narrow the nav rail to 25%. */
+@media (min-width: 1740px) {
+  .content-col {
+    grid-template-columns: 3fr 9fr; /* 25% / 75% */
+  }
+}
+
 /* Reel fills the full-width content column instead of shrinking to its natural size */
 #project-default,
 #project-default .box {

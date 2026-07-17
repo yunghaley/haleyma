@@ -107,13 +107,19 @@
 
         <!--CONTENT-->
         <div class="md:mt-1.5 col-span-full z-10 md:z-0 flex flex-col gap-1.5 scroll-col scroll-fade content-col">
-            <div id="project-default" class="project-panel">
-              <div class="box p-1.5">
-              <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" loop muted playsinline autoplay preload="metadata" width="640" height="360" decoding="async"></video>
+            <!-- RIGHT STAGE (desktop) / top (mobile): reel by default; an opened
+                 project's content is portaled into #project-stage by script.js -->
+            <div class="right-stage flex flex-col gap-1.5">
+              <div id="project-default" class="project-panel">
+                <div class="box p-1.5">
+                <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" loop muted playsinline autoplay preload="metadata" width="640" height="360" decoding="async"></video>
+                </div>
               </div>
+              <div id="project-stage"></div>
             </div>
 
-
+            <!-- LEFT RAIL (desktop) / below reel (mobile): projects nav -->
+            <div class="left-rail">
           <section data-section="projects">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
@@ -571,6 +577,7 @@
                 </div>
               </div>
             </div>
+            </div><!-- /.left-rail -->
 
         </div>
 
