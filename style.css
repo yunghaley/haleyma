@@ -934,6 +934,18 @@ a.t-shimmer-hover {
   transition: opacity 150ms ease;
 }
 
+/* In a phone frame the shell is the full frame, so edge-anchored controls fall
+   under the bezel/mask. Pull them inside the screen opening (inset ~5.333% x /
+   2.5% bottom) so they stay tappable and visible. */
+.phone-frame-screen .video-play {
+  left: 8%;
+  bottom: 4.5%;
+}
+.phone-frame-screen .video-mute {
+  right: 8%;
+  bottom: 4.5%;
+}
+
 /* Touch devices: controls auto-hide, reappear on tap (JS toggles .controls-visible) */
 @media (hover: none) {
   .video-shell .video-play,
