@@ -373,6 +373,29 @@ li:before {
   justify-content: center;
 }
 
+.cs-hero-logo {
+  width: var(--cs-hero-logo-size, 64px);
+  height: var(--cs-hero-logo-size, 64px);
+  filter: brightness(0) invert(1);
+}
+
+.cs-hero-logo--wordmark {
+  width: auto;
+  height: var(--cs-hero-logo-size, 64px);
+  filter: none;
+}
+
+@media (max-width: 767px) {
+  .cs-hero-logo-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+  }
+  .cs-hero-logo {
+    flex-shrink: 0;
+  }
+}
+
 .cs-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -684,7 +707,7 @@ video {
    (height:auto + max-height:70svh shrinks it out of sync with the video/mask
    when the frame is width-driven on mobile). */
 .slide img,
-.case-study img:not(.phone-frame-overlay) {
+.case-study img:not(.phone-frame-overlay):not(.cs-hero-logo) {
   width: 100%;
   height: auto;
   max-height: 70vh;
@@ -1005,7 +1028,7 @@ a.t-shimmer-hover {
    being hidden by a real edge, same as desktop's independently-scrolling
    columns get for free from their own overflow. */
 .scroll-col {
-  max-height: calc(100svh - 54px);
+  max-height: calc(100svh - 94px);
   overflow-y: auto;
   scroll-behavior: smooth;
 }
@@ -1105,7 +1128,7 @@ body:has(.overlay-section[style*="block"]) footer {
   .right-stage {
     grid-row: 1;
     min-height: 0;      /* let grid children shrink so overflow can scroll */
-    max-height: calc(100svh - 54px);
+    max-height: calc(100svh - 94px);
     overflow-y: auto;
   }
   .left-rail  { grid-column: 1; }
@@ -1129,12 +1152,11 @@ body:has(.overlay-section[style*="block"]) footer {
 }
 
 
-/* Clears the fixed header — magic number, matches header height.
-   NOW marquee is hidden for now, so this is just the single nav row.
-   Add the top safe-area inset so content still clears the nav once the nav
-   itself is pushed below the notch (see .nav-safe). */
+/* Clears the fixed header — magic number, matches header height (nav row +
+   Currently marquee row). Add the top safe-area inset so content still
+   clears the nav once the nav itself is pushed below the notch (see .nav-safe). */
 .content-offset {
-  margin-top: calc(54px + env(safe-area-inset-top, 0px));
+  margin-top: calc(94px + env(safe-area-inset-top, 0px));
 }
 
 /* viewport-fit=cover lets page content sit under the status bar / notch.

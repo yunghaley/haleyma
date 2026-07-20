@@ -77,12 +77,12 @@
             </svg>
           </a>
         </div>
-        <div class="hidden w-full box p-1.5 font-sans text-sm flex items-baseline">
-          <span class="text-[10px]" data-text="NOW: ">NOW: </span>
+        <div class="w-full box p-1.5 font-sans text-sm flex items-baseline">
+          <span class="text-[10px]" data-text="CURRENTLY: ">CURRENTLY: </span>
           <div class="grow nav-marquee">
             <div class="nav-marquee-track">
-              <span class="nav-marquee-item">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
-              <span class="nav-marquee-item" aria-hidden="true">Building Trace, an iOS app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
+              <span class="nav-marquee-item">Building Trace, a private WIP on-device app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
+              <span class="nav-marquee-item" aria-hidden="true">Building Trace, a private WIP on-device app for experiencing memories spatially. Running AI creative experiments and agentic workflows. Freelancing across a range of creative production and strategy projects.</span>
             </div>
           </div>
         </div>
@@ -95,7 +95,6 @@
     <main class="flex-1">
   
     <div class="ml-1.5 mr-1.5 z-40">
-    <!-- TODO: fix below magic number on margin top property -->
       <div class="w-full content-offset grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
         <!--INFO & PROJECT ACCORDION-->
         <div class="mt-1.5 col-span-full md:col-span-4 flex flex-col gap-1.5 scroll-col">
@@ -163,7 +162,10 @@
                                     <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
                                   </div>
                                   <div class="cs-hero-copy-col cs-hero-copy-col--center">
-                                    <h2 class="font-sans t-hero-sub cs-hero-copy">Lapse is the social disposable camera app that makes sharing personal again.</h2>
+                                    <div class="cs-hero-logo-row">
+                                      <img class="cs-hero-logo" src="assets/projects/lapse/lapse-logo-icon.svg" alt="Lapse logo">
+                                      <h2 class="font-sans t-hero-sub cs-hero-copy">Lapse is the social disposable camera app that makes sharing personal again.</h2>
+                                    </div>
                                     <div class="cs-metrics">
                                       <div class="cs-stat">
                                         <div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit" data-stagger="1">B</span><span class="t-digit" data-stagger="2">+</span></div>
@@ -428,7 +430,7 @@
                         </div>
                       </div>
 
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-7" id="trigger-7" data-project="trace">
+                      <div class="accordion-item cursor-pointer hidden" aria-controls="panel-7" id="trigger-7" data-project="trace">
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Founder">Founder</span>
@@ -444,22 +446,61 @@
                         <div id="panel-7" class="accordion-panel">
                             <ul class="text-xs">
                               <li>ios</li>
-                              <li>swift</li>
+                              <li>agentic ai</li>
                               <li>spatial computing</li>
                               <li>product design</li>
                             </ul>
-                          <div class="text-sm">iOS app for experiencing memories spatially. Work in progress.</div>
-                          <div id="project-trace" class="project-panel">
-                            <div class="case-study">
-                              <div class="box p-1.5">
-                                <img src="assets/projects/trace/trace-logo.png" alt="Trace logo" loading="lazy">
-                              </div>
-                              <div class="box p-1.5 font-sans t-hero-sub">
-                                <div class="cs-label mb-1.5">Concept</div>
-                                iOS app for experiencing memories spatially. Work in progress.
-                              </div>
-                              <div class="box p-1.5">
-                                <img src="assets/projects/trace/trace-screenshot.jpg" alt="Trace app screenshot" loading="lazy">
+                          <div class="text-sm">An iOS app for experiencing memories spatially. Work in progress.</div>
+                            <div id="project-trace" class="project-panel">
+                              <div class="case-study">
+                                <div class="box p-1.5 cs-hero">
+                                  <div class="cs-hero-row">
+                                    <div class="phone-frame cs-hero-video">
+                                      <div class="phone-frame-screen">
+                                        <!-- placeholder asset — swap for real Trace footage -->
+                                        <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
+                                      </div>
+                                      <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
+                                    </div>
+                                    <div class="cs-hero-copy-col cs-hero-copy-col--center">
+                                      <div class="cs-hero-logo-row">
+                                        <img class="cs-hero-logo cs-hero-logo--wordmark" src="assets/projects/trace/trace-wordmark-01-3x.png" alt="Trace wordmark">
+                                        <h2 class="font-sans t-hero-sub cs-hero-copy">Trace your memories. Make sense of the past. Re-contextualize the present.</h2>
+                                      </div>
+                                      <div class="cs-metrics">
+                                        <div class="cs-stat">
+                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
+                                          <div class="cs-label">photos ingested in [TBD]</div>
+                                        </div>
+                                        <div class="cs-stat">
+                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
+                                          <div class="cs-label">on-device, TBD% [private]</div>
+                                        </div>
+                                        <div class="cs-stat">
+                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
+                                          <div class="cs-label">library size supported</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="box p-1.5 cs-hero">
+                                  <div class="cs-hero-row">
+                                    <div class="phone-frame cs-hero-video">
+                                      <div class="phone-frame-screen">
+                                        <!-- placeholder asset — swap for real Trace footage -->
+                                        <video src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
+                                      </div>
+                                      <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
+                                    </div>
+                                    <div class="cs-hero-copy-col cs-hero-copy-col--center">
+                                      <div>
+                                        <h2 class="font-sans t-hero-sub">[Role / contribution copy — TBD]</h2>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
