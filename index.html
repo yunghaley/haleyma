@@ -651,11 +651,15 @@
   <script src="lapse-images.js"></script>
   <script src="script.js"></script>
   <!-- Dithered reel background: the showreel runs as an ambient dithered canvas
-       behind the page instead of a foreground hero. Reduced-motion users get a
-       static page; the loop starts on load and pauses when the tab is
-       hidden (see dither.js). proximityEnabled is off to halve the per-frame pixel
+       behind the page instead of a foreground hero. Reduced-motion users get
+       a pre-rendered dithered still instead of the animation; the loop
+       otherwise starts on load and pauses when the tab is hidden (see
+       dither.js). proximityEnabled is off to halve the per-frame pixel
        work — flip it true to restore the interactive mouse blur. -->
   <canvas id="dither-bg" aria-hidden="true"></canvas>
+  <noscript>
+    <img id="dither-bg-fallback" src="assets/projects/reel/haley-ma-reel-dithered-fallback.png" alt="" aria-hidden="true">
+  </noscript>
   <video
     id="dither-src"
     src="assets/projects/reel/haley-ma-reel-0.19Mbps.mp4"
@@ -682,6 +686,9 @@
           proximityEnabled: false,
         },
       });
+    } else {
+      document.getElementById('dither-bg').style.backgroundImage =
+        "url('assets/projects/reel/haley-ma-reel-dithered-fallback.png')";
     }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>

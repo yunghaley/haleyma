@@ -31,7 +31,7 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
-  --fs-hero: clamp(2.35rem, 8vw, 3rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero: clamp(2rem, 8vw, 3rem); /* fluid: 44px mobile → 64px wide desktop */
   --fs-hero-sub: clamp(1.5rem, 4.5vw, 2.25rem); /* H2 scale: 24px mobile → 36px wide desktop */
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
@@ -896,8 +896,13 @@ a.t-shimmer-hover {
   }
 }
 
-/* Dithered reel background layer (dither.js) */
-#dither-bg {
+/* Dithered reel background layer (dither.js). #dither-bg-fallback shares this
+   box: a pre-rendered dithered still (see assets/projects/reel) shown instead
+   of the animated canvas for prefers-reduced-motion (set as its
+   background-image in index.html's init script) and for no-JS (the
+   <noscript> <img> below the canvas). */
+#dither-bg,
+#dither-bg-fallback {
   position: fixed;
   top: 0;
   left: 0;
@@ -908,6 +913,9 @@ a.t-shimmer-hover {
   z-index: -1;
   pointer-events: none;
   opacity: 0.5;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
 }
 
 /* Custom video controls */
