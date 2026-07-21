@@ -211,9 +211,10 @@ export function createDitherBg({ canvas, video, config = {} }) {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) start();
   });
-  ['touchstart', 'click', 'keydown', 'wheel'].forEach((evt) => {
-    document.addEventListener(evt, start, { once: true, passive: true });
-  });
+
+  // Video is muted, so browsers allow autoplay with no user gesture — start
+  // immediately on load instead of waiting for a first interaction.
+  start();
 
   return { start, stop };
 }

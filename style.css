@@ -1102,16 +1102,22 @@ body:has(.overlay-section[style*="block"]) footer {
 
 /* Reel sits flush at the top of the content column; PROJECTS (now plain,
    in-flow markup — see index.html — no longer .overlay-section) stacks
-   directly below it, both scrolling together in the same column. */
+   directly below it, both scrolling together in the same column.
+   Overrides .scroll-col's own max-height/overflow-y (mobile shares this
+   selector's base class) — the page itself scrolls on mobile now instead of
+   being caged in an internal scroll box; the accordion's scroll-margin-top
+   (see .accordion-item) still keeps opened items clear of the fixed nav. */
 .content-col {
   min-height: calc(100svh - 94px);
+  max-height: none;
+  overflow-y: visible;
 }
 
 /* --- Desktop split: 25% projects-nav rail | 75% content stage ---
-   Mobile is untouched: content-col stays a single flex-col scroll box
-   (.scroll-col) with the reel/stage on top and the accordion below, and the
-   rail/stage are plain in-flow blocks. On desktop the column becomes a 2-track
-   grid and each side scrolls independently.
+   Mobile is untouched: content-col stays a single flex-col box with the
+   reel/stage on top and the accordion below, and the rail/stage are plain
+   in-flow blocks, the whole page scrolling together. On desktop the column
+   becomes a 2-track grid and each side scrolls independently.
    560px MUST match --bp-split (the single source of truth in :root above);
    @media can't read a custom property, so this literal mirrors it. */
 @media (min-width: 560px) {
@@ -1119,8 +1125,6 @@ body:has(.overlay-section[style*="block"]) footer {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */
     align-items: start;
-    max-height: none;   /* override .scroll-col: columns scroll, not the wrap */
-    overflow: visible;
   }
   .left-rail,
   .right-stage {
@@ -1162,6 +1166,18 @@ body:has(.overlay-section[style*="block"]) footer {
    status bar (its 6px m-1.5 gap is preserved on top of the inset). */
 .nav-safe {
   margin-top: calc(0.375rem + env(safe-area-inset-top, 0px));
+}
+
+/* Below the desktop split (--bp-split, 560px — see :root), drop the nav's and
+   content's 6px side margins so both go flush to the screen edge instead of
+   floating in a visible frame; every phone loses that inset the most. Content
+   still gets its own breathing room from each .box's padding. */
+@media (max-width: 559px) {
+  .nav-safe,
+  .content-safe-x {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 /* Opaque cover over the status-bar / notch strip so content scrolling under
