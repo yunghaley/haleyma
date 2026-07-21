@@ -4,7 +4,7 @@
 
    <div class="bg-shader" aria-hidden="true"></div>
    <canvas id="dither-bg" aria-hidden="true"></canvas>
-   <video id="dither-src" src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
+   <video id="dither-src" src="assets/projects/reel/haley-ma-reel-0.19Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
    ...
    <script type="module">
      import { createDitherBg } from './dither.js';
