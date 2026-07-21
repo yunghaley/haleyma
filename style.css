@@ -544,7 +544,10 @@ li:before {
 }
 
 /* Stack every 2-column case-study layout (hero media+copy, before/after
-   compare) into a single column below the site's md breakpoint. */
+   compare) into a single column below 768px. The case study lives in the
+   right stage once the main frame splits at 560px (see initProjectStage),
+   but its own copy+phone row needs more room than 560px leaves, so it stays
+   stacked within that column until 768px. */
 @media (max-width: 767px) {
   .cs-hero-row {
     flex-direction: column;

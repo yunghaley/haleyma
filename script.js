@@ -60,7 +60,7 @@ function revealProjectContent(panel) {
 // right-hand #project-stage so it shows beside the nav rail; on mobile it stays
 // inline in the accordion panel (unchanged behaviour).
 function isDesktopSplit() {
-  return window.matchMedia('(min-width: 768px)').matches;
+  return window.matchMedia('(min-width: 560px)').matches;
 }
 
 // Nearest scrollable ancestor — the left rail on desktop, the content column on
@@ -134,7 +134,7 @@ function moveProjectToStage(item) {
 }
 
 function initProjectStage() {
-  const mq = window.matchMedia('(min-width: 768px)');
+  const mq = window.matchMedia('(min-width: 560px)');
   mq.addEventListener('change', () => {
     const open = document.querySelector('.accordion-item[aria-expanded="true"]');
     restoreStage(); // put content back inline + show reel, then re-place for the new width
