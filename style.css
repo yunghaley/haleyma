@@ -986,7 +986,7 @@ a.t-shimmer-hover {
 }
 
 /* md:col-span-4/8 — not in the precompiled tailwind.css build */
-@media (min-width: 768px) {
+@media (min-width: 560px) {
   .md\:col-span-4 {
     grid-column: span 4 / span 4;
   }
@@ -1102,7 +1102,7 @@ body:has(.overlay-section[style*="block"]) footer {
    (.scroll-col) with the reel/stage on top and the accordion below, and the
    rail/stage are plain in-flow blocks. On desktop the column becomes a 2-track
    grid and each side scrolls independently. */
-@media (min-width: 768px) {
+@media (min-width: 560px) {
   .content-col {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */

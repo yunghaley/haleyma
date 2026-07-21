@@ -383,37 +383,37 @@
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
   .md\:sticky {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       position: sticky;
     }
   }
   .md\:z-0 {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       z-index: 0;
     }
   }
   .md\:col-span-6 {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       grid-column: span 6 / span 6;
     }
   }
   .md\:col-span-4 {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       grid-column: span 4 / span 4;
     }
   }
   .md\:mt-1\.5 {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       margin-top: calc(var(--spacing) * 1.5);
     }
   }
   .md\:block {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       display: block;
     }
   }
   .md\:grid-cols-12 {
-    @media (width >= 48rem) {
+    @media (width >= 35rem) {
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
   }
