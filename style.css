@@ -41,7 +41,7 @@
      breakpoint auto-follows. CSS @media can't read a custom property, so the
      one functional media query for the split (.content-col, below) mirrors
      this value literally — keep them in sync. */
-  --bp-split: 560px;
+  --bp-split: 900px;
 }
 
 @supports (font-variation-settings: normal) {
@@ -190,10 +190,14 @@ li:before {
   padding-bottom: var(--sp-2);
   border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
-  /* .content-col is its own clipped scroll container at every width (see
-     .scroll-col below), so its top edge already clears the fixed nav — no
-     extra scroll-margin needed, that would just double-count the clearance. */
-  scroll-margin-top: 0;
+  /* Normally the open handler scrolls the clipped .content-col/.left-rail
+     container directly (below the nav), which ignores scroll-margin. But on
+     iOS Safari the svh-sized overflow container isn't always detected as
+     scrollable, so the handler falls back to scrollIntoView({block:'start'}) —
+     which scrolls the window and, without this offset, pins the item at y=0
+     behind the fixed nav. Match the nav clearance (see .content-offset) so the
+     fallback lands the item just below the nav instead. */
+  scroll-margin-top: calc(94px + env(safe-area-inset-top, 0px));
 }
 
 .accordion-trigger {
@@ -611,11 +615,15 @@ li:before {
   border-radius: 0 0 0.375rem 0.375rem;
 }
 
-/* The fixed nav is a .box, but --c-white-trans is transparent, so page
-   content scrolling under it (single-column mobile especially) bleeds
-   through. Give the nav bar an opaque page-black backing on every viewport. */
+/* The fixed nav is a transparent .box. Rather than a solid backing (which
+   reads as a flat bar), frost it: no fill, but blur whatever's behind so the
+   page gradient blends and any content that momentum-scrolls behind it on iOS
+   stays soft/legible instead of a sharp bleed. --nav-blur is the tweak knob. */
 nav .box {
   background: var(--c-white-trans);
+  --nav-blur: 16px;
+  backdrop-filter: blur(var(--nav-blur));
+  -webkit-backdrop-filter: blur(var(--nav-blur));
 }
 
 /* Cap video height so portrait/vertical videos fit the viewport; landscape unaffected */
