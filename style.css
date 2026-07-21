@@ -37,20 +37,6 @@
   --overlay-bg-blur: 8px;
   --overlay-bg-dim: 0.5; /* brightness behind an open overlay: 1 = none, 0 = black */
 }
-  --c-bg: rgb(237, 237, 237);
-  --c-primary: rgb(106, 0, 255);
-  --c-border: rgb(39, 39, 39);
-  --c-faint: rgba(39,39,39,0.7);
-  --c-white-trans: rgb(255 255 255 / 0.6);
-  --c-overlay: rgb(39 39 39 / 0.55);
-  --bg-pattern: radial-gradient(40% 55% at 15% 20%, #9e8784 0%, transparent 100%),
-                radial-gradient(45% 60% at 85% 25%, #77998F 0%, transparent 100%),
-                radial-gradient(50% 55% at 25% 85%, #BAC7DF 0%, transparent 100%),
-                radial-gradient(45% 60% at 80% 80%, #C1C8D0 0%, transparent 100%);
-  font-family: "Inter", sans-serif;
-  font-feature-settings: "zero", "liga", "ss01";
-  font-variation-settings: "wght" 200 400 600 800;
-}
 
 @supports (font-variation-settings: normal) {
   :root { font-family: "InterVariable", "Inter", sans-serif; font-optical-sizing: auto; }
