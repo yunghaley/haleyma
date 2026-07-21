@@ -615,7 +615,7 @@ li:before {
    content scrolling under it (single-column mobile especially) bleeds
    through. Give the nav bar an opaque page-black backing on every viewport. */
 nav .box {
-  background: var(--c-bg);
+  background: var(--c-white-trans);
 }
 
 /* Cap video height so portrait/vertical videos fit the viewport; landscape unaffected */
