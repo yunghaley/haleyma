@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preload" as="image" href="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png">
   <link rel="preload" as="image" href="assets/misc/iphone17pro-screen-mask.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Xanh+Mono:ital@0;1&display=swap" rel="stylesheet">
   <meta property="og:url" content="https://haleyma.com/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Haley Ma">
@@ -46,9 +43,6 @@
   </script>
 </head>
 <body class="flex flex-col min-h-screen">
-  <!-- <div class="bg-shader" aria-hidden="true"></div>
-  <canvas id="dither-bg" aria-hidden="true"></canvas> -->
-  <video id="dither-src" src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
   <div class="flex-1 flex flex-col items-center w-full">
   <!-- Header -->
   <header class="mb-1.5 z-50">
@@ -638,18 +632,7 @@
 
   <script src="lapse-images.js"></script>
   <script src="script.js"></script>
-  <!-- Dither background: disabled for now
-  <script type="module">
-    import { createDitherBg } from './dither.js';
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      createDitherBg({
-        canvas: document.getElementById('dither-bg'),
-        video: document.getElementById('dither-src'),
-        config: { shapeColor: '#272727' },
-      });
-    }
-  </script>
-  -->
+  <!-- Dither background: disabled — see dither.js header comment for the HTML hookup to restore it -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 </div>
 </body>

@@ -1,3 +1,25 @@
+/* Dithered reel background — disabled, kept for later use. Not imported
+   anywhere currently, so it costs nothing to load. To re-enable, paste
+   into index.html before </body>:
+
+   <div class="bg-shader" aria-hidden="true"></div>
+   <canvas id="dither-bg" aria-hidden="true"></canvas>
+   <video id="dither-src" src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
+   ...
+   <script type="module">
+     import { createDitherBg } from './dither.js';
+     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+       createDitherBg({
+         canvas: document.getElementById('dither-bg'),
+         video: document.getElementById('dither-src'),
+         config: { shapeColor: '#272727' },
+       });
+     }
+   </script>
+
+   Also restore the #dither-bg rules in style.css (search "Dithered reel
+   background layer" — currently left in place since they're inert without
+   the canvas element). */
 export function createDitherBg({ canvas, video, config = {} }) {
   if (!canvas || !video) return null;
 
