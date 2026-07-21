@@ -31,7 +31,7 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
-  --fs-hero: clamp(2.35rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero: clamp(2.35rem, 8vw, 3rem); /* fluid: 44px mobile → 64px wide desktop */
   --fs-hero-sub: clamp(1.5rem, 4.5vw, 2.25rem); /* H2 scale: 24px mobile → 36px wide desktop */
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
@@ -649,7 +649,7 @@ video {
 .bg-shader {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   background-color: var(--c-bg);
   background-image: var(--bg-pattern);
@@ -899,12 +899,15 @@ a.t-shimmer-hover {
 /* Dithered reel background layer (dither.js) */
 #dither-bg {
   position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.1;
+  opacity: 0.5;
 }
 
 /* Custom video controls */
@@ -1217,7 +1220,7 @@ body::before {
 .nav-icon {
   display: inline-flex;
   align-items: center;
-  color: inherit;
+  color: #fff;
 }
 
 .nav-icon:hover {

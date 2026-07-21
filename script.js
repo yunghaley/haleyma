@@ -216,7 +216,9 @@ function initVideoControls() {
     sound: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/></svg>',
     soundOff: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/><path d="M4.5 4.5l15 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
   };
-  document.querySelectorAll('video').forEach(video => {
+  // #dither-src is the hidden source video for the background canvas — never a
+  // foreground player, so it gets no play/mute chrome.
+  document.querySelectorAll('video:not(#dither-src)').forEach(video => {
     const shell = document.createElement('div');
     shell.className = 'video-shell';
     video.parentNode.insertBefore(shell, video);

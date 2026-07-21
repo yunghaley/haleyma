@@ -135,7 +135,14 @@ export function createDitherBg({ canvas, video, config = {} }) {
     const dpr = window.devicePixelRatio || 1;
     const step = cell / 64;
 
-    ctx.clearRect(0, 0, w, h);
+    // Clear in device-pixel space (canvas.width/height), not CSS w/h: the
+    // per-shape draws below set an absolute device-pixel transform and
+    // leave it at identity when the loop ends, so a w/h clear under that
+    // identity transform only wiped the top-left 1/dpr fraction of the
+    // canvas on any dpr>1 screen — the rest never got cleared, which read
+    // as "the video only renders in the top-left corner."
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     let fill = '';
 
     for (let y = 0; y < rows; y++) {
@@ -193,6 +200,14 @@ export function createDitherBg({ canvas, video, config = {} }) {
   };
 
   window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', resize);
+  // iOS Safari's address bar collapsing/expanding fires visualViewport
+  // resize/scroll rather than (or in addition to) window resize — re-fit
+  // the canvas to the element's box whenever that happens.
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', resize);
+    window.visualViewport.addEventListener('scroll', resize);
+  }
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) start();
   });
