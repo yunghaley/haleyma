@@ -190,7 +190,7 @@ li:before {
   padding-bottom: var(--sp-2);
   border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
-  /* Normally the open handler scrolls the clipped .content-col/.left-rail
+  /* Normally the open handler scrolls the clipped .content-col/.projects-col
      container directly (below the nav), which ignores scroll-margin. But on
      iOS Safari the svh-sized overflow container isn't always detected as
      scrollable, so the handler falls back to scrollIntoView({block:'start'}) —
@@ -555,9 +555,9 @@ li:before {
 
 /* Stack every 2-column case-study layout (hero media+copy, before/after
    compare) into a single column below 768px. The case study lives in the
-   right stage once the main frame splits at 560px (see initProjectStage),
-   but its own copy+phone row needs more room than 560px leaves, so it stays
-   stacked within that column until 768px. */
+   projects column once the main frame splits at 560px, but its own
+   copy+phone row needs more room than 560px leaves, so it stays stacked
+   within that column until 768px. */
 @media (max-width: 767px) {
   .cs-hero-row {
     flex-direction: column;
@@ -1076,12 +1076,6 @@ a.t-shimmer-hover {
   overflow-y: auto;
 }
 
-/* Left column's children are now fixed-position overlays, so it renders nothing —
-   drop it from the grid track so the content column isn't pushed or gapped. */
-.content-offset > div:first-child {
-  display: contents;
-}
-
 /* Blur the whole page behind an open overlay. Blur is applied to the overlay's
    siblings (content, bg layers, footer) — never an ancestor, since filter would
    blur the overlay too and break its fixed positioning. Nav is z-50, above it all.
@@ -1121,11 +1115,13 @@ body:has(.overlay-section[style*="block"]) footer {
   overflow-y: visible;
 }
 
-/* --- Desktop split: 25% projects-nav rail | 75% content stage ---
-   Mobile is untouched: content-col stays a single flex-col box with the
-   reel/stage on top and the accordion below, and the rail/stage are plain
-   in-flow blocks, the whole page scrolling together. On desktop the column
-   becomes a 2-track grid and each side scrolls independently.
+/* --- Desktop split: permanent INFO column | projects column ---
+   Mobile is untouched: .info-col stays a dormant overlay (see .overlay-section
+   above), .mobile-hero shows the intro copy, and .projects-col is a single-open,
+   closed-by-default accordion below it — all plain in-flow blocks, the whole
+   page scrolling together. Desktop instead makes .info-col a real column (no
+   longer an overlay) beside .projects-col, hides the now-redundant
+   .mobile-hero, and each side scrolls independently.
    560px MUST match --bp-split (the single source of truth in :root above);
    @media can't read a custom property, so this literal mirrors it. */
 @media (min-width: 560px) {
@@ -1134,15 +1130,24 @@ body:has(.overlay-section[style*="block"]) footer {
     grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */
     align-items: start;
   }
-  .left-rail,
-  .right-stage {
+  .info-col {
+    /* Un-overlay: was position:fixed/display:none/centred (see .overlay-section) */
+    display: block;
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+  }
+  .info-col,
+  .projects-col {
     grid-row: 1;
     min-height: 0;      /* let grid children shrink so overflow can scroll */
     max-height: calc(100svh - 94px);
     overflow-y: auto;
   }
-  .left-rail  { grid-column: 1; }
-  .right-stage { grid-column: 2; }
+  .info-col     { grid-column: 1; }
+  .projects-col { grid-column: 2; }
+  .mobile-hero  { display: none; }
 }
 /* Wide desktop: give the stage more room, narrow the nav rail to 25%. */
 @media (min-width: 1740px) {

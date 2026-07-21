@@ -50,29 +50,30 @@ function initInfoDismiss() {
 // needed for that). The project's rich content (video/case-study) lives
 // directly inside its .accordion-panel now, so opening it just means playing
 // its media and scrolling it into view once the open transition settles.
-function revealProjectContent(panel) {
+function revealProjectContent(panel, { autoplayVideo = true } = {}) {
   panel.querySelectorAll('.t-digit-group').forEach(g => {
     g.classList.remove('is-animating');
     void g.offsetHeight;
     g.classList.add('is-animating');
   });
+  if (!autoplayVideo) return;
   panel.querySelectorAll('video').forEach(v => {
     v.muted = true;
     v.play().catch(e => console.log('Autoplay failed:', e));
   });
 }
 
-// --- Desktop project stage (portal) ---
-// On desktop the opened project's content (#project-<slug>) is moved into the
-// right-hand #project-stage so it shows beside the nav rail; on mobile it stays
-// inline in the accordion panel (unchanged behaviour).
+// --- Desktop vs mobile accordion behaviour ---
+// Desktop: every project starts expanded and each stays individually
+// collapsible (multi-open). Mobile: single-open, closed by default
+// (unchanged) — opening one closes any other that's open.
 function isDesktopSplit() {
   return window.matchMedia(SPLIT_QUERY).matches;
 }
 
-// Nearest scrollable ancestor — the left rail on desktop, the content column on
-// mobile. Used so we scroll the right container (never the window, which on
-// mobile drags the item under the fixed nav).
+// Nearest scrollable ancestor — the projects column on desktop, the content
+// column on mobile. Used so we scroll the right container (never the window,
+// which on mobile drags the item under the fixed nav).
 function scrollParent(el) {
   let p = el.parentElement;
   while (p) {
@@ -83,77 +84,30 @@ function scrollParent(el) {
   return null;
 }
 
-// Deferred restore state: closing content must re-enter its (now-collapsed)
-// panel only AFTER the close animation, or it flashes in the shrinking panel.
-let pendingRestore = null;
-function flushPendingRestore() {
-  if (!pendingRestore) return;
-  clearTimeout(pendingRestore.timer);
-  pendingRestore.putBack();
-  pendingRestore = null;
-}
-
-// Immediate restore (viewport crossover): move staged content back inline now.
-function restoreStage() {
-  flushPendingRestore();
-  const stage = document.getElementById('project-stage');
-  if (!stage) return;
-  const moved = stage.firstElementChild;
-  if (moved && moved._home) {
-    moved.querySelectorAll('video, audio').forEach(m => { m.muted = true; m.pause(); });
-    const home = moved._home; moved._home = null;
-    home.parent.insertBefore(moved, home.next);
-    moved.style.display = '';
-  }
-  const reel = document.getElementById('project-default');
-  if (reel) reel.style.display = '';
-}
-
-// Close restore: hide staged content immediately (so it neither flashes in the
-// collapsing left panel nor lingers over the reel) and show the reel; move the
-// content home only after the collapse settles (into the closed, clipped panel).
-function deferStageRestore() {
-  flushPendingRestore();
-  const reel = document.getElementById('project-default');
-  if (reel) reel.style.display = '';
-  const stage = document.getElementById('project-stage');
-  const moved = stage && stage.firstElementChild;
-  if (!moved || !moved._home) return;
-  moved.querySelectorAll('video, audio').forEach(m => { m.muted = true; m.pause(); });
-  moved.style.display = 'none';
-  const home = moved._home; moved._home = null;
-  const putBack = () => { home.parent.insertBefore(moved, home.next); moved.style.display = ''; };
-  pendingRestore = { timer: setTimeout(() => { putBack(); pendingRestore = null; }, 600), putBack };
-}
-
-function moveProjectToStage(item) {
-  if (!isDesktopSplit()) return null;
-  flushPendingRestore();
-  const stage = document.getElementById('project-stage');
-  const content = document.getElementById('project-' + item.dataset.project);
-  if (!stage || !content) return null;
-  content.style.display = '';
-  content._home = { parent: content.parentNode, next: content.nextSibling };
-  stage.appendChild(content);
-  const reel = document.getElementById('project-default');
-  if (reel) reel.style.display = 'none';
-  return content;
-}
-
-function initProjectStage() {
+// All projects open together on desktop by default (see initAccordionDefaultState),
+// so autoplaying every video at once would start a dozen+ streams simultaneously.
+// Bulk/initial opens skip autoplay — videos sit paused at their poster frame
+// until played manually or the project is opened again via a real click.
+function initAccordionDefaultState() {
+  const expandAllForDesktop = () => {
+    document.querySelectorAll('.accordion-item:not(.hidden)').forEach(item => {
+      if (item.getAttribute('aria-expanded') !== 'true') {
+        expandAccordionItem(item, { animate: false });
+      }
+    });
+  };
   const mq = window.matchMedia(SPLIT_QUERY);
+  if (mq.matches) expandAllForDesktop();
   mq.addEventListener('change', () => {
-    const open = document.querySelector('.accordion-item[aria-expanded="true"]');
-    restoreStage(); // put content back inline + show reel, then re-place for the new width
-    if (open && mq.matches) {
-      const staged = moveProjectToStage(open);
-      if (staged) revealProjectContent(staged);
-    }
+    if (mq.matches) expandAllForDesktop();
+    else closeAllAccordions(); // back to mobile's closed-by-default state
   });
 }
 
-function expandAccordionItem(accordionItem) {
-  closeAllAccordions(accordionItem); // also restores any staged content + shows reel
+function expandAccordionItem(accordionItem, { animate = true } = {}) {
+  // Mobile is single-open: opening one closes any other. Desktop allows
+  // several open at once (see initAccordionDefaultState), so siblings stay put.
+  if (!isDesktopSplit()) closeAllAccordions(accordionItem);
   accordionItem.setAttribute('aria-expanded', 'true');
   const trigger = accordionItem.querySelector('.accordion-trigger');
   if (trigger) trigger.setAttribute('aria-expanded', 'true');
@@ -163,10 +117,14 @@ function expandAccordionItem(accordionItem) {
   panel.setAttribute('aria-hidden', 'false');
   panel.removeAttribute('inert');
 
-  // Desktop: portal the project's content to the right stage before measuring,
-  // so the left panel only animates to its (shorter) nav height.
-  const staged = moveProjectToStage(accordionItem);
-  if (staged) revealProjectContent(staged);
+  if (!animate) {
+    // Bulk/initial expand (desktop default state, or a breakpoint crossover):
+    // set the open state directly, no transition, no per-item scroll, and no
+    // autoplay (see revealProjectContent — avoids flooding a dozen+ videos).
+    panel.style.maxHeight = 'none';
+    revealProjectContent(panel, { autoplayVideo: false });
+    return;
+  }
 
   panel.style.maxHeight = panel.scrollHeight + 'px';
 
@@ -176,9 +134,9 @@ function expandAccordionItem(accordionItem) {
     // Un-cap height once open: late-loading media (lazyload images, video
     // metadata) would otherwise stay clipped at the height measured pre-load.
     panel.style.maxHeight = 'none';
-    if (!staged) revealProjectContent(panel); // mobile: content is still inline
+    revealProjectContent(panel);
     // Bring the item's top flush to the top of its own scroll container (the
-    // left rail on desktop, the content column on mobile) — never via
+    // projects column on desktop, the content column on mobile) — never via
     // scrollIntoView, which also scrolls the window and drags the item under
     // the fixed nav on mobile.
     const col = scrollParent(accordionItem);
@@ -200,7 +158,7 @@ function initAccordion() {
     const accordionItem = event.target.closest('.accordion-item');
     if (accordionItem) {
       const isOpen = accordionItem.getAttribute('aria-expanded') === 'true';
-      if (isOpen) closeAllAccordions();
+      if (isOpen) collapseAccordionItem(accordionItem);
       else expandAccordionItem(accordionItem);
     }
     // PROJECTS is always-visible now (not a dismissible overlay), so there's
@@ -291,31 +249,33 @@ function initCaseStudyReveal() {
 }
 
 // --- Helper utilities (moved from original script) ---
+function collapseAccordionItem(item) {
+  const wasOpen = item.getAttribute('aria-expanded') === 'true';
+  item.setAttribute('aria-expanded', 'false');
+  const panel = document.getElementById(item.getAttribute('aria-controls'));
+  if (!panel) return;
+  if (wasOpen) {
+    // Open panels sit at max-height: none (see expandAccordionItem) so
+    // late-loading media isn't clipped — but 'none' can't be transitioned
+    // from directly. Give it a concrete starting height, force layout,
+    // then collapse it so the close actually animates.
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    void panel.offsetHeight;
+  }
+  panel.style.maxHeight = null;
+  panel.classList.remove('is-open');
+  panel.setAttribute('aria-hidden', 'true');
+  panel.setAttribute('inert', '');
+  panel.querySelectorAll('video, audio').forEach(media => {
+    media.muted = true;
+    media.pause();
+  });
+}
+
 function closeAllAccordions(except = null) {
-  deferStageRestore(); // hide staged content + show reel now; move it home after collapse
   document.querySelectorAll('.accordion-item').forEach(item => {
     if (item === except) return;
-    const wasOpen = item.getAttribute('aria-expanded') === 'true';
-    item.setAttribute('aria-expanded', 'false');
-    const panel = document.getElementById(item.getAttribute('aria-controls'));
-    if (panel) {
-      if (wasOpen) {
-        // Open panels sit at max-height: none (see expandAccordionItem) so
-        // late-loading media isn't clipped — but 'none' can't be transitioned
-        // from directly. Give it a concrete starting height, force layout,
-        // then collapse it so the close actually animates.
-        panel.style.maxHeight = panel.scrollHeight + 'px';
-        void panel.offsetHeight;
-      }
-      panel.style.maxHeight = null;
-      panel.classList.remove('is-open');
-      panel.setAttribute('aria-hidden', 'true');
-      panel.setAttribute('inert', '');
-      panel.querySelectorAll('video, audio').forEach(media => {
-        media.muted = true;
-        media.pause();
-      });
-    }
+    collapseAccordionItem(item);
   });
 }
 
@@ -506,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initInfoDismiss();
   initAccordion();
-  initProjectStage();
+  initAccordionDefaultState();
   initVideoControls();
   initCaseStudyReveal();
   initScrollFade();

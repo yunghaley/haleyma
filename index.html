@@ -45,13 +45,13 @@
 <body class="flex flex-col min-h-screen">
   <div class="flex-1 flex flex-col items-center w-full">
   <!-- Header -->
-  <header class="mb-1.5 z-50">
+  <header class="mb-1.5 z-50 w-full">
   
 
 
     <nav aria-label="Primary navigation">
-    <div class="m-1.5 fixed inset-x-0 z-50 flex justify-center nav-safe">
-      <div class="w-full flex flex-col gap-1.5">
+    <div class="m-1.5 inset-x-0 z-50 flex justify-center nav-safe">
+      <div class="w-full flex flex-col place-content-between">
         <!-- Two frosted pills — one hugging the logo, one hugging the email —
              instead of a single full-width frosted bar. Spacer between pushes
              them to the left/right edges. -->
@@ -96,32 +96,30 @@
   
     <div class="ml-1.5 mr-1.5 z-40 content-safe-x">
       <div class="w-full content-offset grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
-        <!--INFO & PROJECT ACCORDION-->
-        <div class="mt-1.5 col-span-full md:col-span-4 flex flex-col gap-1.5 scroll-col">
-          <div data-section="info" class="overlay-section scroll-fade w-full p-1.5 box">
-            <h1 class="font-sans t-hero">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring applications for AI creative tools. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, <a href="https://www.intermiamicf.com/" class="t-shimmer-hover" data-text="Inter Miami CF">Inter Miami CF</a>, and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
-          </div>
-        </div>
-
         <!--CONTENT-->
         <div class="md:mt-1.5 col-span-full z-10 md:z-0 flex flex-col gap-1.5 scroll-col scroll-fade content-col">
-            <!-- RIGHT STAGE (desktop) / top (mobile): reel by default; an opened
-                 project's content is portaled into #project-stage by script.js -->
-            <div class="right-stage flex flex-col gap-1.5">
+            <!-- INFO: desktop's permanent left column (sibling of .projects-col
+                 in this same grid); mobile keeps this dormant (its nav trigger
+                 is hidden — see PROJECTS/INFO buttons above). -->
+            <div data-section="info" class="info-col overlay-section scroll-fade w-full p-1.5 box">
+              <h1 class="font-sans t-hero">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring applications for AI creative tools. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, <a href="https://www.intermiamicf.com/" class="t-shimmer-hover" data-text="Inter Miami CF">Inter Miami CF</a>, and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
+            </div>
+
+            <!-- Mobile-only intro, above the (collapsed) accordion; hidden
+                 entirely on desktop, where .info-col covers the same copy. -->
+            <div class="mobile-hero flex flex-col gap-1.5">
               <div id="project-default" class="project-panel">
                 <div class="box p-1.5">
-                  <!-- Default stage: the positioning statement leads. The showreel
-                       now runs as the dithered background (see bottom of body), so
-                       the words carry the multi-hyphenate story instead of the film.
-                       Copy mirrors the INFO overlay (~L97) — keep the two in sync. -->
                   <h1 class="font-sans t-hero">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring applications for AI creative tools. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, <a href="https://www.intermiamicf.com/" class="t-shimmer-hover" data-text="Inter Miami CF">Inter Miami CF</a>, and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
                 </div>
               </div>
-              <div id="project-stage"></div>
             </div>
 
-            <!-- LEFT RAIL (desktop) / below reel (mobile): projects nav -->
-            <div class="left-rail">
+            <!-- Projects column: desktop's right side, all items expanded by
+                 default and individually collapsible; mobile keeps the
+                 original single-open, closed-by-default accordion below the
+                 intro above (see script.js isDesktopSplit branches). -->
+            <div class="projects-col">
           <section data-section="projects">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
@@ -629,7 +627,7 @@
                 </div>
               </div>
             </div>
-            </div><!-- /.left-rail -->
+            </div><!-- /.projects-col -->
 
         </div>
 
