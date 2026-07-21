@@ -41,7 +41,7 @@
      breakpoint auto-follows. CSS @media can't read a custom property, so the
      one functional media query for the split (.content-col, below) mirrors
      this value literally — keep them in sync. */
-  --bp-split: 900px;
+  --bp-split: 560px;
 }
 
 @supports (font-variation-settings: normal) {
