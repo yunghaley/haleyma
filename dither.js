@@ -80,8 +80,13 @@ export function createDitherBg({ canvas, video, config = {} }) {
   };
 
   const resize = () => {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    // Measure the canvas's own CSS box (sized off 100lvw/100lvh in style.css —
+    // the *large* viewport, immune to mobile browser chrome show/hide) rather
+    // than window.innerWidth/innerHeight, which mobile browsers shrink live
+    // as the address bar/toolbar animates in — that was making the whole
+    // dithered image visibly resize and redraw on every scroll.
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
     const cell = cfg.cell;
     const cols = Math.ceil(w / cell);
     const rows = Math.ceil(h / cell);
@@ -109,12 +114,12 @@ export function createDitherBg({ canvas, video, config = {} }) {
       return;
     }
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
     const cell = cfg.cell;
     const cols = off.width || Math.ceil(w / cell);
     const rows = off.height || Math.ceil(h / cell);
-    const zoom = window.innerWidth <= 640 ? 0.9 : (cfg.zoom || 1);
+    const zoom = w <= 640 ? 0.9 : (cfg.zoom || 1);
     // zoom < 1 shrinks the video under cover-fit, opening a gap in whichever
     // dimension was exactly covered — the black bars top/bottom (or
     // left/right) reported against reference.jpeg. Never go below cover.
@@ -204,13 +209,12 @@ export function createDitherBg({ canvas, video, config = {} }) {
 
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', resize);
-  // iOS Safari's address bar collapsing/expanding fires visualViewport
-  // resize/scroll rather than (or in addition to) window resize — re-fit
-  // the canvas to the element's box whenever that happens.
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', resize);
-    window.visualViewport.addEventListener('scroll', resize);
-  }
+  // Deliberately NOT listening to visualViewport resize/scroll: those fire
+  // as mobile browser chrome (address bar/toolbar) animates in and out, and
+  // re-running resize() on every one of those visibly resized/redrew the
+  // whole dithered image. The canvas's own box is sized off 100lvw/100lvh
+  // (large viewport, see style.css), so it doesn't need to react to chrome
+  // toggling at all — only a real resize/orientation change should re-fit it.
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) start();
   });

@@ -907,10 +907,14 @@ a.t-shimmer-hover {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
+  /* Large viewport units: sized as if browser chrome (address bar/toolbar)
+     is always retracted, so it doesn't visibly resize as chrome animates in
+     and out — dither.js measures this same box via clientWidth/clientHeight
+     instead of window.innerWidth/innerHeight for the same reason. */
+  width: 100lvw;
+  height: 100lvh;
+  max-width: 100lvw;
+  max-height: 100lvh;
   z-index: -1;
   pointer-events: none;
   opacity: 0.5;
