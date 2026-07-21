@@ -36,6 +36,12 @@
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
   --overlay-bg-dim: 0.5; /* brightness behind an open overlay: 1 = none, 0 = black */
+  /* SINGLE SOURCE OF TRUTH for the desktop 2-column / mobile 1-column split.
+     script.js reads this at runtime (getComputedStyle) so the JS portal
+     breakpoint auto-follows. CSS @media can't read a custom property, so the
+     one functional media query for the split (.content-col, below) mirrors
+     this value literally — keep them in sync. */
+  --bp-split: 560px;
 }
 
 @supports (font-variation-settings: normal) {
@@ -988,16 +994,6 @@ a.t-shimmer-hover {
   display: block;
 }
 
-/* md:col-span-4/8 — not in the precompiled tailwind.css build */
-@media (min-width: 560px) {
-  .md\:col-span-4 {
-    grid-column: span 4 / span 4;
-  }
-  .md\:col-span-8 {
-    grid-column: span 8 / span 8;
-  }
-}
-
 /* Registered so --scroll-fade can transition (typed as a number, not a raw token) */
 @property --scroll-fade {
   syntax: "<number>";
@@ -1104,7 +1100,9 @@ body:has(.overlay-section[style*="block"]) footer {
    Mobile is untouched: content-col stays a single flex-col scroll box
    (.scroll-col) with the reel/stage on top and the accordion below, and the
    rail/stage are plain in-flow blocks. On desktop the column becomes a 2-track
-   grid and each side scrolls independently. */
+   grid and each side scrolls independently.
+   560px MUST match --bp-split (the single source of truth in :root above);
+   @media can't read a custom property, so this literal mirrors it. */
 @media (min-width: 560px) {
   .content-col {
     display: grid;

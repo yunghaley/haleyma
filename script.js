@@ -1,5 +1,12 @@
 // script.js – refactored into self‑contained functional modules
 
+// Desktop-split breakpoint. Single source of truth is --bp-split in style.css
+// (:root); we read it here so the JS portal threshold always matches the CSS
+// media query without a second hardcoded value. Falls back to 560px if unset.
+const SPLIT_QUERY = `(min-width: ${
+  getComputedStyle(document.documentElement).getPropertyValue('--bp-split').trim() || '560px'
+})`;
+
 // --- Navigation (NOW / PROJECTS / INFO) and logo handling ---
 function initNav() {
   document.addEventListener('click', function(event) {
@@ -60,7 +67,7 @@ function revealProjectContent(panel) {
 // right-hand #project-stage so it shows beside the nav rail; on mobile it stays
 // inline in the accordion panel (unchanged behaviour).
 function isDesktopSplit() {
-  return window.matchMedia('(min-width: 560px)').matches;
+  return window.matchMedia(SPLIT_QUERY).matches;
 }
 
 // Nearest scrollable ancestor — the left rail on desktop, the content column on
@@ -134,7 +141,7 @@ function moveProjectToStage(item) {
 }
 
 function initProjectStage() {
-  const mq = window.matchMedia('(min-width: 560px)');
+  const mq = window.matchMedia(SPLIT_QUERY);
   mq.addEventListener('change', () => {
     const open = document.querySelector('.accordion-item[aria-expanded="true"]');
     restoreStage(); // put content back inline + show reel, then re-place for the new width
