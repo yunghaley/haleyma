@@ -599,11 +599,12 @@ li:before {
   width: 100%;
 }
 
-/* Project content scrolls in its own region so the accordion item's header
-   and blurb (its "context") stay put above it while the user reads through. */
+/* Used to scroll in its own nested region, capped to 100svh-154px, so the
+   accordion item's header/blurb stayed pinned above it — cramped for
+   content-heavy projects (Lapse) and another caged scroll box like the one
+   .content-col dropped. Case-study content now flows with whatever actually
+   scrolls it (the page on mobile, .projects-col on desktop) instead. */
 .project-panel {
-  max-height: calc(100svh - 154px);
-  overflow-y: auto;
   margin-top: var(--sp-6);
 }
 

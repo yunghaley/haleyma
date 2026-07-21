@@ -878,8 +878,6 @@ li:before {
   width: 100%;
 }
 .project-panel {
-  max-height: calc(100svh - 154px);
-  overflow-y: auto;
   margin-top: var(--sp-6);
 }
 .box {
