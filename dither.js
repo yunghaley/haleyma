@@ -115,7 +115,10 @@ export function createDitherBg({ canvas, video, config = {} }) {
     const cols = off.width || Math.ceil(w / cell);
     const rows = off.height || Math.ceil(h / cell);
     const zoom = window.innerWidth <= 640 ? 0.9 : (cfg.zoom || 1);
-    const scale = Math.max(cols / video.videoWidth, rows / video.videoHeight) * zoom;
+    // zoom < 1 shrinks the video under cover-fit, opening a gap in whichever
+    // dimension was exactly covered — the black bars top/bottom (or
+    // left/right) reported against reference.jpeg. Never go below cover.
+    const scale = Math.max(cols / video.videoWidth, rows / video.videoHeight) * Math.max(zoom, 1);
     const drawW = video.videoWidth * scale;
     const drawH = video.videoHeight * scale;
     const offX = (cols - drawW) / 2;
