@@ -31,6 +31,13 @@ export function createDitherBg({ canvas, video, config = {} }) {
 
   const cfg = {
     cell: 7,
+    // Total grid cells (cols*rows) drives per-frame cost — a flat cell size
+    // means a 5K/4K monitor gets ~10-25x a phone's cell count for the same
+    // per-cell work (getImageData + a fill()+setTransform() per cell), which
+    // is what made large displays laggy even after the fps cap below.
+    // cellSize() grows the cell size on large screens to keep the total
+    // count near this, instead of letting it balloon with screen area.
+    cellTarget: 7000, // ≈ a phone in portrait at cell:7 (6776 cells) — known to run fine
     fps: 30, // ambient background — 60fps+ is imperceptible here but doubles CPU/battery cost
     brightness: 0,
     contrast: 1.85,
@@ -91,6 +98,10 @@ export function createDitherBg({ canvas, video, config = {} }) {
   const shapeRgb = hexToRgb(cfg.shapeColor);
   const shapeCss = `rgb(${shapeRgb[0]},${shapeRgb[1]},${shapeRgb[2]})`;
 
+  // Never finer than cfg.cell (today's phone/small-screen look, unchanged);
+  // grows past it as w*h grows so cols*rows stays near cfg.cellTarget.
+  const cellSize = (w, h) => Math.max(cfg.cell, Math.round(Math.sqrt((w * h) / cfg.cellTarget)));
+
   const brightness = (px4) => {
     let v = (0.299 * px4[0] + 0.587 * px4[1] + 0.114 * px4[2]) / 255;
     if (cfg.invert) v = 1 - v;
@@ -106,7 +117,7 @@ export function createDitherBg({ canvas, video, config = {} }) {
     // stylesheet unit, so this is authoritative regardless of lvh support).
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
-    const cell = cfg.cell;
+    const cell = cellSize(w, h);
     const cols = Math.ceil(w / cell);
     const rows = Math.ceil(h / cell);
     const dpr = window.devicePixelRatio || 1;
@@ -158,7 +169,7 @@ export function createDitherBg({ canvas, video, config = {} }) {
     lastDrawTime = now - (elapsed % frameInterval); // correct drift, don't compound it
 
     const { w, h } = viewportSize();
-    const cell = cfg.cell;
+    const cell = cellSize(w, h);
     const cols = off.width || Math.ceil(w / cell);
     const rows = off.height || Math.ceil(h / cell);
     const zoom = w <= 640 ? 0.9 : (cfg.zoom || 1);
