@@ -27,8 +27,13 @@ function initNav() {
       // Logo resets home: collapse any open project and dismiss all overlays.
       // project-default (the homepage reel) is never hidden or paused by
       // anything else, so there's nothing else to reset here.
-      closeAllAccordions();
-      document.querySelectorAll('[data-section]:not([data-section="projects"])').forEach(sec => sec.style.display = 'none');
+      // Desktop: .info-col is permanent (not a dismissible overlay) and
+      // every project starts expanded by default — that default state IS
+      // "home" there already, so there's nothing to reset.
+      if (!isDesktopSplit()) {
+        closeAllAccordions();
+        document.querySelectorAll('[data-section]:not([data-section="projects"])').forEach(sec => sec.style.display = 'none');
+      }
     }
   });
 }
@@ -36,6 +41,9 @@ function initNav() {
 // --- INFO overlay: tap anywhere that isn't a link or a nav toggle to dismiss ---
 function initInfoDismiss() {
   document.addEventListener('click', (event) => {
+    // Desktop: .info-col is a permanent column, not a dismissible overlay —
+    // any click (e.g. collapsing an accordion item) would otherwise hide it.
+    if (isDesktopSplit()) return;
     const info = document.querySelector('[data-section="info"]');
     if (!info || getComputedStyle(info).display === 'none') return; // not open
     // Links keep working; nav toggles ([data-target]) manage the overlay themselves.
