@@ -1,0 +1,17 @@
+# CSS/fonts/images already get 7-day caching from the host by default (see
+# haleyma.com response headers) — .js and video assets get none at all, so
+# repeat visits re-fetch script.js and multi-MB case-study videos from
+# scratch every time. Fill just that gap; IfModule guards make this a no-op
+# rather than an error if either module isn't loaded.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType text/javascript "access plus 7 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|mp4)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
