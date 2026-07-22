@@ -924,7 +924,7 @@ a.t-shimmer-hover {
   max-height: 100lvh;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.25;
   background-size: cover;
   background-position: center;
   object-fit: cover;
