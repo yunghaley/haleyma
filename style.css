@@ -31,7 +31,7 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
-  --fs-hero: clamp(2.35rem, 8vw, 4rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero: clamp(2rem, 8vw, 3rem); /* fluid: 44px mobile → 64px wide desktop */
   --fs-hero-sub: clamp(1.5rem, 4.5vw, 2.25rem); /* H2 scale: 24px mobile → 36px wide desktop */
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
@@ -41,7 +41,14 @@
      breakpoint auto-follows. CSS @media can't read a custom property, so the
      one functional media query for the split (.content-col, below) mirrors
      this value literally — keep them in sync. */
-  --bp-split: 900px;
+  --bp-split: 560px;
+  /* Also required (min-height) before the split engages — a landscape phone
+     is plenty wide (>560px) but only ~300-430px tall, and the split's two
+     columns each cap to 100svh-94px, i.e. ~250-350px boxes with their own
+     internal scrollbar: everything reads as squeezed into small compressed
+     boxes. Below this height, stay in the single-column mobile layout
+     (natural page scroll) even at desktop width. */
+  --bp-split-min-height: 500px;
 }
 
 @supports (font-variation-settings: normal) {
@@ -190,7 +197,7 @@ li:before {
   padding-bottom: var(--sp-2);
   border-bottom: 1px solid var(--c-border);
   transition: margin 0.55s cubic-bezier(0.34, 1.38, 0.64, 1);
-  /* Normally the open handler scrolls the clipped .content-col/.left-rail
+  /* Normally the open handler scrolls the clipped .content-col/.projects-col
      container directly (below the nav), which ignores scroll-margin. But on
      iOS Safari the svh-sized overflow container isn't always detected as
      scrollable, so the handler falls back to scrollIntoView({block:'start'}) —
@@ -555,9 +562,9 @@ li:before {
 
 /* Stack every 2-column case-study layout (hero media+copy, before/after
    compare) into a single column below 768px. The case study lives in the
-   right stage once the main frame splits at 560px (see initProjectStage),
-   but its own copy+phone row needs more room than 560px leaves, so it stays
-   stacked within that column until 768px. */
+   projects column once the main frame splits at 560px, but its own
+   copy+phone row needs more room than 560px leaves, so it stays stacked
+   within that column until 768px. */
 @media (max-width: 767px) {
   .cs-hero-row {
     flex-direction: column;
@@ -599,11 +606,12 @@ li:before {
   width: 100%;
 }
 
-/* Project content scrolls in its own region so the accordion item's header
-   and blurb (its "context") stay put above it while the user reads through. */
+/* Used to scroll in its own nested region, capped to 100svh-154px, so the
+   accordion item's header/blurb stayed pinned above it — cramped for
+   content-heavy projects (Lapse) and another caged scroll box like the one
+   .content-col dropped. Case-study content now flows with whatever actually
+   scrolls it (the page on mobile, .projects-col on desktop) instead. */
 .project-panel {
-  max-height: calc(100svh - 154px);
-  overflow-y: auto;
   margin-top: var(--sp-6);
 }
 
@@ -649,7 +657,7 @@ video {
 .bg-shader {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   background-color: var(--c-bg);
   background-image: var(--bg-pattern);
@@ -896,15 +904,30 @@ a.t-shimmer-hover {
   }
 }
 
-/* Dithered reel background layer (dither.js) */
-#dither-bg {
+/* Dithered reel background layer (dither.js). #dither-bg-fallback shares this
+   box: a pre-rendered dithered still (see assets/projects/reel) shown instead
+   of the animated canvas for prefers-reduced-motion (set as its
+   background-image in index.html's init script) and for no-JS (the
+   <noscript> <img> below the canvas). */
+#dither-bg,
+#dither-bg-fallback {
   position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  /* Large viewport units: sized as if browser chrome (address bar/toolbar)
+     is always retracted, so it doesn't visibly resize as chrome animates in
+     and out — dither.js measures this same box via clientWidth/clientHeight
+     instead of window.innerWidth/innerHeight for the same reason. */
+  width: 100lvw;
+  height: 100lvh;
+  max-width: 100lvw;
+  max-height: 100lvh;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.1;
+  opacity: 0.5;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
 }
 
 /* Custom video controls */
@@ -1065,12 +1088,6 @@ a.t-shimmer-hover {
   overflow-y: auto;
 }
 
-/* Left column's children are now fixed-position overlays, so it renders nothing —
-   drop it from the grid track so the content column isn't pushed or gapped. */
-.content-offset > div:first-child {
-  display: contents;
-}
-
 /* Blur the whole page behind an open overlay. Blur is applied to the overlay's
    siblings (content, bg layers, footer) — never an ancestor, since filter would
    blur the overlay too and break its fixed positioning. Nav is z-50, above it all.
@@ -1099,35 +1116,51 @@ body:has(.overlay-section[style*="block"]) footer {
 
 /* Reel sits flush at the top of the content column; PROJECTS (now plain,
    in-flow markup — see index.html — no longer .overlay-section) stacks
-   directly below it, both scrolling together in the same column. */
+   directly below it, both scrolling together in the same column.
+   Overrides .scroll-col's own max-height/overflow-y (mobile shares this
+   selector's base class) — the page itself scrolls on mobile now instead of
+   being caged in an internal scroll box; the accordion's scroll-margin-top
+   (see .accordion-item) still keeps opened items clear of the fixed nav. */
 .content-col {
   min-height: calc(100svh - 94px);
+  max-height: none;
+  overflow-y: visible;
 }
 
-/* --- Desktop split: 25% projects-nav rail | 75% content stage ---
-   Mobile is untouched: content-col stays a single flex-col scroll box
-   (.scroll-col) with the reel/stage on top and the accordion below, and the
-   rail/stage are plain in-flow blocks. On desktop the column becomes a 2-track
-   grid and each side scrolls independently.
-   560px MUST match --bp-split (the single source of truth in :root above);
-   @media can't read a custom property, so this literal mirrors it. */
-@media (min-width: 560px) {
+/* --- Desktop split: permanent INFO column | projects column ---
+   Mobile is untouched: .info-col stays a dormant overlay (see .overlay-section
+   above), .mobile-hero shows the intro copy, and .projects-col is a single-open,
+   closed-by-default accordion below it — all plain in-flow blocks, the whole
+   page scrolling together. Desktop instead makes .info-col a real column (no
+   longer an overlay) beside .projects-col, hides the now-redundant
+   .mobile-hero, and each side scrolls independently.
+   560px/500px MUST match --bp-split/--bp-split-min-height (the single source
+   of truth in :root above); @media can't read a custom property, so this
+   literal mirrors it. */
+@media (min-width: 560px) and (min-height: 500px) {
   .content-col {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */
     align-items: start;
-    max-height: none;   /* override .scroll-col: columns scroll, not the wrap */
-    overflow: visible;
   }
-  .left-rail,
-  .right-stage {
+  .info-col {
+    /* Un-overlay: was position:fixed/display:none/centred (see .overlay-section) */
+    display: block;
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+  }
+  .info-col,
+  .projects-col {
     grid-row: 1;
     min-height: 0;      /* let grid children shrink so overflow can scroll */
     max-height: calc(100svh - 94px);
     overflow-y: auto;
   }
-  .left-rail  { grid-column: 1; }
-  .right-stage { grid-column: 2; }
+  .info-col     { grid-column: 1; }
+  .projects-col { grid-column: 2; }
+  .mobile-hero  { display: none; }
 }
 /* Wide desktop: give the stage more room, narrow the nav rail to 25%. */
 @media (min-width: 1740px) {
@@ -1161,6 +1194,18 @@ body:has(.overlay-section[style*="block"]) footer {
   margin-top: calc(0.375rem + env(safe-area-inset-top, 0px));
 }
 
+/* Below the desktop split (--bp-split, 560px — see :root), drop the nav's and
+   content's 6px side margins so both go flush to the screen edge instead of
+   floating in a visible frame; every phone loses that inset the most. Content
+   still gets its own breathing room from each .box's padding. */
+@media (max-width: 559px) {
+  .nav-safe,
+  .content-safe-x {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* Opaque cover over the status-bar / notch strip so content scrolling under
    it doesn't show through above the nav. Sits above content, below the nav. */
 body::before {
@@ -1173,6 +1218,12 @@ body::before {
   background: var(--c-bg);
   z-index: 45;
   pointer-events: none;
+}
+
+/* Logo + PROJECTS/INFO buttons used to inherit white text from the removed
+   .box frosted pill — keep that same white now that the pill's gone. */
+.nav-pill {
+  color: #fff;
 }
 
 /* Nav logo / static NOW label: fixed width, no shrink, no wrap */
@@ -1217,7 +1268,7 @@ body::before {
 .nav-icon {
   display: inline-flex;
   align-items: center;
-  color: inherit;
+  color: #fff;
 }
 
 .nav-icon:hover {

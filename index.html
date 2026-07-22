@@ -45,25 +45,31 @@
 <body class="flex flex-col min-h-screen">
   <div class="flex-1 flex flex-col items-center w-full">
   <!-- Header -->
-  <header class="mb-1.5 z-50">
+  <header class="mb-1.5 z-50 w-full">
   
 
 
     <nav aria-label="Primary navigation">
-    <div class="m-1.5 fixed inset-x-0 z-50 flex justify-center nav-safe">
-      <div class="w-full flex flex-col gap-1.5">
-        <div class="flex w-full p-1.5 gap-1.5 font-mono text-xl box">
-          <button data-project="default" class="cursor-pointer nav-logo" aria-label="Home" aria-controls="project-default">
-            <span class="t-shimmer-hover" data-text="HALEY MA">HALEY MA</span>
-          </button>
+    <div class="m-1.5 inset-x-0 z-50 flex justify-center nav-safe">
+      <div class="w-full flex flex-col place-content-between">
+        <!-- Two frosted pills — one hugging the logo, one hugging the email —
+             instead of a single full-width frosted bar. Spacer between pushes
+             them to the left/right edges. -->
+        <div class="flex w-full gap-1.5 font-mono text-xl">
+          <div class="flex p-1.5 gap-1.5 nav-pill">
+            <button data-project="default" class="cursor-pointer nav-logo" aria-label="Home" aria-controls="project-default">
+              <span class="t-shimmer-hover" data-text="HALEY MA">HALEY MA</span>
+            </button>
+            <button data-target="projects" class="hidden cursor-pointer" aria-controls="section-projects" aria-expanded="false">
+              <span class="t-shimmer-hover" data-text="PROJECTS">PROJECTS</span>
+            </button>
+            <!-- INFO hidden for now — overlay markup + JS handlers stay intact/dormant; remove `hidden` to restore -->
+            <button data-target="info" class="hidden cursor-pointer" aria-controls="section-info" aria-expanded="false">
+              <span class="t-shimmer-hover" data-text="INFO">INFO</span>
+            </button>
+          </div>
           <div class="grow"><!-- Spacer --></div>
-          <button data-target="projects" class="hidden cursor-pointer" aria-controls="section-projects" aria-expanded="false">
-            <span class="t-shimmer-hover" data-text="PROJECTS">PROJECTS</span>
-          </button>
-          <button data-target="info" class="cursor-pointer" aria-controls="section-info" aria-expanded="false">
-            <span class="t-shimmer-hover" data-text="INFO">INFO</span>
-          </button>
-          <a href="mailto:hm@haleyma.com" aria-label="Email" class="nav-icon">
+          <a href="mailto:hm@haleyma.com" aria-label="Email" class="nav-icon flex items-center p-1.5">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
               <circle cx="12" cy="12" r="9"/>
               <path d="M3 12h18"/>
@@ -71,7 +77,7 @@
             </svg>
           </a>
         </div>
-        <div class="w-full box p-1.5 font-sans text-sm flex items-baseline">
+        <div class="w-full box p-1.5 font-sans text-sm flex items-baseline hidden">
           <span class="text-[10px]" data-text="CURRENTLY: ">CURRENTLY: </span>
           <div class="grow nav-marquee">
             <div class="nav-marquee-track">
@@ -87,32 +93,32 @@
   </header>
 
     <main class="flex-1">
-  
-    <div class="ml-1.5 mr-1.5 z-40">
-      <div class="w-full content-offset grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
-        <!--INFO & PROJECT ACCORDION-->
-        <div class="mt-1.5 col-span-full md:col-span-4 flex flex-col gap-1.5 scroll-col">
-          <div data-section="info" class="overlay-section scroll-fade w-full p-1.5 box">
-            <!-- Move to CV section??? -->
-            <h1 class="font-sans t-hero">Creative technologist, director and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from zero to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring applications for AI creative tools. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a>, <a href="https://www.intermiamicf.com/" class="t-shimmer-hover" data-text="Inter Miami CF">Inter Miami CF</a>, and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
-          </div>
-        </div>
-
+    <div class="ml-1.5 mr-1.5 z-40 content-safe-x">
+      <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
         <!--CONTENT-->
         <div class="md:mt-1.5 col-span-full z-10 md:z-0 flex flex-col gap-1.5 scroll-col scroll-fade content-col">
-            <!-- RIGHT STAGE (desktop) / top (mobile): reel by default; an opened
-                 project's content is portaled into #project-stage by script.js -->
-            <div class="right-stage flex flex-col gap-1.5">
-              <div id="project-default" class="project-panel">
-                <div class="box p-1.5">
-                <video src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" loop muted playsinline autoplay preload="metadata" width="640" height="360" decoding="async"></video>
-                </div>
-              </div>
-              <div id="project-stage"></div>
+            <!-- INFO: desktop's permanent left column (sibling of .projects-col
+                 in this same grid); mobile keeps this dormant (its nav trigger
+                 is hidden — see PROJECTS/INFO buttons above). -->
+            <div data-section="info" class="info-col overlay-section scroll-fade w-full p-1.5 box">
+              <h1 class="font-sans t-hero">Creative technologist, lead and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from 0 to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring AI creative tool workflows. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a> and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
             </div>
 
-            <!-- LEFT RAIL (desktop) / below reel (mobile): projects nav -->
-            <div class="left-rail">
+            <!-- Mobile-only intro, above the (collapsed) accordion; hidden
+                 entirely on desktop, where .info-col covers the same copy. -->
+            <div class="mobile-hero flex flex-col gap-1.5">
+              <div id="project-default" class="project-panel">
+                <div class="box p-1.5">
+                  <h1 class="font-sans t-hero">Creative technologist and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a> from 0 to #1 on the App Store (1B+ snaps, $42M raised). Currently exploring AI creative tools workflows. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a> and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
+                </div>
+              </div>
+            </div>
+
+            <!-- Projects column: desktop's right side, all items expanded by
+                 default and individually collapsible; mobile keeps the
+                 original single-open, closed-by-default accordion below the
+                 intro above (see script.js isDesktopSplit branches). -->
+            <div class="projects-col">
           <section data-section="projects">
               <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
 
@@ -127,6 +133,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                               <span data-text="Head of Camera">Head of Camera</span>
+                              <span class="craft-tag">Tech</span>
                           </div>
                           <div class="col-span-3">
                             Lapse
@@ -258,6 +265,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Paul George &quot;Keep Rising&quot;">Paul George "Keep Rising"</span>
+                            <span class="craft-tag">Creative</span>
                           </div>
                           <div class="col-span-3">
                             Nike Basketball
@@ -287,6 +295,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="&quot;Hand Covers Bruise&quot;">"Hand Covers Bruise"</span>
+                            <span class="craft-tag">Creative</span>
                           </div>
                           <div class="col-span-3">
                             Sequence
@@ -317,6 +326,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Born Mercurial">Born Mercurial</span>
+                            <span class="craft-tag">Production</span>
                           </div>
                           <div class="col-span-3">
                             Nike Football
@@ -345,6 +355,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Buatsi">Buatsi</span>
+                            <span class="craft-tag">Production</span>
                           </div>
                           <div class="col-span-3">
                             Nike London
@@ -373,6 +384,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="VSCO Film">Come Closer</span>
+                            <span class="craft-tag">Creative</span>
                           </div>
                           <div class="col-span-3">
                             VSCO
@@ -400,6 +412,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Inter Miami CF">Inter Miami CF</span>
+                            <span class="craft-tag">Production</span>
                           </div>
                           <div class="col-span-3">
                             DB Ventures
@@ -428,6 +441,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Founder">Founder</span>
+                            <span class="craft-tag">Tech</span>
                           </div>
                           <div class="col-span-3">
                             Trace
@@ -505,6 +519,7 @@
                         <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
                           <div class="col-span-8">
                             <span data-text="Stills Portfolio">Stills Portfolio</span>
+                            <span class="craft-tag">Creative</span>
                           </div>
                           <div class="col-span-3">
                             Various
@@ -611,7 +626,7 @@
                 </div>
               </div>
             </div>
-            </div><!-- /.left-rail -->
+            </div><!-- /.projects-col -->
 
         </div>
 
@@ -632,7 +647,47 @@
 
   <script src="lapse-images.js"></script>
   <script src="script.js"></script>
-  <!-- Dither background: disabled — see dither.js header comment for the HTML hookup to restore it -->
+  <!-- Dithered reel background: the showreel runs as an ambient dithered canvas
+       behind the page instead of a foreground hero. Reduced-motion users get
+       a pre-rendered dithered still instead of the animation; the loop
+       otherwise starts on load and pauses when the tab is hidden (see
+       dither.js). proximityEnabled is off to halve the per-frame pixel
+       work — flip it true to restore the interactive mouse blur. -->
+  <canvas id="dither-bg" aria-hidden="true"></canvas>
+  <noscript>
+    <img id="dither-bg-fallback" src="assets/projects/reel/haley-ma-reel-dithered-fallback.png" alt="" aria-hidden="true">
+  </noscript>
+  <video
+    id="dither-src"
+    src="assets/projects/reel/haley-ma-reel-0.19Mbps.mp4"
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    class="hidden"
+    aria-hidden="true"
+    width="640"
+    height="360"
+    decoding="async"
+  ></video>
+
+  <script type="module">
+    import { createDitherBg } from './dither.js';
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      createDitherBg({
+        canvas: document.getElementById('dither-bg'),
+        video: document.getElementById('dither-src'),
+        config: {
+          shapeColor: '#3a3a3a',
+          proximityEnabled: false,
+        },
+      });
+    } else {
+      document.getElementById('dither-bg').style.backgroundImage =
+        "url('assets/projects/reel/haley-ma-reel-dithered-fallback.png')";
+    }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 </div>
 </body>

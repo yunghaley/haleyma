@@ -4,7 +4,7 @@
 
    <div class="bg-shader" aria-hidden="true"></div>
    <canvas id="dither-bg" aria-hidden="true"></canvas>
-   <video id="dither-src" src="assets/projects/reel/haley-ma-reel-3Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
+   <video id="dither-src" src="assets/projects/reel/haley-ma-reel-0.19Mbps.mp4" muted loop playsinline preload="metadata" class="hidden" aria-hidden="true" width="640" height="360" decoding="async"></video>
    ...
    <script type="module">
      import { createDitherBg } from './dither.js';
@@ -58,6 +58,26 @@ export function createDitherBg({ canvas, video, config = {} }) {
   let py = -9999;
   let started = false;
 
+  // Largest viewport size seen since the last real geometry change. Mobile
+  // Safari (and other touch browsers) shrink window.innerWidth/innerHeight
+  // live as the address bar/toolbar expand back in on scroll-up — CSS lvh
+  // alone wasn't reliably immune to this on-device, so track the max in JS
+  // instead and only ever grow: a shrink is assumed to be chrome showing,
+  // not a real resize, so it's ignored and the canvas just sits underneath,
+  // uncovered again once chrome collapses. resetViewportMax() below
+  // (orientation change) is the only thing allowed to bring these back down.
+  // Desktop (mouse/trackpad) skips this entirely — a shrinking browser
+  // window there is a real resize, not chrome, and should track live.
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  let maxVW = 0;
+  let maxVH = 0;
+  const viewportSize = () => {
+    if (!isTouch) return { w: window.innerWidth, h: window.innerHeight };
+    maxVW = Math.max(maxVW, window.innerWidth);
+    maxVH = Math.max(maxVH, window.innerHeight);
+    return { w: maxVW, h: maxVH };
+  };
+
   const hexToRgb = (hex) => {
     const h = hex.replace('#', '');
     return [
@@ -80,8 +100,11 @@ export function createDitherBg({ canvas, video, config = {} }) {
   };
 
   const resize = () => {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const { w, h } = viewportSize();
+    // Pin the CSS box to the tracked max in px (inline style beats any
+    // stylesheet unit, so this is authoritative regardless of lvh support).
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
     const cell = cfg.cell;
     const cols = Math.ceil(w / cell);
     const rows = Math.ceil(h / cell);
@@ -93,6 +116,15 @@ export function createDitherBg({ canvas, video, config = {} }) {
     off.height = rows;
     blurCanvas.width = cols;
     blurCanvas.height = rows;
+  };
+
+  // Real geometry change (device rotation): the tracked max is for the old
+  // orientation and would be wrong (e.g. portrait's tall max height kept as
+  // a floor after rotating to landscape) — reset it before re-measuring.
+  const resetViewportMax = () => {
+    maxVW = 0;
+    maxVH = 0;
+    resize();
   };
 
   const onMove = (e) => {
@@ -109,13 +141,15 @@ export function createDitherBg({ canvas, video, config = {} }) {
       return;
     }
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const { w, h } = viewportSize();
     const cell = cfg.cell;
     const cols = off.width || Math.ceil(w / cell);
     const rows = off.height || Math.ceil(h / cell);
-    const zoom = window.innerWidth <= 640 ? 0.9 : (cfg.zoom || 1);
-    const scale = Math.max(cols / video.videoWidth, rows / video.videoHeight) * zoom;
+    const zoom = w <= 640 ? 0.9 : (cfg.zoom || 1);
+    // zoom < 1 shrinks the video under cover-fit, opening a gap in whichever
+    // dimension was exactly covered — the black bars top/bottom (or
+    // left/right) reported against reference.jpeg. Never go below cover.
+    const scale = Math.max(cols / video.videoWidth, rows / video.videoHeight) * Math.max(zoom, 1);
     const drawW = video.videoWidth * scale;
     const drawH = video.videoHeight * scale;
     const offX = (cols - drawW) / 2;
@@ -135,7 +169,14 @@ export function createDitherBg({ canvas, video, config = {} }) {
     const dpr = window.devicePixelRatio || 1;
     const step = cell / 64;
 
-    ctx.clearRect(0, 0, w, h);
+    // Clear in device-pixel space (canvas.width/height), not CSS w/h: the
+    // per-shape draws below set an absolute device-pixel transform and
+    // leave it at identity when the loop ends, so a w/h clear under that
+    // identity transform only wiped the top-left 1/dpr fraction of the
+    // canvas on any dpr>1 screen — the rest never got cleared, which read
+    // as "the video only renders in the top-left corner."
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     let fill = '';
 
     for (let y = 0; y < rows; y++) {
@@ -193,12 +234,20 @@ export function createDitherBg({ canvas, video, config = {} }) {
   };
 
   window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', resetViewportMax);
+  // Deliberately NOT listening to visualViewport resize/scroll: those fire
+  // as mobile browser chrome (address bar/toolbar) animates in and out, and
+  // re-running resize() on every one of those visibly resized/redrew the
+  // whole dithered image. viewportSize()'s max-tracking (above) already
+  // makes plain resize() a no-op for chrome-driven shrinks on touch devices,
+  // so there's nothing for a visualViewport listener to add here.
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) start();
   });
-  ['touchstart', 'click', 'keydown', 'wheel'].forEach((evt) => {
-    document.addEventListener(evt, start, { once: true, passive: true });
-  });
+
+  // Video is muted, so browsers allow autoplay with no user gesture — start
+  // immediately on load instead of waiting for a first interaction.
+  start();
 
   return { start, stop };
 }
