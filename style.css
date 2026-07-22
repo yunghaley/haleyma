@@ -1220,6 +1220,12 @@ body::before {
   pointer-events: none;
 }
 
+/* Logo + PROJECTS/INFO buttons used to inherit white text from the removed
+   .box frosted pill — keep that same white now that the pill's gone. */
+.nav-pill {
+  color: #fff;
+}
+
 /* Nav logo / static NOW label: fixed width, no shrink, no wrap */
 .nav-logo {
   flex-shrink: 0;
