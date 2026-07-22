@@ -440,6 +440,7 @@
   --overlay-bg-blur: 8px;
   --overlay-bg-dim: 0.5;
   --bp-split: 560px;
+  --bp-split-min-height: 500px;
 }
 @supports (font-variation-settings: normal) {
   :root {
@@ -1270,7 +1271,7 @@ body:has(.overlay-section[style*="block"]) .content-col, body:has(.overlay-secti
   max-height: none;
   overflow-y: visible;
 }
-@media (min-width: 560px) {
+@media (min-width: 560px) and (min-height: 500px) {
   .content-col {
     display: grid;
     grid-template-columns: 1fr 2fr;

@@ -42,6 +42,13 @@
      one functional media query for the split (.content-col, below) mirrors
      this value literally — keep them in sync. */
   --bp-split: 560px;
+  /* Also required (min-height) before the split engages — a landscape phone
+     is plenty wide (>560px) but only ~300-430px tall, and the split's two
+     columns each cap to 100svh-94px, i.e. ~250-350px boxes with their own
+     internal scrollbar: everything reads as squeezed into small compressed
+     boxes. Below this height, stay in the single-column mobile layout
+     (natural page scroll) even at desktop width. */
+  --bp-split-min-height: 500px;
 }
 
 @supports (font-variation-settings: normal) {
@@ -1127,9 +1134,10 @@ body:has(.overlay-section[style*="block"]) footer {
    page scrolling together. Desktop instead makes .info-col a real column (no
    longer an overlay) beside .projects-col, hides the now-redundant
    .mobile-hero, and each side scrolls independently.
-   560px MUST match --bp-split (the single source of truth in :root above);
-   @media can't read a custom property, so this literal mirrors it. */
-@media (min-width: 560px) {
+   560px/500px MUST match --bp-split/--bp-split-min-height (the single source
+   of truth in :root above); @media can't read a custom property, so this
+   literal mirrors it. */
+@media (min-width: 560px) and (min-height: 500px) {
   .content-col {
     display: grid;
     grid-template-columns: 1fr 2fr; /* 33% / 66% (mid desktop) */

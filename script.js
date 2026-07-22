@@ -1,10 +1,16 @@
 // script.js – refactored into self‑contained functional modules
 
-// Desktop-split breakpoint. Single source of truth is --bp-split in style.css
-// (:root); we read it here so the JS portal threshold always matches the CSS
-// media query without a second hardcoded value. Falls back to 560px if unset.
+// Desktop-split breakpoint. Single source of truth is --bp-split/
+// --bp-split-min-height in style.css (:root); we read them here so the JS
+// accordion threshold always matches the CSS media query without a second
+// hardcoded value. Falls back to 560px/500px if unset. The height half
+// keeps landscape phones (wide enough, but short) out of the 2-column
+// split — its columns cap to 100svh-94px, which reads as squeezed into
+// tiny boxes on a ~300-430px-tall landscape viewport.
 const SPLIT_QUERY = `(min-width: ${
   getComputedStyle(document.documentElement).getPropertyValue('--bp-split').trim() || '560px'
+}) and (min-height: ${
+  getComputedStyle(document.documentElement).getPropertyValue('--bp-split-min-height').trim() || '500px'
 })`;
 
 // --- Navigation (NOW / PROJECTS / INFO) and logo handling ---
