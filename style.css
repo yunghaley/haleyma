@@ -31,8 +31,8 @@
   --fs-base: 1rem;   /* 16px */
   --fs-lg: 1.125rem; /* 18px */
   --fs-xl: 1.25rem;  /* 20px */
-  --fs-hero: clamp(2rem, 8vw, 2.35rem); /* fluid: 44px mobile → 64px wide desktop */
-  --fs-hero-sub: clamp(1.5rem, 4.5vw, 2.25rem); /* H2 scale: 24px mobile → 36px wide desktop */
+  --fs-hero: clamp(2rem, 6vw, 2.25rem); /* fluid: 44px mobile → 64px wide desktop */
+  --fs-hero-sub: clamp(1.5rem, 4.5vw, 2rem); /* H2 scale: 24px mobile → 36px wide desktop */
   /* Overlay background blur */
   --overlay-bg-blur: 8px;
   --overlay-bg-dim: 0.5; /* brightness behind an open overlay: 1 = none, 0 = black */
