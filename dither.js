@@ -31,6 +31,7 @@ export function createDitherBg({ canvas, video, config = {} }) {
 
   const cfg = {
     cell: 7,
+    fps: 30, // ambient background — 60fps+ is imperceptible here but doubles CPU/battery cost
     brightness: 0,
     contrast: 1.85,
     gamma: 1.2,
@@ -133,13 +134,28 @@ export function createDitherBg({ canvas, video, config = {} }) {
     py = e.clientY - r.top;
   };
 
-  const frame = () => {
+  // Ambient background, not motion content — cap the redraw rate instead of
+  // running full tilt at the display's native refresh (60-120fps+ measured
+  // ~8ms/frame uncapped on a real machine, but ~33ms/frame — the *entire*
+  // page's effective frame rate — under Chrome's 4x mobile CPU throttle).
+  // rAF still fires every tick; this just skips the expensive redraw (getImageData
+  // + a fill()+setTransform() per grid cell) until enough time has passed.
+  let lastDrawTime = 0;
+  const frame = (now = 0) => {
     if (!video.videoWidth || !video.videoHeight || video.readyState < 2) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       raf = requestAnimationFrame(frame);
       return;
     }
+
+    const frameInterval = 1000 / cfg.fps;
+    const elapsed = now - lastDrawTime;
+    if (elapsed < frameInterval) {
+      raf = requestAnimationFrame(frame);
+      return;
+    }
+    lastDrawTime = now - (elapsed % frameInterval); // correct drift, don't compound it
 
     const { w, h } = viewportSize();
     const cell = cfg.cell;
