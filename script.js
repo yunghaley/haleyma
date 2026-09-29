@@ -64,16 +64,12 @@ function initInfoDismiss() {
 // needed for that). The project's rich content (video/case-study) lives
 // directly inside its .accordion-panel now, so opening it just means playing
 // its media and scrolling it into view once the open transition settles.
-function revealProjectContent(panel, { autoplayVideo = true } = {}) {
+// Video playback is owned by initViewportAutoplay (most-visible video plays).
+function revealProjectContent(panel) {
   panel.querySelectorAll('.t-digit-group').forEach(g => {
     g.classList.remove('is-animating');
     void g.offsetHeight;
     g.classList.add('is-animating');
-  });
-  if (!autoplayVideo) return;
-  panel.querySelectorAll('video').forEach(v => {
-    v.muted = true;
-    v.play().catch(e => console.log('Autoplay failed:', e));
   });
 }
 
@@ -133,10 +129,9 @@ function expandAccordionItem(accordionItem, { animate = true } = {}) {
 
   if (!animate) {
     // Bulk/initial expand (desktop default state, or a breakpoint crossover):
-    // set the open state directly, no transition, no per-item scroll, and no
-    // autoplay (see revealProjectContent — avoids flooding a dozen+ videos).
+    // set the open state directly, no transition, no per-item scroll.
     panel.style.maxHeight = 'none';
-    revealProjectContent(panel, { autoplayVideo: false });
+    revealProjectContent(panel);
     return;
   }
 
@@ -243,6 +238,39 @@ function initVideoControls() {
     }
     sync();
   });
+}
+
+// --- Viewport autoplay ---
+// Only one video plays at a time: whichever shows the most on-screen area
+// (min 50% of itself visible). Collapsed panels clip to 0, so they never win.
+// Acts only when the leader changes, so a manual pause sticks until you scroll
+// to a different video.
+function initViewportAutoplay() {
+  const videos = [...document.querySelectorAll('video:not(#dither-src)')];
+  const area = new Map();
+  let current = null;
+
+  // Any play (auto or manual) pauses the rest.
+  videos.forEach(v => v.addEventListener('play', () => {
+    videos.forEach(o => { if (o !== v && !o.paused) o.pause(); });
+  }));
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const r = e.intersectionRect;
+      area.set(e.target, e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
+    });
+    let best = null, bestArea = 0;
+    area.forEach((a, v) => { if (a > bestArea) { best = v; bestArea = a; } });
+    if (best === current) return;
+    if (current) current.pause();
+    current = best;
+    if (best) best.play().catch(() => {});
+  }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+
+  videos.forEach(v => observer.observe(v));
 }
 
 // --- Case‑study reveal (scroll‑reveal) ---
@@ -482,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAccordion();
   initAccordionDefaultState();
   initVideoControls();
+  initViewportAutoplay();
   initCaseStudyReveal();
   initScrollFade();
   initMarqueeHoverPause();
