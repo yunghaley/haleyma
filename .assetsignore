@@ -1,0 +1,12 @@
+.git/
+.github/
+node_modules/
+.wrangler/
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+.DS_Store
+CLAUDE.md
+wrangler.jsonc
+wrangler.toml
