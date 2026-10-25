@@ -96,15 +96,15 @@ body.is-index[data-route="home"] #nav-index { text-decoration: underline; text-u
 /* info tray (project pages): a title row that stays, and a body that slides away. On mobile it overlays the bottom of the
    stage (which keeps a fixed 44px reserve), so opening and closing never resizes the media. */
 body[data-route="project"] .stage { margin-bottom: 44px; }
-.rail-info.is-tray { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; gap: 0; padding: 0 var(--pad) env(safe-area-inset-bottom, 0px); background: #000; }
+.rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: 0; z-index: 6; gap: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); background: #000; } /* the hairline lines up with the header margins */
 .info-head { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; text-align: left; }
-.info-tog { flex: none; font: var(--fs-ui) var(--font-mono); color: var(--c-mute); }
+.info-tog { flex: none; font-size: 14px; color: var(--c-mute); }
 .info-tog::after { content: " +"; }
 .rail-info:not(.is-closed) .info-tog::after { content: " \2212"; }
 .info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
 .info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
 .rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
-.info-title { font-size: 16px; font-weight: calc(var(--w-sans) + 60); }
+.info-title { font-size: 14px; font-weight: calc(var(--w-sans) + 60); }
 .info-desc { font-size: 14px; line-height: 1.35; color: var(--c-fg); }
 .info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
 
