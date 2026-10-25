@@ -227,6 +227,8 @@ function go({ keep = false } = {}) {
   const view = document.getElementById('view-' + (tagRoute ? '' : slug)) || $('#view-home');
   if (!keep && currentView && currentView !== view) currentView.dispatchEvent(new CustomEvent('view:leave'));
   currentView = view;
+  const reelOf = r => r === 'home' ? hr : r === 'about' ? $('#about-reel') : null; // Home and About show the same reel in two elements
+  const reelFrom = reelOf(current), reelAt = reelFrom ? reelFrom.currentTime : 0;
   current = view.id.slice(5);
 
   $$('.view').forEach(v => { v.hidden = v !== view; });
@@ -239,6 +241,9 @@ function go({ keep = false } = {}) {
     if (v.id === 'about-reel' && !DESKTOP.matches) return; // the About stage is hidden on mobile
     setSrc(v);
   });
+
+  const reelTo = reelOf(current);
+  if (reelTo && reelFrom && reelTo !== reelFrom && reelAt) reelTo.currentTime = reelAt; // carry the playhead over so the reel does not restart
 
   const i = links.findIndex(a => a.dataset.slug === current);
   if (current === 'home') {
