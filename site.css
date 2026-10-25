@@ -95,7 +95,7 @@ body.is-index[data-route="home"] #nav-index { text-decoration: underline; text-u
 }
 /* info tray (project pages): a title row that stays, and a body that slides away. On mobile it overlays the bottom of the
    stage (which keeps a fixed 44px reserve), so opening and closing never resizes the media. */
-body[data-route="project"] .stage { margin-bottom: 44px; }
+body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (44px row + 1px hairline); the pad above it matches the gap under the header */
 .rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: 0; z-index: 6; gap: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); background: #000; } /* the hairline lines up with the header margins */
 .info-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; text-align: left; }
 .info-head .info-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -107,6 +107,7 @@ body[data-route="project"] .stage { margin-bottom: 44px; }
 .info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
 .info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
 .rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
+.rail-info.is-closed .info-inner { padding-bottom: 0; } /* a closed tray is exactly its title row */
 .info-title { font-size: 14px; font-weight: calc(var(--w-sans) + 60); }
 .info-desc { font-size: 14px; line-height: 1.35; color: var(--c-fg); }
 .info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
