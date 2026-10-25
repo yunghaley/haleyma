@@ -17,3 +17,4 @@ assets/misc/og-drafts/
 .cpanel.yml
 .assetsignore
 assets/projects/lapse/shot-on-lapse/jpeg/
+*.mp4
