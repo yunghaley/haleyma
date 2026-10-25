@@ -14,8 +14,8 @@ const links = $$('#list a');
 const info = $('#info');
 
 // Plays on Home when nothing is hovered or selected.
-const REEL = 'assets/projects/reel/haley-ma-reel-3mbps-hevc.mp4'; // HEVC, index up front so it starts without downloading the whole file
-const REEL_ALT = 'assets/projects/reel/haley-ma-reel-2Mbps-faststart.mp4'; // H.264 for browsers that cannot play HEVC
+const REEL = 'https://cdn.haleyma.com/haley-ma-reel-3mbps-hevc.mp4'; // HEVC, index up front so it starts without downloading the whole file
+const REEL_ALT = 'https://cdn.haleyma.com/haley-ma-reel-2Mbps-faststart.mp4'; // H.264 for browsers that cannot play HEVC
 
 // HEVC plays natively on Safari/iOS and most recent Chrome/Edge; elsewhere a data-alt H.264 file is used.
 const HEVC = !!document.createElement('video').canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"');

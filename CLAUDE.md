@@ -25,7 +25,7 @@ All CSS is plain hand-written CSS in `site.css` (no Tailwind). Fonts: Inter Vari
 
 ## Deployment
 
-Cloudflare (`wrangler.jsonc`, static assets) and a cPanel `.cpanel.yml` both exist in the repo. Cloudflare static assets cap files at 25 MiB, so large videos belong on R2. All paths in HTML are relative to repo root.
+Cloudflare (`wrangler.jsonc`, static assets) and a cPanel `.cpanel.yml` both exist in the repo. Videos are served from R2 at `cdn.haleyma.com`, not from the repo. All paths in HTML are relative to repo root.
 
 ## Architecture
 
@@ -48,9 +48,9 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
 1. **Prepare the video** (`ffmpeg`). H.264, capped at 1080 tall, with the index up front so it starts fast. A capped bitrate keeps it to roughly 4 to 6 Mbps:
    `ffmpeg -i in.mov -vf "scale=-2:'min(1080,ih)'" -c:v libx264 -crf 23 -maxrate 6M -bufsize 12M -preset slow -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart out.mp4`
    Note the real pixel size (`ffprobe`), you need it in step 3.
-   Keep each file under 25 MiB if it deploys through Cloudflare static assets. Put it in `assets/projects/{slug}/`.
+   Videos are not in git. Upload the file to the R2 bucket root (it is served at `https://cdn.haleyma.com/{file}.mp4`), and keep your local master in `assets/projects/{slug}/` (git-ignored). File names must be unique across all projects.
 2. **Add a row** to `<nav id="list">`, anywhere in the order you want:
-   `<a href="#/{slug}" data-slug="{slug}" data-kind="video" data-src="assets/projects/{slug}/{file}.mp4"><span>Project title</span><span>Client</span></a>`
+   `<a href="#/{slug}" data-slug="{slug}" data-kind="video" data-src="https://cdn.haleyma.com/{file}.mp4"><span>Project title</span><span>Client</span></a>`
    `data-src` is also the hover preview on Home and the card on the mobile feed.
 3. **Add a page** inside `<main id="stage">`, next to the other video pages (copy one):
    ```
@@ -59,7 +59,7 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
        <p class="desc">One or two sentences.</p>
        <ul class="roles"><li>art direction</li><li>video edit</li></ul>
      </div>
-     <div class="vwrap"><video data-src="assets/projects/{slug}/{file}.mp4" loop muted playsinline preload="none" width="1920" height="1080"></video></div>
+     <div class="vwrap"><video data-src="https://cdn.haleyma.com/{file}.mp4" loop muted playsinline preload="none" width="1920" height="1080"></video></div>
    </section>
    ```
    Set `width` and `height` to the video's real pixel size, otherwise the page jumps when it loads. The slug in the row, the `id` and the folder must match, and the slug can't be `home`, `about` or `tag` (the router uses them). If the file is HEVC, also add `data-alt="...-avc.mp4"` (an H.264 copy) to the `<video>` and to the list row.
