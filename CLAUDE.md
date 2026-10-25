@@ -25,7 +25,11 @@ All CSS is plain hand-written CSS in `site.css` (no Tailwind). Fonts: Inter Vari
 
 ## Deployment
 
-Cloudflare (`wrangler.jsonc`, static assets) and a cPanel `.cpanel.yml` both exist in the repo. Videos are served from R2 at `cdn.haleyma.com`, not from the repo. All paths in HTML are relative to repo root.
+Hosted on Cloudflare. The `haleyma-website` Worker (`wrangler.jsonc`, static assets from the repo root) serves `haleyma.com` and `www.haleyma.com`. `.assetsignore` keeps non-site files and local video masters out of the upload. Cloudflare static assets cap files at 25 MiB.
+
+Videos are not in the repo. They live in an R2 bucket served at `https://cdn.haleyma.com/{file}.mp4` (CORS allows haleyma.com and www, 1 year edge cache). To change a video, upload a file with a new name, then point `index.html` at it; a replaced file under the same name can stay cached for a year.
+
+DNS, domain registration, R2 and the Worker are all in the Cloudflare account. Email is ProtonMail (MX, SPF, DKIM and DMARC records in Cloudflare DNS). There is no `.htaccess` or cPanel step any more: cache headers come from Cloudflare, so after changing `site.css` or `app.js` bump the `?v=` in `index.html`.
 
 ## Architecture
 
