@@ -85,7 +85,9 @@ function renderInfo(view, { tray = false } = {}) {
     const head = el('button', 'info-head');
     head.type = 'button';
     head.setAttribute('aria-controls', 'info-body');
-    head.append(el('span', 'info-title', title));
+    const name = el('span', 'info-title', title);
+    if (link) name.append(el('span', 'info-client', link.lastElementChild.textContent)); // truncates first when the pair is too long
+    head.append(name);
     head.append(el('span', 'info-tog', 'info'));
     head.disabled = DESKTOP.matches; // a plain title on desktop, a toggle on mobile
     head.addEventListener('click', toggleTray);

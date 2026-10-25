@@ -97,7 +97,10 @@ body.is-index[data-route="home"] #nav-index { text-decoration: underline; text-u
    stage (which keeps a fixed 44px reserve), so opening and closing never resizes the media. */
 body[data-route="project"] .stage { margin-bottom: 44px; }
 .rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: 0; z-index: 6; gap: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); background: #000; } /* the hairline lines up with the header margins */
-.info-head { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; text-align: left; }
+.info-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; text-align: left; }
+.info-head .info-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.info-client { color: var(--c-mute); font-weight: var(--w-sans); }
+.info-client::before { content: "\00a0\00b7\00a0"; }
 .info-tog { flex: none; font-size: 14px; color: var(--c-mute); }
 .info-tog::after { content: " +"; }
 .rail-info:not(.is-closed) .info-tog::after { content: " \2212"; }
@@ -356,7 +359,7 @@ body[data-route="about"] .stage { display: none; }
   .rail-info.is-tray { position: static; z-index: auto; background: none; padding: 0 var(--inset) 60px; }
   .rail-info.is-tray .info-inner { gap: 12px; padding-bottom: 0; }
   .info-head { cursor: default; }
-  .info-tog { display: none; } /* nothing to toggle on desktop */
+  .info-tog, .info-client { display: none; } /* nothing to toggle on desktop, and the list beside it already shows the client */
   .rail-info {
     flex: 0 0 auto;
     max-height: min(340px, 35svh); /* short windows: keep the list from shrinking under a hovering pointer */
