@@ -85,8 +85,10 @@ function renderInfo(view, { tray = false } = {}) {
     const head = el('button', 'info-head');
     head.type = 'button';
     head.setAttribute('aria-controls', 'info-body');
-    head.append(el('span', 'info-title', title));
-    head.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 4.5l4 4 4-4"/></svg>');
+    const name = el('span', 'info-title', title);
+    if (link) name.append(el('span', 'info-client', link.lastElementChild.textContent)); // truncates first when the pair is too long
+    head.append(name);
+    head.append(el('span', 'info-tog', 'info'));
     head.disabled = DESKTOP.matches; // a plain title on desktop, a toggle on mobile
     head.addEventListener('click', toggleTray);
     const wrap = el('div', 'info-body');
@@ -104,55 +106,18 @@ function renderInfo(view, { tray = false } = {}) {
     roles.append(el('li', '')); roles.lastChild.append(chip);
   });
   body.append(roles);
-  if (view.dataset.tpl === 'video') {
-    const i = links.indexOf(link);
-    const prev = links[(i + links.length - 1) % links.length], next = links[(i + 1) % links.length];
-    const pn = el('div', 'info-pn');
-    [['Previous', prev], ['Next', next]].forEach(([label, t]) => { const a = el('a', '', label); a.href = t.getAttribute('href'); pn.append(a); });
-    body.append(pn);
-  }
   if (tray) startTray();
 }
 
-// --- Info tray: the first time, it opens on arrival and slides down on its own. After that it starts closed and only the visitor moves it. ---
-let trayTimer = null, trayHold = false, trayOpenedAt = 0, trayAuto = false;
-const trayDone = () => { try { return sessionStorage.getItem('trayDone') === '1'; } catch (e) { return false; } };
-const markTrayDone = () => { try { sessionStorage.setItem('trayDone', '1'); } catch (e) { /* storage blocked: the demo just repeats */ } };
-function setTray(open, { auto = false } = {}) {
-  clearTimeout(trayTimer);
+// --- Info tray (mobile): a docked row that starts closed on every page and opens only when the visitor taps it ---
+function setTray(open) {
   if (DESKTOP.matches) open = true; // desktop has the room: the description stays open
   info.classList.toggle('is-closed', !open);
-  if (open) trayOpenedAt = Date.now();
   const head = $('.info-head', info);
   if (head) head.setAttribute('aria-expanded', String(open));
-  if (open && auto && trayAuto) trayTimer = setTimeout(() => { if (!trayHold) autoClose(); }, 4500);
 }
-function autoClose() { trayAuto = false; markTrayDone(); setTray(false); }
-// a tap on the title row is the visitor taking over: no more automatic closing, so they can finish reading
-function toggleTray() { trayAuto = false; markTrayDone(); setTray(info.classList.contains('is-closed')); }
-function startTray() {
-  if (DESKTOP.matches) { setTray(true); return; }
-  if (trayDone()) { trayAuto = false; setTray(false); return; }
-  trayAuto = true;
-  setTray(true, { auto: true });
-}
-function initTray() {
-  info.addEventListener('focusin', e => { if (e.target.matches(':focus-visible')) { trayHold = true; clearTimeout(trayTimer); } }); // keyboard focus holds it open; a tap's leftover focus must not
-  info.addEventListener('focusout', () => { trayHold = false; });
-  // First visit only: touching or scrolling the media puts the tray away. Scroll events in the first moments after it opens
-  // are ignored, since layout and snapping can fire them without the visitor doing anything.
-  const away = (settle) => () => {
-    if (!trayAuto || !info.classList.contains('is-tray') || info.classList.contains('is-closed') || trayHold) return;
-    if (settle && Date.now() - trayOpenedAt < 700) return;
-    if (info.contains(document.activeElement)) document.activeElement.blur();
-    autoClose();
-  };
-  const stage = $('#stage');
-  stage.addEventListener('pointerdown', away(false));
-  stage.addEventListener('wheel', away(false), { passive: true });
-  stage.addEventListener('touchmove', away(false), { passive: true });
-  stage.addEventListener('scroll', away(true), { capture: true, passive: true });
-}
+function toggleTray() { setTray(info.classList.contains('is-closed')); }
+function startTray() { setTray(DESKTOP.matches); }
 
 // --- Home: the hovered/cursor project's description shows in the rail (desktop) ---
 function homeInfo(i) {
@@ -262,6 +227,8 @@ function go({ keep = false } = {}) {
   const view = document.getElementById('view-' + (tagRoute ? '' : slug)) || $('#view-home');
   if (!keep && currentView && currentView !== view) currentView.dispatchEvent(new CustomEvent('view:leave'));
   currentView = view;
+  const reelOf = r => r === 'home' ? hr : r === 'about' ? $('#about-reel') : null; // Home and About show the same reel in two elements
+  const reelFrom = reelOf(current), reelAt = reelFrom ? reelFrom.currentTime : 0;
   current = view.id.slice(5);
 
   $$('.view').forEach(v => { v.hidden = v !== view; });
@@ -274,6 +241,9 @@ function go({ keep = false } = {}) {
     if (v.id === 'about-reel' && !DESKTOP.matches) return; // the About stage is hidden on mobile
     setSrc(v);
   });
+
+  const reelTo = reelOf(current);
+  if (reelTo && reelFrom && reelTo !== reelFrom && reelAt) reelTo.currentTime = reelAt; // carry the playhead over so the reel does not restart
 
   const i = links.findIndex(a => a.dataset.slug === current);
   if (current === 'home') {
@@ -669,7 +639,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $$('.view[data-tpl="stills"]').forEach(initStills);
   initCase();
   initViewportHeight();
-  initTray();
   initIndexToggle();
   initKeys();
   initClock();
