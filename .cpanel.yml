@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/haleymac/public_html
-    - /bin/rsync -a --delete --exclude '.git' ./ $DEPLOYPATH/
+    - /bin/rsync -a --exclude '.git' --exclude 'CLAUDE.md' --exclude '.claude' --exclude '.serena' --exclude 'wrangler.jsonc' --exclude '.cpanel.yml' --exclude '.assetsignore' --exclude 'assets/misc/og-drafts' --exclude 'assets/projects/lapse/shot-on-lapse/jpeg' --exclude 'assets/fonts/ABCArealVariable.ttf' ./ $DEPLOYPATH/

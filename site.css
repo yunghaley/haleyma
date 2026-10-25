@@ -1,0 +1,425 @@
+/* site.css – plain CSS, no build step. Mobile-first; the desktop layout is one
+   @media block near the bottom. That query is mirrored in app.js (DESKTOP) —
+   change both together. */
+
+@font-face {
+  font-family: "InterVariable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("assets/fonts/InterVariable.woff2") format("woff2");
+}
+@font-face {
+  font-family: "XanhMono";
+  font-style: normal;
+  font-display: swap;
+  src: url("assets/fonts/XanhMono-Regular.woff2") format("woff2"), url("assets/fonts/XanhMono-Regular.ttf") format("truetype");
+}
+
+:root {
+  --c-bg: #000;
+  --c-fg: #fff;
+  --c-mute: #8a8a8a;
+  --c-line: rgba(255, 255, 255, 0.5);
+  --c-accent: #8a6bff;   /* hover + focus only */
+  --c-select: #410dff;
+  --font-sans: "InterVariable", "Inter", sans-serif; /* to try ABC Areal again: put "ABCAreal" first (needs the license sorted, see CLAUDE.md) */
+  --font-mono: "XanhMono", monospace;
+  --pad: 12px;
+  --row-h: 32px;
+  --w-sans: 340;         /* body weight for the sans (variable font; Areal's wght axis only goes down to 400) */
+  --fs-ui: 12px;         /* mono UI text: controls, counters, hints, clock */
+  --fs-meta: 13px;       /* small sans text: roles, stat labels */
+  --inset: 6px;          /* shared left/right inset for all rail text */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* { box-sizing: border-box; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+
+html, body { margin: 0; height: 100%; background: var(--c-bg); color: var(--c-fg); }
+body {
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-weight: var(--w-sans);
+  font-variant-numeric: tabular-nums;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--c-accent); }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+button:disabled { cursor: default; }
+img, video { display: block; }
+p, h1, h2, h3, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+::selection { background: var(--c-select); color: #fff; }
+:focus-visible { outline: 1px solid var(--c-accent); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* ---------- shell (mobile) ---------- */
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100svh;
+  height: var(--app-h, 100svh); /* set from the visual viewport on phones, so browser toolbars never sit on top of the layout */
+  padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) var(--pad) calc(var(--pad) + env(safe-area-inset-bottom, 0px));
+}
+.rail { display: contents; }
+.stage { position: relative; flex: 1; min-height: 0; order: 1; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: none;
+  font: 18px var(--font-mono);
+}
+.topbar a { display: flex; align-items: center; min-height: 44px; }
+.topnav { display: flex; gap: 20px; }
+body[data-route="about"] #nav-about,
+body.is-index[data-route="home"] #nav-index { text-decoration: underline; text-underline-offset: 6px; }
+
+.list-wrap, .hint, .rail-about { display: none; }
+
+.rail-info {
+  order: 2;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--c-fg);
+  padding-top: var(--pad);
+}
+/* info tray (project pages): a title row that stays, and a body that slides away. On mobile it overlays the bottom of the
+   stage (which keeps a fixed 44px reserve), so opening and closing never resizes the media. */
+body[data-route="project"] .stage { margin-bottom: 44px; }
+.rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: calc(var(--pad) + env(safe-area-inset-bottom, 0px)); z-index: 6; padding-top: 0; gap: 0; background: rgba(0, 0, 0, 0.55); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.info-head { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; text-align: left; }
+.info-head svg { flex: none; transition: transform 0.4s var(--ease); }
+.rail-info.is-closed .info-head svg { transform: rotate(180deg); }
+.info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
+.info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
+.rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
+.info-title { font-size: 16px; font-weight: calc(var(--w-sans) + 60); }
+.info-desc { font-size: 14px; line-height: 1.35; color: var(--c-fg); }
+.info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
+
+.info-pn { display: flex; justify-content: space-between; font: var(--fs-ui) var(--font-mono); }
+.info-pn a { min-height: 44px; display: flex; align-items: center; }
+
+/* tag chips: role lists in the info panel; also the "clear filter" chip above the list */
+.chip { display: inline-flex; align-items: center; padding: 3px 10px; border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 999px; font-size: var(--fs-meta); line-height: 1.3; color: var(--c-mute); transition: color 0.12s ease, border-color 0.12s ease; }
+.chip:hover, .chip.is-on { color: var(--c-fg); border-color: rgba(255, 255, 255, 0.7); }
+@media (hover: none) { .chip { padding: 8px 12px; } }
+.list-filter { flex: none; display: flex; padding: 0 0 12px; }
+.list-filter.is-empty { display: none; }
+
+/* ---------- views ---------- */
+.view { position: absolute; inset: 0; display: flex; flex-direction: column; }
+
+/* home: mobile feed (one project per screen, snapping) */
+.home-preview { display: none; }
+.home-feed {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  --feed-h: 100%;
+}
+body.is-index .home-feed { scroll-snap-type: none; }
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  height: var(--feed-h);
+  overflow: hidden;
+  scroll-snap-align: center;
+  transition: height 0.35s ease;
+}
+body.is-index .home-feed { border-top: 1px solid rgba(255, 255, 255, 0.1); }
+body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); } /* same hairline list as the desktop rail; 44px for touch */
+.card-media {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+body.is-index .card-media { max-height: 0; opacity: 0; }
+.card-media > * { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--c-line); background: #111; }
+.card-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; letter-spacing: 0.01em; }
+.card-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-row span:last-child { flex: none; white-space: nowrap; }
+body.is-index #feed-pager { display: none; }
+
+/* video */
+.vwrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px 0; min-height: 0; }
+.vwrap .video-shell { max-width: min(100%, 880px); }
+.vwrap video { width: 100%; height: auto; max-height: calc(100svh - 220px); }
+
+/* stills: vertical snap scroll, one still per page, same dot marker as the case study */
+.sp { position: absolute; inset: 0; overflow-y: auto; scroll-snap-type: y mandatory; }
+.sp-page { height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; padding: 12px 20px; }
+.sp-page img { width: 100%; height: 100%; object-fit: contain; } /* low-res fills the same box as the full image, so nothing resizes on swap */
+.sp-page:not(.is-sharp) img { filter: blur(6px); }
+.sp-page.is-sharp img { filter: none; transition: filter 0.4s ease; }
+
+/* about */
+.about-box { display: none; }
+.rail-about { font-size: 26px; line-height: 1.18; letter-spacing: -0.01em; min-height: 0; overflow-y: auto; }
+.rail-about a:not(.mail) { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+.mail { display: inline-block; vertical-align: -0.35em; padding: 12px; margin: -12px -8px -12px -8px; } /* 44px tap area */
+.mail svg { width: 0.85em; height: 0.85em; }
+body[data-route="about"] .rail-about { display: block; flex: 1; padding-top: 32px; }
+body[data-route="about"] .stage { display: none; }
+
+/* ---------- case study (Lapse) ---------- */
+.cs { position: absolute; inset: 0; z-index: 1; overflow-y: auto; scroll-snap-type: y mandatory; }
+.cs-sec {
+  position: relative;
+  height: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.pager { position: absolute; right: 0; top: 24px; bottom: 44px; display: flex; flex-direction: column; justify-content: space-between; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+.pager.is-live { opacity: 1; } /* shown while scrolling, fades out after a moment of stillness */
+.pager i { flex: none; width: 2px; height: 2px; border-radius: 50%; background: #555; transition: background 0.25s ease; }
+.pager i.on { background: var(--c-fg); }
+
+/* iPhone frame — screen mask clips the video, bezel PNG sits on top */
+.phone-wrap { position: relative; }
+.phone-frame { position: relative; height: min(52svh, 500px); aspect-ratio: 1350 / 2760; }
+.phone-frame-screen, .phone-frame-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+.phone-frame-overlay { z-index: 2; pointer-events: none; }
+.phone-frame-screen {
+  z-index: 1;
+  background: #000;
+  -webkit-mask: url("assets/misc/iphone17pro-screen-mask.png") center / 100% 100% no-repeat;
+          mask: url("assets/misc/iphone17pro-screen-mask.png") center / 100% 100% no-repeat;
+}
+.phone-frame-screen .video-shell { width: 100%; height: 100%; }
+.phone-frame-screen video { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
+/* The walkthrough recording has UI at its very edges; constrain it to the mask's
+   screen opening (89.333% x 95%) so it maps ~1:1 with no crop. */
+.phone-frame.screen-rec video { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; }
+.phone-frame-screen .video-play { left: 4%; bottom: 3%; }
+.phone-frame-screen .video-mute { right: 4%; bottom: 3%; }
+
+/* circle stickers: the Lapse logo and the four stats. They pop in one after another once the phone is up. */
+.s1 { display: flex; align-items: center; justify-content: center; --d: 84px; }
+.stk {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--d);
+  height: var(--d);
+  background: #ff6300;
+  color: #000;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) calc(0.45s + var(--n, 0) * 0.14s), opacity 0.3s ease calc(0.45s + var(--n, 0) * 0.14s);
+}
+.s1:not(.is-active) .stk { opacity: 0; transform: translateY(-0.6em) rotate(var(--r, 0deg)) scale(0.3); transition: opacity 0.4s ease, transform 0.5s var(--ease); }
+.sticker { top: -12px; right: -22px; width: 68px; height: 68px; padding: 10px; } /* logo is 48px in the 68px circle */
+.stat-stk { padding: 8px; text-align: center; }
+.stat-num { font: 600 24px/1 var(--font-sans); letter-spacing: -0.02em; }
+.stat-label { font-size: 10px; font-weight: 500; line-height: 1.1; margin-top: 3px; }
+.stat-stk--1 { left: calc(var(--d) * -0.62); top: 16%; --r: -8deg; }
+.stat-stk--2 { right: calc(var(--d) * -0.72); top: 50%; --r: 7deg; }
+.stat-stk--3 { left: calc(var(--d) * -0.3); bottom: 18%; --r: 5deg; }
+.stat-stk--4 { right: calc(var(--d) * -0.4); bottom: calc(var(--d) * -0.3); --r: -6deg; } /* straddles the bottom-right corner of the phone */
+.sticker img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0); }
+
+
+.s3 .phone-frame { height: min(60svh, 560px); }
+.statement { font-size: 29px; font-weight: var(--w-sans); line-height: 1.1; letter-spacing: -0.01em; text-align: center; padding: 0 20px; }
+
+.ba-stage { position: relative; flex: 1 1 0; min-height: 0; width: 100%; max-width: 900px; margin-top: 16px; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
+.ba-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+.ba-frame.on { opacity: 1; }
+.ba-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.6s ease-in-out; }
+.ba-frame img.is-on { opacity: 1; }
+.ba-stage.is-orig .ba-frame img { opacity: 0; transition-duration: 0.15s; }
+.ba-stage.is-orig .ba-frame img.before { opacity: 1; }
+.ba-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 12px; }
+.ba-tabs { display: flex; gap: 8px; }
+.ba-tabs button { width: 44px; height: 44px; padding: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.28); opacity: 0.55; transition: opacity 0.2s ease, border-color 0.2s ease; }
+.ba-tabs button:hover { opacity: 0.85; }
+.ba-tabs button[aria-pressed="true"] { opacity: 1; border-color: var(--c-fg); }
+.ba-tabs img { width: 100%; height: 100%; object-fit: cover; }
+.ba-hint { font: var(--fs-ui) var(--font-mono); color: var(--c-mute); margin-bottom: 8px; }
+.ba-hint .st-after, .ba-hint .st-before { color: var(--c-fg); }
+.s4:not(.is-orig) .st-before, .s4.is-orig .st-after { display: none; }
+
+/* role statement: lines fade up in turn when the page arrives */
+.statement .w { display: inline-block; opacity: 0; transform: translateY(0.4em); filter: blur(2px); transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease; }
+.cap-3.is-on .w { opacity: 1; transform: none; filter: none; transition: opacity 0.7s ease, transform 0.7s var(--ease), filter 0.7s ease; transition-delay: calc(var(--l, 0) * 110ms); }
+.s4 { display: block; height: 200%; padding: 0; scroll-snap-align: none; } /* two snap pages: caption over the dimmed comparison, then the comparison clear */
+.pg { position: absolute; left: 0; right: 0; top: 0; height: 50%; scroll-snap-align: start; pointer-events: none; }
+.pg--b { top: 50%; }
+.s4-pin { position: sticky; top: 0; height: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 20px; } /* side room so the page marker never sits on the photo */
+.s4-ui { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; transition: opacity 0.6s ease; }
+.s4.is-capped .s4-ui { opacity: 0.28; }
+.s4-cap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; transition: opacity 0.5s ease, transform 0.5s var(--ease); }
+.s4:not(.is-capped) .s4-cap { opacity: 0; transform: translateY(-0.6em); }
+
+.wall--bg { z-index: 0; opacity: 0.28; pointer-events: none; transition: opacity 0.6s ease; }
+.wall--bg.is-off { opacity: 0; }
+.wall--main { z-index: 0; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+.wall--main.is-dim { opacity: 0.28; }
+.wall--main.is-full { opacity: 1; }
+.s1 > * { position: relative; z-index: 1; }
+/* pages 1 and 2: the caption fades out as the phone page fades in */
+/* Pinned text (captions and the role statement): it sits in one layer above the scrolling pages, so it stays put and
+   fades out with a small drift up while the page scrolls under it. The before/after caption works the same way. */
+.cap-layer { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; }
+.cap { grid-area: 1 / 1; max-width: 900px; margin: 0; opacity: 0; transform: translateY(-0.6em); transition: opacity 0.5s ease, transform 0.5s var(--ease); }
+.cap.is-on { opacity: 1; transform: none; }
+/* the phone page: fades out while drifting up */
+.s1 .phone-wrap { transition: opacity 0.5s ease, transform 0.5s var(--ease); }
+.s1:not(.is-active) .phone-wrap { opacity: 0; transform: translateY(-0.6em); }
+.s-cap-text { max-width: 900px; padding: 0 20px; text-align: center; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.85); }
+.s5 { padding: 0; align-items: stretch; justify-content: flex-start; }
+.wall { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); }
+.wall-cell { position: relative; overflow: hidden; background: #111; border: 0.5px solid rgba(255, 255, 255, 0.2); }
+.wall-cell::before { content: ""; position: absolute; inset: -8%; background: var(--thumb) center / cover no-repeat; filter: blur(6px); }
+.wall-cell.is-ready::before { display: none; }
+.wall-cell:nth-child(n + 25) { display: none; }
+.wall-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; visibility: hidden; filter: blur(8px); transition: filter 0.5s ease; animation: wall-fade 16s ease-in-out infinite; }
+.wall-cell img.is-loaded { visibility: visible; filter: none; }
+.wall-cell img:first-child { z-index: 1; animation-delay: calc(var(--d) * -1.7s); }
+.wall-cell img:last-child { opacity: 1; animation: none; } /* always opaque underneath, so the top image fades to a photo, never to black */
+@keyframes wall-fade { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
+
+/* custom video controls */
+.video-shell { position: relative; width: fit-content; margin-inline: auto; --video-ctrl-size: 44px; --video-ctrl-icon-size: 16px; }
+.video-shell button { position: absolute; bottom: 0; width: var(--video-ctrl-size); height: var(--video-ctrl-size); color: #fff; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.5)); transition: opacity 150ms ease; }
+.video-play { left: 0; }
+.video-mute { right: 0; }
+.video-shell button svg { width: var(--video-ctrl-icon-size); height: var(--video-ctrl-icon-size); display: block; }
+.video-shell.is-playing .video-play { opacity: 0; }
+.video-shell.is-playing .video-play:focus-visible { opacity: 1; }
+@media (hover: hover) { .video-shell.is-playing:hover .video-play { opacity: 1; } }
+@media (hover: none) {
+  .video-shell .video-play, .video-shell .video-mute { opacity: 0; pointer-events: none; }
+  .video-shell.controls-visible .video-play, .video-shell.controls-visible .video-mute { opacity: 1; pointer-events: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
+  .wall-cell img:first-child { opacity: 1; }
+}
+
+/* ---------- desktop: persistent left rail | media stage ----------
+   Must mirror DESKTOP in app.js. */
+@media (min-width: 1024px) and (min-height: 520px) {
+  .app {
+    display: grid;
+    /* the rail never drops below 320px: the widest list row needs about 296px, so names never wrap */
+    grid-template-columns: minmax(320px, 7fr) minmax(0, 17fr);
+    column-gap: var(--pad);
+    padding: var(--pad);
+  }
+  .rail { display: flex; flex-direction: column; position: relative; min-height: 0; overflow: hidden; }
+  .topbar { font-size: 20px; margin-bottom: 12px; }
+  .list-filter { height: 36px; align-items: center; padding: 0 var(--inset); }
+  .list-filter.is-empty { display: flex; visibility: hidden; } /* keeps the list where it was */
+  .topbar a { min-height: 0; padding: 6px var(--inset); }
+
+  .list-wrap { display: block; flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  body[data-route="about"] .list-wrap { display: none; }
+  .list { position: relative; display: flex; flex-direction: column; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+  .list a {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    height: var(--row-h); padding: 0 var(--inset);
+    font-size: 14px; letter-spacing: 0.01em; color: var(--c-mute);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    transition: color 0.12s ease;
+  }
+  .list a.is-cursor, .list a:hover, .list:not(.has-cursor) a { color: var(--c-fg); }
+  .list a span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px; }
+  .list a span:last-child { flex: none; white-space: nowrap; }
+
+  .rail-about { font-size: 28px; padding: 0 var(--inset) 56px; flex: 1; }
+  body[data-route="about"] .rail-about { padding-top: 0; }
+  body[data-route="about"] .stage { display: block; }
+
+  body[data-route="project"] .stage { margin-bottom: 0; }
+  .rail-info.is-tray { position: static; z-index: auto; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; padding-top: 0; }
+  .rail-info.is-tray .info-inner { gap: 12px; padding-bottom: 0; }
+  .info-head { cursor: default; }
+  .info-head svg { display: none; } /* nothing to toggle on desktop */
+  .rail-info {
+    flex: 0 0 auto;
+    max-height: min(340px, 35svh); /* short windows: keep the list from shrinking under a hovering pointer */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+    padding: var(--pad) var(--inset) 60px;
+    gap: 12px;
+  }
+  .info-title { font-size: 18px; }
+  .info-desc { font-size: 16px; line-height: 1.4; }
+    .info-roles { font-size: var(--fs-meta); }
+  .info-pn { display: none; }
+
+  .hint {
+    display: flex; justify-content: space-between;
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 10px var(--inset);
+    background: rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+    font: var(--fs-ui) var(--font-mono);
+    color: var(--c-mute);
+  }
+
+  /* home: hover preview */
+  .home-feed, #feed-pager { display: none; }
+  .home-preview { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; }
+  .hp-box { position: relative; width: min(100%, 880px); aspect-ratio: 16 / 9; transition: opacity 0.2s ease; }
+  body.is-index .hp-box { opacity: 0; }
+  .hp-box > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.2s ease; }
+  .hp-box > .on { opacity: 1; }
+
+  .vwrap { padding: 0; }
+  .vwrap video { max-height: 78svh; }
+
+
+  #view-about { align-items: center; justify-content: center; }
+  .about-box { display: block; position: relative; width: min(100%, 880px); aspect-ratio: 1916 / 822; } /* the reel is wider than 16:9 */
+  .about-box .video-shell { width: 100%; height: 100%; }
+  .about-box video { width: 100%; height: 100%; object-fit: contain; }
+
+  .phone-frame { height: min(78svh, 720px); }
+  .s1 { --d: 150px; }
+  .stat-num { font-size: 42px; }
+  .stat-label { font-size: var(--fs-meta); }
+  .sticker { width: 104px; height: 104px; padding: 13px; top: -22px; right: -34px; }
+
+  .statement { font-size: clamp(32px, 3.6vw, 52px); text-align: center; max-width: 900px; padding: 0 24px; }
+  .s3 .phone-frame { height: min(82svh, 760px); }
+  .ba-stage { margin-top: 0; }
+  .s4-pin { padding: 12px 0; }
+  .s4-ui { justify-content: center; gap: 16px; }
+  .wall { inset: 0; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 1fr); }
+  .wall-cell:nth-child(n + 25) { display: block; }
+}
+
+/* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */
+@media (min-width: 1024px) and (max-width: 1279px) and (min-height: 520px) {
+  .s1 { --d: 120px; }
+  .stat-num { font-size: 32px; }
+  .sticker { width: 84px; height: 84px; padding: 12px; right: -26px; }
+}

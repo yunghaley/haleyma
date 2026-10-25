@@ -10,3 +10,10 @@ node_modules/
 CLAUDE.md
 wrangler.jsonc
 wrangler.toml
+assets/fonts/ABCArealVariable.ttf
+assets/misc/og-drafts/
+.claude/
+.serena/
+.cpanel.yml
+.assetsignore
+assets/projects/lapse/shot-on-lapse/jpeg/

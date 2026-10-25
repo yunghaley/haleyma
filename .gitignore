@@ -3,3 +3,5 @@ node_modules
 package.json
 package-lock.json
 .vscode
+# ABC Areal: the license forbids public repos and servers
+assets/fonts/ABCArealVariable.ttf

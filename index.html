@@ -4,24 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Haley Ma</title>
-  <meta name="description" content="Haley Ma — Creative and Photography Direction for Tech, Fashion, and Sportswear. Head of Camera at Lapse. Previously AKQA London, Portland, and YUD Studio Toronto.">
+  <meta name="description" content="Creative technologist and director. Built the camera product at Lapse. Works across tech, fashion and sportswear.">
   <meta property="og:title" content="Haley Ma">
-  <meta property="og:description" content="Creative and Photography Direction for Tech, Fashion, and Sportswear.">
+  <meta property="og:description" content="Creative technologist and director. Built the camera product at Lapse. Works across tech, fashion and sportswear.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://haleyma.com/assets/misc/haley-ogimage.png">
+  <meta property="og:site_name" content="Haley Ma">
+  <link rel="canonical" href="https://haleyma.com/">
+  <meta property="og:image" content="https://haleyma.com/assets/misc/haleyma-og-wordmark.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Haley Ma">
   <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon-96.png" type="image/png" sizes="96x96">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="tailwind.css">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preload" as="image" href="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png">
-  <link rel="preload" as="image" href="assets/misc/iphone17pro-screen-mask.png">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/InterVariable.woff2" crossorigin>
+  <link rel="stylesheet" href="site.css?v=20261025">
   <meta property="og:url" content="https://haleyma.com/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Haley Ma">
-  <meta name="twitter:description" content="Creative and Photography Direction for Tech, Fashion, and Sportswear.">
-  <meta name="twitter:image" content="https://haleyma.com/assets/misc/haley-ogimage.png">
+  <meta name="twitter:description" content="Creative technologist and director. Built the camera product at Lapse. Works across tech, fashion and sportswear.">
+  <meta name="twitter:image" content="https://haleyma.com/assets/misc/haleyma-og-wordmark.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -32,656 +35,165 @@
       "https://www.linkedin.com/in/haleyma",
       "https://www.instagram.com/haleyma"
     ],
-    "jobTitle": "Creative & Photography Director",
+    "jobTitle": "Creative technologist and director",
     "worksFor": {
       "@type": "Organization",
       "name": "Lapse"
     },
-    "image": "https://haleyma.com/assets/misc/haley-ogimage.png",
-    "description": "Creative and Photography Direction for Tech, Fashion, and Sportswear."
+    "image": "https://haleyma.com/assets/misc/haleyma-og-wordmark.png",
+    "description": "Creative technologist and director. Built the camera product at Lapse. Works across tech, fashion and sportswear."
   }
   </script>
 </head>
-<body class="flex flex-col min-h-screen">
-  <div class="flex-1 flex flex-col items-center w-full">
-  <!-- Header -->
-  <header class="mb-1.5 z-50 w-full">
-  
+<body data-route="home">
+<div class="app">
 
+  <aside class="rail" id="rail">
+    <header class="topbar">
+      <h1 class="sr-only">Haley Ma</h1>
+      <a href="#/" class="brand">HALEY MA</a>
+      <nav class="topnav" aria-label="Primary">
+        <a href="#/" id="nav-index">INDEX</a>
+        <a href="#/about" id="nav-about">ABOUT</a>
+      </nav>
+    </header>
 
-    <nav aria-label="Primary navigation">
-    <div class="m-1.5 inset-x-0 z-50 flex justify-center nav-safe">
-      <div class="w-full flex flex-col place-content-between">
-        <!-- Two frosted pills — one hugging the logo, one hugging the email —
-             instead of a single full-width frosted bar. Spacer between pushes
-             them to the left/right edges. -->
-        <div class="flex w-full gap-1.5 font-mono text-xl">
-          <div class="flex p-1.5 gap-1.5 nav-pill">
-            <button data-project="default" class="cursor-pointer nav-logo" aria-label="Home" aria-controls="project-default">
-              <span class="t-shimmer-hover" data-text="HALEY MA">HALEY MA</span>
-            </button>
-            <button data-target="projects" class="hidden cursor-pointer" aria-controls="section-projects" aria-expanded="false">
-              <span class="t-shimmer-hover" data-text="PROJECTS">PROJECTS</span>
-            </button>
-            <!-- INFO hidden for now — overlay markup + JS handlers stay intact/dormant; remove `hidden` to restore -->
-            <button data-target="info" class="hidden cursor-pointer" aria-controls="section-info" aria-expanded="false">
-              <span class="t-shimmer-hover" data-text="INFO">INFO</span>
-            </button>
-          </div>
-          <div class="grow"><!-- Spacer --></div>
-          <a href="mailto:hm@haleyma.com" aria-label="Email" class="nav-icon flex items-center p-1.5">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M3 12h18"/>
-              <ellipse cx="12" cy="12" rx="4.5" ry="9"/>
-            </svg>
-          </a>
-        </div>
-        <div class="w-full box p-1.5 font-sans text-sm flex items-baseline hidden">
-          <span class="text-[10px]" data-text="CURRENTLY: ">CURRENTLY: </span>
-          <div class="grow nav-marquee">
-            <div class="nav-marquee-track">
-              <span class="nav-marquee-item">Building Trace, an app for experiencing memories spatially. Exploring new possibilities with AI agentic workflows and creative tools. Freelancing across a range of creative production and strategy projects.</span>
-              <span class="nav-marquee-item" aria-hidden="true">Building Trace, an app for experiencing memories spatially. Exploring new possibilities with AI agentic workflows and creative tools. Freelancing across a range of creative production and strategy projects.</span>
-            </div>
-          </div>
-        </div>
+    <div class="list-filter is-empty" id="filter"></div>
+
+    <div class="list-wrap">
+      <nav class="list" id="list" aria-label="Projects">
+        <a href="#/lapse" data-slug="lapse" data-kind="video" data-src="assets/projects/lapse/lapse-sizzle-1920-hevc.mp4" data-alt="assets/projects/lapse/lapse-sizzle-1920-avc.mp4"><span>Head of Camera</span><span>Lapse</span></a>
+        <a href="#/nike-basketball" data-slug="nike-basketball" data-kind="video" data-src="assets/projects/nike-basketball-pg-keep-rising/nike-basketball-keep-rising-paul-george-h264.mp4"><span>Paul George &quot;Keep Rising&quot;</span><span>Nike Basketball</span></a>
+        <a href="#/sequence" data-slug="sequence" data-kind="video" data-src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise-hevc.mp4" data-alt="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise-avc.mp4"><span>&quot;Hand Covers Bruise&quot;</span><span>Sequence</span></a>
+        <a href="#/nike-football" data-slug="nike-football" data-kind="video" data-src="assets/projects/nike-football-born-mercurial/nike-football-born-mercurial-cr7-h264.mp4"><span>Born Mercurial</span><span>Nike Football</span></a>
+        <a href="#/nike-buatsi" data-slug="nike-buatsi" data-kind="video" data-src="assets/projects/nike-uk-buatsi/nike-uk-buatsi-h264.mp4"><span>Buatsi</span><span>Nike London</span></a>
+        <a href="#/vsco" data-slug="vsco" data-kind="video" data-src="assets/projects/vsco/vsco-come-closer-2mbps-faststart.mp4"><span>Come Closer</span><span>VSCO</span></a>
+        <a href="#/stills-portfolio" data-slug="stills-portfolio" data-kind="image" data-src="assets/stills-portfolio/HM-StillsPortfolio-0.jpg"><span>Stills Portfolio</span><span>Various</span></a>
+      </nav>
+    </div>
+
+    <p class="rail-about">Creative technologist and director with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/">Lapse</a>. Currently exploring AI creative tool workflows. Clients include <a href="https://www.nike.com/">Nike</a>, <a href="https://www.akqa.com/">AKQA</a> and <a href="https://www.gq-magazine.co.uk/">British GQ</a>. <a class="mail" href="mailto:hm@haleyma.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 7l9 6 9-6"/></svg></a></p>
+
+    <div class="rail-info" id="info" hidden></div>
+
+    <div class="hint" aria-hidden="true"><span>&uarr;&darr; &nbsp;&crarr; &nbsp;esc</span><span id="clock"></span></div>
+  </aside>
+
+  <main class="stage" id="stage">
+
+  <section class="view" id="view-home" data-tpl="home">
+    <div class="home-preview" aria-hidden="true">
+      <div class="hp-box">
+        <video id="hr" muted loop playsinline preload="none"></video>
+        <video id="hv" muted loop playsinline preload="none"></video>
+        <img id="hi" alt="">
       </div>
     </div>
-</nav>
+    <div class="home-feed" id="feed"></div>
+    <div class="pager" id="feed-pager" aria-hidden="true"></div>
+  </section>
 
-  </header>
+  <section class="view" id="view-about" data-tpl="about" hidden>
+    <div class="about-box"><video id="about-reel" muted loop playsinline preload="none"></video></div>
+  </section>
 
-    <main class="flex-1">
-    <div class="ml-1.5 mr-1.5 z-40 content-safe-x">
-      <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-1.5 md:sticky">
-        <!--CONTENT-->
-        <div class="md:mt-1.5 col-span-full z-10 md:z-0 flex flex-col gap-1.5 scroll-col scroll-fade content-col">
-            <!-- INFO: desktop's permanent left column (sibling of .projects-col
-                 in this same grid); mobile keeps this dormant (its nav trigger
-                 is hidden — see PROJECTS/INFO buttons above). -->
-            <div data-section="info" class="info-col overlay-section scroll-fade w-full p-1.5 box">
-              <h1 class="font-sans t-hero">Creative technologist, lead and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a>. Currently exploring AI creative tool workflows. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a> and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
-            </div>
-
-            <!-- Mobile-only intro, above the (collapsed) accordion; hidden
-                 entirely on desktop, where .info-col covers the same copy. -->
-            <div class="mobile-hero flex flex-col gap-1.5">
-              <div id="project-default" class="project-panel">
-                <div class="box p-1.5">
-                  <h1 class="font-sans t-hero">Creative technologist and product builder with experience in tech, fashion and sportswear. Built the camera product at <a href="https://www.lapse.com/" class="t-shimmer-hover" data-text="Lapse">Lapse</a>. Currently exploring AI creative tools workflows. Clients include <a href="https://www.nike.com/" class="t-shimmer-hover" data-text="Nike">Nike</a>, <a href="https://www.akqa.com/" class="t-shimmer-hover" data-text="AKQA">AKQA</a> and <a href="https://www.gq-magazine.co.uk/" class="t-shimmer-hover" data-text="British GQ">British GQ</a>.</h1>
-                </div>
-              </div>
-            </div>
-
-            <!-- Projects column: desktop's right side, all items expanded by
-                 default and individually collapsible; mobile keeps the
-                 original single-open, closed-by-default accordion below the
-                 intro above (see script.js isDesktopSplit branches). -->
-            <div class="projects-col">
-          <section data-section="projects">
-              <div class="grid grid-cols-1 md:col-span-6 gap-1.5 z-40 relative">
-
-                  <!-- Description of Work Goes Here -->
-                  <div class="font-sans p-1.5 box">
-                    <div class="grid grid-cols-12 gap-x-1 text-[10px] uppercase tracking-wide">
-                      <div class="col-span-8">project</div> 
-                      <div class="col-span-4">client</div>
-                    </div>
-                    <div class="accordion">
-                      <div class="accordion-item cursor-pointer" data-project="lapse" aria-controls="panel-1" id="trigger-1">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                              <span data-text="Head of Camera">Head of Camera</span>
-                          </div>
-                          <div class="col-span-3">
-                            Lapse
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>    
-                        <div id="panel-1" class="accordion-panel">
-                          <ul class="text-xs">
-                            <li>image processing</li>
-                            <li>app design</li>
-                            <li>project management</li>
-                            <li>creative direction</li>
-                            <li>brand marketing</li>
-                          </ul>
-                          <div class="text-sm">Architected Lapse's proprietary image processing pipeline, transforming iPhone photos into film-like images. Backed by Greylock, DST Global, Google Ventures, and others.</div>
-                          <div id="project-lapse" class="project-panel">
-                            <div class="case-study">
-                              <div class="box p-1.5 cs-hero">
-                                <div class="cs-hero-row">
-                                  <div class="phone-frame cs-hero-video">
-                                    <div class="phone-frame-screen">
-                                      <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                                    </div>
-                                    <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
-                                  </div>
-                                  <div class="cs-hero-copy-col cs-hero-copy-col--center">
-                                    <div class="cs-hero-logo-row">
-                                      <img class="cs-hero-logo" src="assets/projects/lapse/lapse-logo-icon.svg" alt="Lapse logo">
-                                      <h2 class="font-sans t-hero-sub cs-hero-copy">Lapse is the social disposable camera app that makes sharing personal again.</h2>
-                                    </div>
-                                    <div class="cs-metrics">
-                                      <div class="cs-stat">
-                                        <div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit" data-stagger="1">B</span><span class="t-digit" data-stagger="2">+</span></div>
-                                        <div class="cs-label">snaps</div>
-                                      </div>
-                                      <div class="cs-stat">
-                                        <div class="cs-num t-digit-group"><span class="t-digit" data-stagger="1">#</span><span class="t-digit" data-stagger="2">1</span></div>
-                                        <div class="cs-label">US App Store</div>
-                                      </div>
-                                      <div class="cs-stat">
-                                        <div class="cs-num t-digit-group"><span class="t-digit">$</span><span class="t-digit">4</span><span class="t-digit">2</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div>
-                                        <div class="cs-label">raised</div>
-                                      </div>
-                                      <div class="cs-stat">
-                                        <div class="cs-num t-digit-group"><span class="t-digit">1</span><span class="t-digit">.</span><span class="t-digit">5</span><span class="t-digit" data-stagger="1">M</span><span class="t-digit" data-stagger="2">+</span></div>
-                                        <div class="cs-label">users</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="box p-1.5 cs-hero">
-                                <div class="cs-hero-row">
-                                  <div class="phone-frame cs-hero-video">
-                                    <div class="phone-frame-screen">
-                                      <video src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                                    </div>
-                                    <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
-                                  </div>
-                                  <div class="cs-hero-copy-col cs-hero-copy-col--center">
-                                    <div>
-                                      <h2 class="font-sans t-hero-sub">As a founding member and Head of Camera, I was responsible for the design and development of a proprietary iOS image pipeline, plus creative direction, product vision, brand marketing, and social strategy.</h2>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="box p-1.5">
-                                <div class="cs-label mb-1.5">Lapse Image Processing — before / after</div>
-                                <div class="cs-crossfade-row">
-                                  <div class="cs-crossfade">
-                                    <img src="assets/projects/lapse/beforeAfter/tina-before-1512px.jpg" alt="Before" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/tina-after-1512px-01.jpg" alt="After" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/tina-after-1512px-02.jpg" alt="After" loading="lazy">
-                                  </div>
-                                  <div class="cs-crossfade">
-                                    <img src="assets/projects/lapse/beforeAfter/artist-before-1512px.jpg" alt="Before" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/artist-after-1512px-01.jpg" alt="After" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/artist-after-1512px-02.jpg" alt="After" loading="lazy">
-                                  </div>
-                                  <div class="cs-crossfade">
-                                    <img src="assets/projects/lapse/beforeAfter/boat-before-1512px.jpg" alt="Before" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/boat-after-1512px-01.jpg" alt="After" loading="lazy">
-                                  </div>
-                                  <div class="cs-crossfade">
-                                    <img src="assets/projects/lapse/beforeAfter/park-before-1512px.jpg" alt="Before" loading="lazy">
-                                    <img src="assets/projects/lapse/beforeAfter/park-after-1512px-01.jpg" alt="After" loading="lazy">
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="box p-1.5">
-                                <div class="cs-label mb-1.5">1B+ snaps taken on Lapse Image Pipeline</div>
-                                <div class="lapse-wall">
-                                  <div class="lapse-wall-cell" style="--d:0"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01GY402CF6SQ4NRT06YYHP2JA7_filtered_0%201_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDY1S2H97M89B2KZWMQM6KHQ_filtered_0%202.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:1"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01H743QVFP0R28KGN8W5T60P9X_filtered_0%201_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDZ1SV4NJAJJJ5B27QEKB53A_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:2"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01H8WYPJECCZGAZ6YNJ6TQGFKB_filtered_0%201_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEECEQGPSTVN84BRYNJT16S9_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:3"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01H9CB8DD36A1VMER4Y6XSHD01_filtered_0_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEEB2SXSKAF2BB31MFBB83G_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:4"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01H9Y3NDB3CT1R7TJ7VE6DN41W_filtered_0%201_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEEQP2NY288PK8BPNYYSJC6_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:5"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HAK16BGMXQ2TQF1WYC4BBM16_filtered_0_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEFDRJ42CV67Z4FZ9KWRAQ3_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:6"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HANK1AAVQG90ZCGEK691Q9V3_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEFTZBQH7C008581GGY3TCK_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:7"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HB9F17JTV8G1X34XSCWRWHZA_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEGE5JHCCTSG9H065GY513E_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:8"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HBA2F22NMH68QQE9XA4F4QRP_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEEYQY62JFGD6Z81CMGYXHM3_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:9"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HBJ5QWZTFDV6TTWREX5AS12R_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEGDFK66YJ4TRKM2WZQP6GGD_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:10"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HBQ3V47GVKH0NJT2051NHZTF_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEGK6R9W7TDRYB7JYVW0C8H6_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:11"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HBRF4WZHN86RVJHX8N6S3VM8_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEGN0YKMWBSSRH802NVFXXSX_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:12"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HBS2YNDE08MWJ5AKA5HGXJE1_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEGWGMBQADWYWNX3REWRWTJ6_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:13"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HC710CTFHENJHWS71WYXSP26_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEKAG24A4QH3FAW8MFBKYESA_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:14"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HC81969VZTB0SNWXNC276Z4Z_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEKMMKT5CMTY9MS03PN833G3_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:15"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HCA73G1YPZKTWSMHA18QNQAP_filtered_0.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEN02EE327ZMG1M60DAH1J9J_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:16"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HD46JY3GB9RP8DDK3PF3JKAK_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEN1RXC5A11RASH8B7P76VH1_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:17"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HD6E3M5AAQKQHJQ7V1X2CJ01_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HENEYK72Y5NH56MWM8HTQR6N_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:18"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDJ639GE82ZWE4K2ZZZMGPWA_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HEP1H1437C05XKE8HEG1YV7H_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:19"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDW2ENYTECA446H4V3M3JP7X_filtered_0%202.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HER3018B3Z5PG7NR0RZSQ0EN_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:20"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDWR122SH703B2JHR6CCPFXG_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HER3SRVRZJJRSD9D63WEVJSD_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:21"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDWRDKYZ0G7YE0X3AG5PYP05_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HES05VH02V6JVB66GBHKRP50_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:22"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDWSJJ2ZAW4DRDXDVY21GE1V_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HES3R4A516E85PTGZB0RRV3P_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                  <div class="lapse-wall-cell" style="--d:23"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HDXVHCSJ4SY1EC0W8F7CM0HE_filtered_0%202.jpg" alt="" loading="lazy" decoding="async"><img src="assets/projects/lapse/shot-on-lapse/jpeg/01HES4JG9BT885BQ9AJP7YQ682_filtered_0%201.jpg" alt="" loading="lazy" decoding="async"></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-2" id="trigger-2" data-project="nike-basketball">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Paul George &quot;Keep Rising&quot;">Paul George "Keep Rising"</span>
-                          </div>
-                          <div class="col-span-3">
-                            Nike Basketball
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                          <div id="panel-2" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>art direction</li>
-                              <li>cinematography</li>
-                              <li>directing</li>
-                              <li>brand marketing</li>
-                            </ul>
-                            <div class="text-sm">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</div>
-                            <div id="project-nike-basketball" class="project-panel">
-                              <div class="box p-1.5">
-                              <video id="nike-basketball" src="assets/projects/nike-basketball-pg-keep-rising/paul-george-keep-rising-live.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-3" id="trigger-3" data-project="sequence">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="&quot;Hand Covers Bruise&quot;">"Hand Covers Bruise"</span>
-                          </div>
-                          <div class="col-span-3">
-                            Sequence
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-3" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>art direction</li>
-                              <li>cinematography</li>
-                              <li>directing</li>
-                              <li>video edit</li>
-                              <li>colour grade</li>
-                            </ul>
-                          <div class="text-sm">A short dance film channeling the brand's collection ethos into a narrative of inner turmoil. Moving beyond the static editorial, it portrays the tense moment of leaving a safe space to confront the world.</div>
-                          <div id="project-sequence" class="project-panel">
-                            <div class="box p-1.5">
-                            <video src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-4" id="trigger-4" data-project="nike-football">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Born Mercurial">Born Mercurial</span>
-                          </div>
-                          <div class="col-span-3">
-                            Nike Football
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-4" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>camera</li>
-                              <li>video edit</li>
-                              <li>colour grade</li>
-                            </ul>
-                          <div class="text-sm">Digital content that offered an intimate vignette on a footballer's beginnings that connected deeply with fans globally via Nike's social channels.</div>
-                          <div id="project-nike-football" class="project-panel">
-                            <div class="box p-1.5">
-                            <video src="assets/projects/nike-football-born-mercurial/nike_football_-_born_mercurial_ft._cristiano_ronaldo (1080p).mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-5" id="trigger-5" data-project="nike-buatsi">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Buatsi">Buatsi</span>
-                          </div>
-                          <div class="col-span-3">
-                            Nike London
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-5" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>video edit</li>
-                              <li>colour grade</li>
-                              <li>sound design</li>
-                            </ul>
-                          <div class="text-sm">Created an evocative vignette of one boxer's journey from London to the world.</div>
-                          <div id="project-nike-buatsi" class="project-panel">
-                            <div class="box p-1.5">
-                              <video src="assets/projects/nike-uk-buatsi/nike_uk_'buatsi' (1080p).mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" aria-controls="panel-8" id="trigger-8" data-project="vsco">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="VSCO Film">Come Closer</span>
-                          </div>
-                          <div class="col-span-3">
-                            VSCO
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-8" class="accordion-panel">
-                          <ul class="text-xs">
-                            <li>cinematography</li>
-                            <li>video edit</li>
-                          </ul>
-                          <div class="text-sm">Accompanying film to the 'Come Closer' campaign, which celebrated curated images from the community in physical gallery spaces across Oakland, Tokyo and London.</div>
-                          <div id="project-vsco" class="project-panel">
-                            <div class="box p-1.5">
-                              <video src="assets/projects/vsco/ComeCloser_14_HEVC_2Mbps.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer hidden" aria-controls="panel-6" id="trigger-6" data-project="inter-miami-cf">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Inter Miami CF">Inter Miami CF</span>
-                          </div>
-                          <div class="col-span-3">
-                            DB Ventures
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-6" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>photography direction</li>
-                              <li>art direction</li>
-                              <li>video editing</li>
-                            </ul>
-                          <div class="text-sm">At AKQA London, we played an instrumental role in the launch of Inter Miami CF. Work included on-the-ground research, interviews and content production for social media moments and announcements.</div>
-                          <div id="project-inter-miami-cf" class="project-panel">
-                            <div class="box p-1.5">
-                              <img src="assets/stills-portfolio/HM-StillsPortfolio-12.jpg" alt="inter-miami-cf-image" loading="lazy">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer hidden" aria-controls="panel-7" id="trigger-7" data-project="trace">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Founder">Founder</span>
-                          </div>
-                          <div class="col-span-3">
-                            Trace
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>
-                        <div id="panel-7" class="accordion-panel">
-                            <ul class="text-xs">
-                              <li>ios</li>
-                              <li>agentic ai</li>
-                              <li>spatial computing</li>
-                              <li>product design</li>
-                            </ul>
-                          <div class="text-sm">An iOS app for experiencing memories spatially. Work in progress.</div>
-                            <div id="project-trace" class="project-panel">
-                              <div class="case-study">
-                                <div class="box p-1.5 cs-hero">
-                                  <div class="cs-hero-row">
-                                    <div class="phone-frame cs-hero-video">
-                                      <div class="phone-frame-screen">
-                                        <!-- placeholder asset — swap for real Trace footage -->
-                                        <video src="assets/projects/lapse/Sizzle_v5_HEVC_3Mbps.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                                      </div>
-                                      <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
-                                    </div>
-                                    <div class="cs-hero-copy-col cs-hero-copy-col--center">
-                                      <div class="cs-hero-logo-row">
-                                        <img class="cs-hero-logo cs-hero-logo--wordmark" src="assets/projects/trace/trace-wordmark-01-3x.png" alt="Trace wordmark">
-                                        <h2 class="font-sans t-hero-sub cs-hero-copy">Trace your memories. Make sense of the past. Re-contextualize the present.</h2>
-                                      </div>
-                                      <div class="cs-metrics">
-                                        <div class="cs-stat">
-                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
-                                          <div class="cs-label">photos ingested in [TBD]</div>
-                                        </div>
-                                        <div class="cs-stat">
-                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
-                                          <div class="cs-label">on-device, TBD% [private]</div>
-                                        </div>
-                                        <div class="cs-stat">
-                                          <div class="cs-num t-digit-group"><span class="t-digit">—</span></div>
-                                          <div class="cs-label">library size supported</div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="box p-1.5 cs-hero">
-                                  <div class="cs-hero-row">
-                                    <div class="phone-frame cs-hero-video">
-                                      <div class="phone-frame-screen">
-                                        <!-- placeholder asset — swap for real Trace footage -->
-                                        <video src="assets/projects/lapse/iPhone-15-Pro-Viewport-60fps-1.mp4" loop muted playsinline preload="metadata" width="640" height="360" decoding="async"></video>
-                                      </div>
-                                      <img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" fetchpriority="high" decoding="async">
-                                    </div>
-                                    <div class="cs-hero-copy-col cs-hero-copy-col--center">
-                                      <div>
-                                        <h2 class="font-sans t-hero-sub">[Role / contribution copy — TBD]</h2>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="accordion-item cursor-pointer" data-project="stills-portfolio" aria-controls="panel-0" id="trigger-0">
-                        <div class="grid grid-cols-12 gap-x-1 text-sm items-baseline">
-                          <div class="col-span-8">
-                            <span data-text="Stills Portfolio">Stills Portfolio</span>
-                          </div>
-                          <div class="col-span-3">
-                            Various
-                          </div>
-                          <div class="col-span-1 justify-self-end">
-                            <button class="accordion-trigger" aria-expanded="false">
-                            </button>
-                          </div>
-                        </div>    
-                        <div id="panel-0" class="accordion-panel">
-                          <ul class="text-xs">
-                            <li>fashion</li>
-                            <li>commercial</li>
-                            <li>sports</li>
-                            <li>portraits</li>
-                            <li>documentary</li>
-                          </ul>
-                          <div class="text-sm">Select images from various projects and client work.</div>
-                          <div id="project-stills-portfolio" class="project-panel">
-                            <div class="flex flex-col items-center justify-center">
-                              <div class="slideshow-container w-full max-w-4xl box p-1.5">
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-0.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-0.jpg" alt="HM-StillsPortfolio-0" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-1.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-1.jpg" alt="HM-StillsPortfolio-1" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-10.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-10.jpg" alt="HM-StillsPortfolio-10" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-11.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-11.jpg" alt="HM-StillsPortfolio-11" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-3.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-3.jpg" alt="HM-StillsPortfolio-3" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-4.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-4.jpg" alt="HM-StillsPortfolio-4" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-5.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-5.jpg" alt="HM-StillsPortfolio-5" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-6.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-6.jpg" alt="HM-StillsPortfolio-6" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-9.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-9.jpg" alt="HM-StillsPortfolio-9" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-14.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-14.jpg" alt="HM-StillsPortfolio-14" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-15.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-15.jpg" alt="HM-StillsPortfolio-15" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-16.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-16.jpg" alt="HM-StillsPortfolio-16" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-20.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-20.jpg" alt="HM-StillsPortfolio-20" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-22.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-22.jpg" alt="HM-StillsPortfolio-22" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-23.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-23.jpg" alt="HM-StillsPortfolio-23" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-24.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-24.jpg" alt="HM-StillsPortfolio-24" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-25.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-25.jpg" alt="HM-StillsPortfolio-25" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-26.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-26.jpg" alt="HM-StillsPortfolio-26" loading="lazy" class="lazyload">
-                              </div>
-                              <div class="slide flex items-center justify-center">
-                                  <img src="assets/stills-portfolio/lazyload/HM-StillsPortfolio-LowRes-27.jpg" data-src="assets/stills-portfolio/HM-StillsPortfolio-27.jpg" alt="HM-StillsPortfolio-27" loading="lazy" class="lazyload">
-                              </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                </div>
-              </div>  
-          </section>
-
-            <div id="project-ai-experiments" class="project-panel hidden">
-              <div class="case-study">
-                <div class="box p-1.5">
-                  <div class="cs-label mb-1.5">Image experiments</div>
-                  <div class="cs-compare">
-                    <div class="cs-placeholder">ai-experiments/sd-sample-1.png</div>
-                    <div class="cs-placeholder">ai-experiments/sd-sample-2.png</div>
-                  </div>
-                </div>
-                <div class="box p-1.5">
-                  <div class="cs-label mb-1.5">ElevenLabs — voice / audio</div>
-                  <div class="cs-placeholder">elevenlabs-tts-sample-1.mp3</div>
-                  <div class="cs-placeholder mt-1.5">elevenlabs-dubbing-sample-1.mp3</div>
-                  <div class="cs-placeholder mt-1.5">elevenlabs-video-sample-1.mp4</div>
-                </div>
-              </div>
-            </div>
-            </div><!-- /.projects-col -->
-
-        </div>
-
-      </div>
+  <section class="view" id="view-nike-basketball" data-tpl="video" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Director of Photography for a motion piece with Nike to celebrate the launch of a new signature Paul George shoe.</p>
+      <ul class="roles"><li>art direction</li><li>cinematography</li><li>directing</li><li>brand marketing</li></ul>
     </div>
-</main>
+    <div class="vwrap"><video data-src="assets/projects/nike-basketball-pg-keep-rising/nike-basketball-keep-rising-paul-george-h264.mp4" loop muted playsinline preload="none" width="720" height="1280"></video></div>
+  </section>
 
+  <section class="view" id="view-sequence" data-tpl="video" hidden>
+    <div class="meta" hidden>
+      <p class="desc">A short dance film channeling the brand&#x27;s collection ethos into a narrative of inner turmoil. Moving beyond the static editorial, it portrays the tense moment of leaving a safe space to confront the world.</p>
+      <ul class="roles"><li>art direction</li><li>cinematography</li><li>directing</li><li>video edit</li><li>colour grade</li></ul>
+    </div>
+    <div class="vwrap"><video data-src="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise-hevc.mp4" data-alt="assets/projects/sequence-hand-covers-bruise/sequence-hand-covers-bruise-avc.mp4" loop muted playsinline preload="none" width="1920" height="1080"></video></div>
+  </section>
 
+  <section class="view" id="view-nike-football" data-tpl="video" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Digital content that offered an intimate vignette on Cristiano Ronaldo&#x27;s beginnings that connected deeply with fans globally via Nike&#x27;s social channels.</p>
+      <ul class="roles"><li>camera</li><li>video edit</li><li>colour grade</li></ul>
+    </div>
+    <div class="vwrap"><video data-src="assets/projects/nike-football-born-mercurial/nike-football-born-mercurial-cr7-h264.mp4" loop muted playsinline preload="none" width="1920" height="1080"></video></div>
+  </section>
 
+  <section class="view" id="view-nike-buatsi" data-tpl="video" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Created an evocative vignette of one boxer&#x27;s journey from London to the world.</p>
+      <ul class="roles"><li>video edit</li><li>colour grade</li><li>sound design</li></ul>
+    </div>
+    <div class="vwrap"><video data-src="assets/projects/nike-uk-buatsi/nike-uk-buatsi-h264.mp4" loop muted playsinline preload="none" width="1080" height="1350"></video></div>
+  </section>
 
+  <section class="view" id="view-vsco" data-tpl="video" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Accompanying film to the &#x27;Come Closer&#x27; campaign, which celebrated curated images from the community in physical gallery spaces across Oakland, Tokyo and London.</p>
+      <ul class="roles"><li>cinematography</li><li>video edit</li></ul>
+    </div>
+    <div class="vwrap"><video data-src="assets/projects/vsco/vsco-come-closer-2mbps-faststart.mp4" loop muted playsinline preload="none" width="1920" height="1080"></video></div>
+  </section>
 
+  <section class="view" id="view-lapse" data-tpl="case" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Architected Lapse&#x27;s proprietary image processing pipeline, transforming iPhone photos into film-like images. Backed by Greylock, DST Global, Google Ventures, and others.</p>
+      <ul class="roles"><li>image processing</li><li>app design</li><li>project management</li><li>creative direction</li><li>brand marketing</li></ul>
+    </div>
+    <div class="wall wall--bg" id="wall-bg" aria-hidden="true"></div>
+    <div class="wall wall--main" id="wall" aria-hidden="true"></div>
+    <div class="cs">
+      <div class="cs-sec s-cap"></div>
+      <div class="cs-sec s1">
+        <div class="phone-wrap"><div class="phone-frame"><div class="phone-frame-screen"><video data-src="assets/projects/lapse/lapse-sizzle-1920-hevc.mp4" data-alt="assets/projects/lapse/lapse-sizzle-1920-avc.mp4" loop muted playsinline preload="none" width="640" height="360"></video></div><img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" loading="lazy" decoding="async"></div><span class="sticker stk" style="--n:0;--r:9deg"><img src="assets/projects/lapse/lapse-logo-icon.svg" alt="Lapse logo"></span><div class="stk stat-stk stat-stk--1" style="--n:1"><span class="stat-num">2B+</span><span class="stat-label">snaps</span></div><div class="stk stat-stk stat-stk--2" style="--n:2"><span class="stat-num">#1</span><span class="stat-label">US App Store</span></div><div class="stk stat-stk stat-stk--3" style="--n:3"><span class="stat-num">$42M</span><span class="stat-label">raised</span></div><div class="stk stat-stk stat-stk--4" style="--n:4"><span class="stat-num">1.5M+</span><span class="stat-label">users</span></div></div>
+      </div>
+      <div class="cs-sec s2"></div>
+      <div class="cs-sec s3">
+        <div class="phone-wrap"><div class="phone-frame screen-rec"><div class="phone-frame-screen"><video data-src="assets/projects/lapse/lapse-app-walkthrough-1920-hevc.mp4" data-alt="assets/projects/lapse/lapse-app-walkthrough-1920-avc.mp4" loop muted playsinline preload="none" width="640" height="360"></video></div><img src="assets/misc/iphone17pro-cosmicOrange-portrait-noStatusBar.png" alt="" class="phone-frame-overlay" loading="lazy" decoding="async"></div></div>
+      </div>
+      <div class="cs-sec s4">
+        <span class="pg" aria-hidden="true"></span>
+        <span class="pg pg--b" aria-hidden="true"></span>
+        <div class="s4-pin">
+          <div class="s4-ui">
+        <div class="ba-stage" id="ba-stage" aria-label="Before and after. Press and hold, or hold Space, to see the original.">
+          <div class="ba-frame" data-name="tina" data-thumb="assets/projects/lapse/beforeAfter/thumbnails/tina-crop-thumbnail.jpg"><img data-src="assets/projects/lapse/beforeAfter/tina-before-1512px.jpg" alt="tina, before" class="before"><img data-src="assets/projects/lapse/beforeAfter/tina-after-1512px-01.jpg" alt="tina, after" class="after"><img data-src="assets/projects/lapse/beforeAfter/tina-after-1512px-02.jpg" alt="tina, after" class="after"></div>
+          <div class="ba-frame" data-name="artist" data-thumb="assets/projects/lapse/beforeAfter/thumbnails/artist-crop-thumbnail.jpg"><img data-src="assets/projects/lapse/beforeAfter/artist-before-1512px.jpg" alt="artist, before" class="before"><img data-src="assets/projects/lapse/beforeAfter/artist-after-1512px-01.jpg" alt="artist, after" class="after"><img data-src="assets/projects/lapse/beforeAfter/artist-after-1512px-02.jpg" alt="artist, after" class="after"></div>
+          <div class="ba-frame" data-name="boat"><img data-src="assets/projects/lapse/beforeAfter/boat-before-1512px.jpg" alt="boat, before" class="before"><img data-src="assets/projects/lapse/beforeAfter/boat-after-1512px-01.jpg" alt="boat, after" class="after"></div>
+          <div class="ba-frame" data-name="park" data-thumb="assets/projects/lapse/beforeAfter/thumbnails/park-crop-thumbnail.jpg"><img data-src="assets/projects/lapse/beforeAfter/park-before-1512px.jpg" alt="park, before" class="before"><img data-src="assets/projects/lapse/beforeAfter/park-after-1512px-01.jpg" alt="park, after" class="after"></div>
+        </div>
+        <div class="ba-controls">
+          <div class="ba-tabs" id="ba-tabs"></div>
+          <p class="ba-hint"><span class="st-after">after</span><span class="st-before">before</span> · hold to see original</p>
+        </div>
+          </div>
+          <div class="s4-cap"><p class="statement s-cap-text">Bringing a procedural film camera to anyone with an iPhone.</p></div>
+        </div>
+      </div>
+      <div class="cs-sec s-cap"></div>
+      <div class="cs-sec s5"></div>
+    </div>
+    <div class="cap-layer">
+      <p class="statement cap s-cap-text" data-pg="0">Lapse is the social disposable camera app that makes sharing personal again.</p>
+      <h2 class="statement cap cap-3" data-pg="2">As a founding member and Head of Camera, I led the design and development of a proprietary iOS image pipeline, while contributing to product vision, creative direction, marketing, and social strategy.</h2>
+      <p class="statement cap s-cap-text" data-pg="6">2B+ snaps taken and loved using Lapse.</p>
+    </div>
+    <div class="pager" aria-hidden="true"></div>
+  </section>
+  <section class="view" id="view-stills-portfolio" data-tpl="stills" data-folder="assets/stills-portfolio" data-prefix="HM-StillsPortfolio" data-stills="0,1,10,11,3,4,5,6,9,14,15,16,20,22,23,24,25,26,27" hidden>
+    <div class="meta" hidden>
+      <p class="desc">Select images from various projects and client work.</p>
+      <ul class="roles"><li>fashion</li><li>commercial</li><li>sports</li><li>portraits</li><li>documentary</li></ul>
+    </div>
+    <div class="sp"></div>
+    <div class="pager" aria-hidden="true"></div>
+  </section>
 
-  <!-- Background Motifs -->
-  <!-- <div class="z-0"><div class="bg-texture"></div></div>
-  <div class="z-0 opacity-15 absolute"> -->
-    <!-- <img class="bg-item bg-item--flower" src="assets/misc/hibiscus-flower-hm.png" alt=""> -->
-  </div>
-
-  <script src="lapse-images.js"></script>
-  <script src="script.js"></script>
-  <!-- Dithered reel background: the showreel runs as an ambient dithered canvas
-       behind the page instead of a foreground hero. Reduced-motion users get
-       a pre-rendered dithered still instead of the animation; the loop
-       otherwise starts on load and pauses when the tab is hidden (see
-       dither.js). proximityEnabled is off to halve the per-frame pixel
-       work — flip it true to restore the interactive mouse blur. -->
-  <!-- DITHER OFF: remove this opener and the closer below to restore
-  <canvas id="dither-bg" aria-hidden="true"></canvas>
-  <noscript>
-    <img id="dither-bg-fallback" src="assets/projects/reel/haley-ma-reel-dithered-fallback.png" alt="" aria-hidden="true">
-  </noscript>
-  <video
-    id="dither-src"
-    src="assets/projects/reel/haley-ma-reel-0.19Mbps.mp4"
-    muted
-    loop
-    playsinline
-    preload="metadata"
-    class="hidden"
-    aria-hidden="true"
-    width="640"
-    height="360"
-    decoding="async"
-  ></video>
-
-  <script type="module">
-    import { createDitherBg } from './dither.js';
-
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      createDitherBg({
-        canvas: document.getElementById('dither-bg'),
-        video: document.getElementById('dither-src'),
-        config: {
-          shapeColor: '#3a3a3a',
-          proximityEnabled: false,
-        },
-      });
-    } else {
-      document.getElementById('dither-bg').style.backgroundImage =
-        "url('assets/projects/reel/haley-ma-reel-dithered-fallback.png')";
-    }
-  </script>
-  DITHER OFF closer -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+  </main>
 </div>
+
+  <script src="app.js?v=20261025"></script>
 </body>
 </html>
