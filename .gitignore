@@ -5,3 +5,6 @@ package-lock.json
 .vscode
 # ABC Areal: the license forbids public repos and servers
 assets/fonts/ABCArealVariable.ttf
+
+# videos live in R2 (cdn.haleyma.com), keep local masters out of git
+assets/projects/**/*.mp4
