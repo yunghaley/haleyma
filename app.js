@@ -459,9 +459,8 @@ function initStills(view) {
   view.addEventListener('view:enter', () => { sp.scrollTop = 0; pips.forEach((p, k) => p.classList.toggle('on', k === 0)); live(); });
 }
 
-// --- Lapse case study: snap sections, pager, per-section behaviour ---
-function initCase() {
-  const view = $('#view-lapse');
+// --- Case study: snap sections, pager, per-section behaviour. Runs per case view; a part (statement, before/after, wall) is optional. ---
+function initCase(view) {
   const cs = $('.cs', view);
   const secs = $$('.cs-sec, .pg', view).filter(el => !el.classList.contains('s4')); // the before/after section holds two snap pages (.pg)
   // page marker: one segment per page, so the bar always spans the full height and adapts to the page count
@@ -482,14 +481,16 @@ function initCase() {
 
   // Role statement: each line fades up in turn. Words are wrapped so lines can be measured.
   const statement = $('.cap-3', view);
-  statement.setAttribute('aria-label', statement.textContent);
-  statement.replaceChildren(...statement.textContent.split(' ').flatMap((w, k) => {
-    const s = document.createElement('span');
-    s.className = 'w';
-    s.setAttribute('aria-hidden', 'true');
-    s.textContent = w;
-    return k ? [document.createTextNode(' '), s] : [s];
-  }));
+  if (statement) {
+    statement.setAttribute('aria-label', statement.textContent);
+    statement.replaceChildren(...statement.textContent.split(' ').flatMap((w, k) => {
+      const s = document.createElement('span');
+      s.className = 'w';
+      s.setAttribute('aria-hidden', 'true');
+      s.textContent = w;
+      return k ? [document.createTextNode(' '), s] : [s];
+    }));
+  }
   function layoutLines() {
     let line = -1, top = null;
     $$('.w', statement).forEach(w => {
@@ -497,11 +498,12 @@ function initCase() {
       w.style.setProperty('--l', line);
     });
   }
-  window.addEventListener('resize', () => { if (!view.hidden) layoutLines(); });
+  window.addEventListener('resize', () => { if (statement && !view.hidden) layoutLines(); });
 
   // before / after
-  const stage = $('#ba-stage'), tabs = $('#ba-tabs');
-  const frames = $$('.ba-frame', stage);
+  const ba = $('.s4', view), stage = $('#ba-stage', view), tabs = $('#ba-tabs', view);
+  const baAt = ba ? secs.indexOf($('.pg', ba)) : -1; // the caption page; the comparison page is the next one
+  const frames = stage ? $$('.ba-frame', stage) : [];
   let frame = -1, cycle = null;
   frames.forEach((f, i) => {
     const b = document.createElement('button'); // a small photo of the frame, not a word
@@ -532,13 +534,15 @@ function initCase() {
     }
   }
   // hold to see the original
-  const hold = on => { stage.classList.toggle('is-orig', on); $('.s4', view).classList.toggle('is-orig', on); };
+  const hold = on => { stage.classList.toggle('is-orig', on); ba.classList.toggle('is-orig', on); };
+  if (stage) {
   stage.tabIndex = 0;
   stage.setAttribute('role', 'button');
   stage.addEventListener('pointerdown', () => hold(true));
   ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach(ev => stage.addEventListener(ev, () => hold(false)));
   stage.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); hold(true); } });
   stage.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') hold(false); });
+  }
 
   // Shot-on-Lapse wall. It appears twice: dimmed behind the phone on page 1, and full on
   // page 5. Each tile shows a blurred 18x24 thumbnail (lapse-wall-thumbs.js) straight away, then
@@ -550,6 +554,7 @@ function initCase() {
     s.onload = s.onerror = done;
     document.head.append(s);
   }))));
+  const wallBg = $('#wall-bg', view), wall = $('#wall', view);
   const built = new Set();
   async function buildWall(wall, { delay = 0, both = true } = {}) {
     if (built.has(wall)) return;
@@ -592,18 +597,20 @@ function initCase() {
     pips.forEach((p, k) => p.classList.toggle('on', k <= i));
     secs.forEach((x, k) => x.classList.toggle('is-active', k === i)); // drives the fade of the phone page
     caps.forEach(c => c.classList.toggle('is-on', +c.dataset.pg === i)); // pinned text: it stays put and fades while the page scrolls under it
-    $('#wall-bg').classList.toggle('is-off', i > 1); // the dimmed wall sits behind pages 1 and 2 only
-    $('#wall').classList.toggle('is-dim', i === 6); // the full wall: dimmed behind its caption, then clear
-    $('#wall').classList.toggle('is-full', i === 7);
-    $('.s4', view).classList.toggle('is-capped', i === 4); // before/after: caption over the dimmed comparison, then clear
+    if (wallBg) wallBg.classList.toggle('is-off', i > 1); // the dimmed wall sits behind pages 1 and 2 only
+    if (wall) { // Lapse only
+      wall.classList.toggle('is-dim', i === 6); // the full wall: dimmed behind its caption, then clear
+      wall.classList.toggle('is-full', i === 7);
+    }
+    if (ba) ba.classList.toggle('is-capped', i === baAt); // before/after: caption over the dimmed comparison, then clear
     const s = secs[i];
-    if (i === 0) setTimeout(() => buildWall($('#wall-bg'), { both: false }), 800); // after the phone video has a head start
-    if (i === 4 || i === 5) { // caption page and comparison page share the frames; also works when a visitor jumps straight to page 6
+    if (wallBg && i === 0) setTimeout(() => buildWall(wallBg, { both: false }), 800); // after the phone video has a head start
+    if (ba && (i === baAt || i === baAt + 1)) { // caption page and comparison page share the frames; also works when a visitor jumps straight to page 6
       loadTabThumbs();
-      if (i === 4 || frame < 0 || !cycle) selectFrame(Math.max(frame, 0));
+      if (i === baAt || frame < 0 || !cycle) selectFrame(Math.max(frame, 0));
     } else { clearInterval(cycle); cycle = null; }
-    if (i === 2) layoutLines();
-    if (i >= 3) buildWall($('#wall')); // same images as the page-1 layer, so mostly cached by now
+    if (statement && i === +statement.dataset.pg) layoutLines();
+    if (wall && i >= 3) buildWall(wall); // same images as the page-1 layer, so mostly cached by now
   }
 
   const io = new IntersectionObserver(entries => {
@@ -637,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideoControls();
   initAutoplay();
   $$('.view[data-tpl="stills"]').forEach(initStills);
-  initCase();
+  $$('.view[data-tpl="case"]').forEach(initCase);
   initViewportHeight();
   initIndexToggle();
   initKeys();
