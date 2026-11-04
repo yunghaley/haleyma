@@ -324,6 +324,17 @@ body[data-route="about"] .stage { display: none; }
 
 /* ---------- desktop: persistent left rail | media stage ----------
    Must mirror DESKTOP in app.js. */
+/* ---------- case study: Forexy feature grid (phone: 2 columns, desktop: 4x3 bento) ---------- */
+.fx-logo { width: 96px; height: 96px; border-radius: 22px; display: block; }
+.cs-sec.fx-sec { display: block; height: 200%; padding: 0; scroll-snap-align: none; } /* two snap pages on a phone (.fx-page), like before/after */
+.fx-page { height: 50%; scroll-snap-align: start; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; align-content: center; padding: 48px 12px 16px; }
+.fx-cell { position: relative; display: flex; flex-direction: column; background: #0d0d0d; border: 0.5px solid rgba(255, 255, 255, 0.2); }
+.fx-cell p { margin: 0; min-height: 64px; padding: 12px 14px 0; font: var(--fs-ui) / 1.25 var(--font-mono); }
+.fx-shot { margin: 0 14px 14px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 12px; } /* images are 3:2 landscape or 2:3 portrait, see references/forexy-grid */
+.fx-cell--tall .fx-shot { aspect-ratio: 2 / 3; }
+.fx-cell--hero { grid-column: 1 / -1; }
+.fx-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
 @media (min-width: 1024px) and (min-height: 520px) {
   .app {
     display: grid;
@@ -416,6 +427,14 @@ body[data-route="about"] .stage { display: none; }
   .s4-ui { justify-content: center; gap: 16px; }
   .wall { inset: 0; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 1fr); }
   .wall-cell:nth-child(n + 25) { display: block; }
+  .cs-sec.fx-sec { display: grid; height: 100%; padding: 32px; gap: 10px; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); scroll-snap-align: start; }
+  .fx-page { display: contents; }
+  .fx-cell { min-height: 0; }
+  .fx-cell p { position: absolute; top: 0; left: 0; right: 0; z-index: 1; }
+  .fx-shot { position: absolute; inset: 64px 16px 16px; margin: 0; aspect-ratio: auto; }
+  .fx-cell--tall .fx-shot { aspect-ratio: auto; }
+  .fx-cell--hero { grid-column: span 2; grid-row: span 2; }
+  .fx-cell--tall { grid-row: span 2; }
 }
 
 /* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */

@@ -462,10 +462,12 @@ function initStills(view) {
 // --- Case study: snap sections, pager, per-section behaviour. Runs per case view; a part (statement, before/after, wall) is optional. ---
 function initCase(view) {
   const cs = $('.cs', view);
-  const secs = $$('.cs-sec, .pg', view).filter(el => !el.classList.contains('s4')); // the before/after section holds two snap pages (.pg)
+  const secs = $$('.cs-sec, .pg, .fx-page', view).filter(el => !el.classList.contains('s4')); // before/after holds two snap pages (.pg); the Forexy grid holds two on a phone (.fx-page) and is one page on desktop
   // page marker: one segment per page, so the bar always spans the full height and adapts to the page count
   const pips = secs.map(() => document.createElement('i'));
   $('.pager', view).replaceChildren(...pips);
+  const syncPips = () => secs.forEach((s, k) => { pips[k].hidden = !s.getClientRects().length || (s.classList.contains('fx-sec') && !DESKTOP.matches); }); // the Forexy grid is two pages on a phone and one on desktop
+  window.addEventListener('resize', () => { if (!view.hidden) syncPips(); });
   const caps = $$('.cap', view);
   let active = -1;
 
@@ -617,7 +619,7 @@ function initCase(view) {
     entries.forEach(e => { if (e.isIntersecting) setSection(secs.indexOf(e.target)); });
   }, { root: cs, threshold: 0.6 });
   secs.forEach(s => io.observe(s));
-  view.addEventListener('view:enter', () => { active = -1; cs.scrollTop = 0; setSection(0); showPager(); });
+  view.addEventListener('view:enter', () => { active = -1; cs.scrollTop = 0; syncPips(); setSection(0); showPager(); });
   view.addEventListener('view:leave', () => { clearInterval(cycle); cycle = null; });
 }
 
