@@ -30,6 +30,15 @@
   --w-sans: 340;         /* body weight for the sans (variable font; Areal's wght axis only goes down to 400) */
   --fs-ui: 12px;         /* mono UI text: controls, counters, hints, clock */
   --fs-meta: 13px;       /* small sans text: roles, stat labels */
+  /* type styles, one token each (font shorthand). Desktop sizes are set in the desktop media block at the bottom. */
+  --t-h1: var(--w-sans) 29px / 1.1 var(--font-sans);        /* case-study headline */
+  --t-h2: var(--w-sans) 26px / 1.18 var(--font-sans);       /* About text in the rail */
+  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);       /* feature titles */
+  --t-body: var(--w-sans) 14px / 1.35 var(--font-sans);     /* descriptions */
+  --t-body-strong: calc(var(--w-sans) + 60) 14px / 1.35 var(--font-sans); /* the rail title */
+  --t-label: var(--w-sans) 14px var(--font-sans);           /* list rows, feed rows, toggles */
+  --t-nav: 18px var(--font-mono);                           /* top bar */
+  --ls-display: -0.01em;
   --inset: 6px;          /* shared left/right inset for all rail text */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -75,7 +84,7 @@ ul { list-style: none; }
   justify-content: space-between;
   align-items: center;
   flex: none;
-  font: 18px var(--font-mono);
+  font: var(--t-nav);
 }
 .topbar a { display: flex; align-items: center; min-height: 44px; }
 .topnav { display: flex; gap: 20px; }
@@ -101,15 +110,15 @@ body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (4
 .info-head .info-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .info-client { color: var(--c-mute); font-weight: var(--w-sans); }
 .info-client::before { content: "\00a0\00b7\00a0"; }
-.info-tog { flex: none; font-size: 14px; color: var(--c-mute); }
+.info-tog { flex: none; font: var(--t-label); color: var(--c-mute); }
 .info-tog::after { content: " +"; }
 .rail-info:not(.is-closed) .info-tog::after { content: " \2212"; }
 .info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
 .info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
 .rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
 .rail-info.is-closed .info-inner { padding-bottom: 0; } /* a closed tray is exactly its title row */
-.info-title { font-size: 14px; font-weight: calc(var(--w-sans) + 60); }
-.info-desc { font-size: 14px; line-height: 1.35; color: var(--c-fg); }
+.info-title { font: var(--t-body-strong); }
+.info-desc { font: var(--t-body); color: var(--c-fg); }
 .info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
 
 /* tag chips: role lists in the info panel; also the "clear filter" chip above the list */
@@ -151,7 +160,7 @@ body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 2
 }
 body.is-index .card-media { max-height: 0; opacity: 0; }
 .card-media > * { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--c-line); background: #111; }
-.card-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; letter-spacing: 0.01em; }
+.card-row { display: flex; justify-content: space-between; gap: 12px; font: var(--t-label); letter-spacing: 0.01em; }
 .card-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-row span:last-child { flex: none; white-space: nowrap; }
 body.is-index #feed-pager { display: none; }
@@ -170,7 +179,7 @@ body.is-index #feed-pager { display: none; }
 
 /* about */
 .about-box { display: none; }
-.rail-about { font-size: 26px; line-height: 1.18; letter-spacing: -0.01em; min-height: 0; overflow-y: auto; }
+.rail-about { font: var(--t-h2); letter-spacing: var(--ls-display); min-height: 0; overflow-y: auto; }
 .rail-about a:not(.mail) { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 .mail { display: inline-block; vertical-align: -0.35em; padding: 12px; margin: -12px -8px -12px -8px; } /* 44px tap area */
 .mail svg { width: 0.85em; height: 0.85em; }
@@ -244,7 +253,7 @@ body[data-route="about"] .stage { display: none; }
 
 
 .s3 .phone-frame { height: min(60svh, 560px); }
-.statement { font-size: 29px; font-weight: var(--w-sans); line-height: 1.1; letter-spacing: -0.01em; text-align: center; padding: 0 20px; }
+.statement { font: var(--t-h1); letter-spacing: var(--ls-display); text-align: center; padding: 0 20px; }
 
 .ba-stage { position: relative; flex: 1 1 0; min-height: 0; width: 100%; max-width: 900px; margin-top: 16px; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
 .ba-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
@@ -336,6 +345,14 @@ body[data-route="about"] .stage { display: none; }
 .fx-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 @media (min-width: 1024px) and (min-height: 520px) {
+  :root {
+    --t-h1: var(--w-sans) clamp(32px, 3.6vw, 52px) / 1.1 var(--font-sans);
+    --t-h2: var(--w-sans) 28px / 1.18 var(--font-sans);
+    --t-h3: var(--w-sans) 24px / 1.15 var(--font-sans);
+    --t-body: var(--w-sans) 16px / 1.4 var(--font-sans);
+    --t-body-strong: calc(var(--w-sans) + 60) 16px / 1.4 var(--font-sans);
+    --t-nav: 20px var(--font-mono);
+  }
   .app {
     display: grid;
     /* the rail never drops below 320px: the widest list row needs about 296px, so names never wrap */
@@ -344,7 +361,7 @@ body[data-route="about"] .stage { display: none; }
     padding: var(--pad);
   }
   .rail { display: flex; flex-direction: column; position: relative; min-height: 0; overflow: hidden; }
-  .topbar { font-size: 20px; margin-bottom: 12px; }
+  .topbar { margin-bottom: 12px; }
   .list-filter { height: 36px; align-items: center; padding: 0 var(--inset); }
   .list-filter.is-empty { display: flex; visibility: hidden; } /* keeps the list where it was */
   .topbar a { min-height: 0; padding: 6px var(--inset); }
@@ -355,7 +372,7 @@ body[data-route="about"] .stage { display: none; }
   .list a {
     display: flex; justify-content: space-between; align-items: center; gap: 12px;
     height: var(--row-h); padding: 0 var(--inset);
-    font-size: 14px; letter-spacing: 0.01em; color: var(--c-mute);
+    font: var(--t-label); letter-spacing: 0.01em; color: var(--c-mute);
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     transition: color 0.12s ease;
   }
@@ -363,7 +380,7 @@ body[data-route="about"] .stage { display: none; }
   .list a span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px; }
   .list a span:last-child { flex: none; white-space: nowrap; }
 
-  .rail-about { font-size: 28px; padding: 0 var(--inset) 56px; flex: 1; }
+  .rail-about { padding: 0 var(--inset) 56px; flex: 1; }
   body[data-route="about"] .rail-about { padding-top: 0; }
   body[data-route="about"] .stage { display: block; }
 
@@ -382,8 +399,6 @@ body[data-route="about"] .stage { display: none; }
     padding: var(--pad) var(--inset) 60px;
     gap: 12px;
   }
-  .info-title { font-size: 18px; }
-  .info-desc { font-size: 16px; line-height: 1.4; }
     .info-roles { font-size: var(--fs-meta); }
 
   .hint {
@@ -420,7 +435,7 @@ body[data-route="about"] .stage { display: none; }
   .stat-label { font-size: var(--fs-meta); }
   .sticker { width: 104px; height: 104px; padding: 13px; top: -22px; right: -34px; }
 
-  .statement { font-size: clamp(32px, 3.6vw, 52px); text-align: center; max-width: 900px; padding: 0 24px; }
+  .statement { text-align: center; max-width: 900px; padding: 0 24px; }
   .s3 .phone-frame { height: min(82svh, 760px); }
   .ba-stage { margin-top: 0; }
   .s4-pin { padding: 12px 0; }
@@ -443,3 +458,6 @@ body[data-route="about"] .stage { display: none; }
   .stat-num { font-size: 32px; }
   .sticker { width: 84px; height: 84px; padding: 12px; right: -26px; }
 }
+
+/* the font shorthand in the type tokens resets tabular numbers; this has to come after every rule that uses one */
+.info-tog, .info-title, .info-desc, .card-row, .rail-about, .statement, .list a { font-variant-numeric: tabular-nums; }
