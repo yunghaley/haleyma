@@ -30,6 +30,16 @@
   --w-sans: 340;         /* body weight for the sans (variable font; Areal's wght axis only goes down to 400) */
   --fs-ui: 12px;         /* mono UI text: controls, counters, hints, clock */
   --fs-meta: 13px;       /* small sans text: roles, stat labels */
+  /* type styles, one token each (font shorthand). Desktop sizes are set in the desktop media block at the bottom. */
+  --t-h1: var(--w-sans) 29px / 1.1 var(--font-sans);        /* case-study headline */
+  --t-h2: var(--w-sans) 26px / 1.18 var(--font-sans);       /* About text in the rail */
+  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);                 /* feature titles */
+  --t-body: var(--w-sans) 14px / 1.35 var(--font-sans);     /* descriptions */
+  --t-body-strong: calc(var(--w-sans) + 60) 14px / 1.35 var(--font-sans); /* the rail title */
+  --t-label: var(--w-sans) 14px var(--font-sans);           /* list rows, feed rows, toggles */
+  --t-nav: 18px var(--font-mono);                           /* top bar */
+  --t-button: 500 15px / 1 var(--font-sans);                /* buttons */
+  --ls-display: -0.01em;
   --inset: 6px;          /* shared left/right inset for all rail text */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -75,7 +85,7 @@ ul { list-style: none; }
   justify-content: space-between;
   align-items: center;
   flex: none;
-  font: 18px var(--font-mono);
+  font: var(--t-nav);
 }
 .topbar a { display: flex; align-items: center; min-height: 44px; }
 .topnav { display: flex; gap: 20px; }
@@ -101,15 +111,15 @@ body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (4
 .info-head .info-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .info-client { color: var(--c-mute); font-weight: var(--w-sans); }
 .info-client::before { content: "\00a0\00b7\00a0"; }
-.info-tog { flex: none; font-size: 14px; color: var(--c-mute); }
+.info-tog { flex: none; font: var(--t-label); color: var(--c-mute); }
 .info-tog::after { content: " +"; }
 .rail-info:not(.is-closed) .info-tog::after { content: " \2212"; }
 .info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
 .info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
 .rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
 .rail-info.is-closed .info-inner { padding-bottom: 0; } /* a closed tray is exactly its title row */
-.info-title { font-size: 14px; font-weight: calc(var(--w-sans) + 60); }
-.info-desc { font-size: 14px; line-height: 1.35; color: var(--c-fg); }
+.info-title { font: var(--t-body-strong); }
+.info-desc { font: var(--t-body); color: var(--c-fg); }
 .info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
 
 /* tag chips: role lists in the info panel; also the "clear filter" chip above the list */
@@ -151,7 +161,7 @@ body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 2
 }
 body.is-index .card-media { max-height: 0; opacity: 0; }
 .card-media > * { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--c-line); background: #111; }
-.card-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; letter-spacing: 0.01em; }
+.card-row { display: flex; justify-content: space-between; gap: 12px; font: var(--t-label); letter-spacing: 0.01em; }
 .card-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-row span:last-child { flex: none; white-space: nowrap; }
 body.is-index #feed-pager { display: none; }
@@ -170,7 +180,7 @@ body.is-index #feed-pager { display: none; }
 
 /* about */
 .about-box { display: none; }
-.rail-about { font-size: 26px; line-height: 1.18; letter-spacing: -0.01em; min-height: 0; overflow-y: auto; }
+.rail-about { font: var(--t-h2); letter-spacing: var(--ls-display); min-height: 0; overflow-y: auto; }
 .rail-about a:not(.mail) { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 .mail { display: inline-block; vertical-align: -0.35em; padding: 12px; margin: -12px -8px -12px -8px; } /* 44px tap area */
 .mail svg { width: 0.85em; height: 0.85em; }
@@ -244,7 +254,7 @@ body[data-route="about"] .stage { display: none; }
 
 
 .s3 .phone-frame { height: min(60svh, 560px); }
-.statement { font-size: 29px; font-weight: var(--w-sans); line-height: 1.1; letter-spacing: -0.01em; text-align: center; padding: 0 20px; }
+.statement { font: var(--t-h1); letter-spacing: var(--ls-display); text-align: center; padding: 0 20px; }
 
 .ba-stage { position: relative; flex: 1 1 0; min-height: 0; width: 100%; max-width: 900px; margin-top: 16px; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
 .ba-frame { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
@@ -324,7 +334,74 @@ body[data-route="about"] .stage { display: none; }
 
 /* ---------- desktop: persistent left rail | media stage ----------
    Must mirror DESKTOP in app.js. */
+/* ---------- case study: Forexy feature tour (a phone that stays put while the screen and caption change, one snap page per feature) ---------- */
+.fx-logo { position: relative; z-index: 1; width: 96px; height: 96px; border-radius: 22px; display: block; }
+/* the Forexy background, behind every page of the case study: three large glow fields drift very slowly and a fourth pulses, on the site black. Transform and opacity only, no blur: the soft edges come from the eased stops, and the grain tile breaks up any banding. */
+.fx-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; isolation: isolate; }
+.fx-bg i { position: absolute; border-radius: 50%; will-change: transform, opacity; --c: 77, 77, 255; --a: 0.5; width: 58vmax; height: 58vmax; background: radial-gradient(circle closest-side, rgba(var(--c), calc(var(--a) * 1)) 0%, rgba(var(--c), calc(var(--a) * 0.8)) 16%, rgba(var(--c), calc(var(--a) * 0.54)) 36%, rgba(var(--c), calc(var(--a) * 0.28)) 56%, rgba(var(--c), calc(var(--a) * 0.1)) 76%, rgba(var(--c), calc(var(--a) * 0.02)) 90%, rgba(var(--c), 0) 100%); }
+.fx-bg i:nth-child(1) { left: -14%; top: -40%; animation: fx-d1 34s ease-in-out -8s infinite alternate; }
+.fx-bg i:nth-child(2) { --c: 152, 152, 255; --a: 0.36; width: 120vmax; height: 120vmax; right: -20%; bottom: -40%; animation: fx-p2 40s ease-in-out -12s infinite alternate; }
+.fx-bg i:nth-child(3) { --c: 55, 55, 190; --a: 0.42; width: 54vmax; height: 54vmax; left: 26%; top: 22%; animation: fx-d3 28s ease-in-out -4s infinite alternate; }
+.fx-bg i:nth-child(4) { --c: 152, 152, 255; --a: 0.36; width: 100vmax; height: 100vmax; left: 50%; top: 50%; margin: -50vmax 0 0 -50vmax; animation: fx-p4 52s ease-in-out -20s infinite alternate, fx-pl 22s ease-in-out -6s infinite alternate; }
+.fx-bg::before, .fx-bg::after { content: ""; position: absolute; inset: -128px; background: url(assets/projects/forexy/grain.png) 0 0 / 128px 128px; mix-blend-mode: overlay; opacity: 0.042; animation: fx-noise 1s step-end infinite; } /* colour noise; overlay leaves the pure black alone and only textures the glow. Two layers at different scales, mirrored, with different random frame orders and loop lengths, so the grain never reads as one sheet sliding. Each jumps 24 to 25 times a second (transform only, so it stays on the compositor). Together they come to about 6%. */
+.fx-bg::before { background-size: 177px 177px; animation: fx-noise2 1.04s step-end infinite; }
+@keyframes fx-d1 { from { transform: translate3d(-5%, 3%, 0) scale(1); } to { transform: translate3d(9%, -6%, 0) scale(1.14); } }
+@keyframes fx-p2 { 0% { transform: translate3d(0, 0, 0) scale(1); } 30% { transform: translate3d(-45%, -60%, 0) scale(1.08); } 60% { transform: translate3d(-85%, -20%, 0) scale(0.95); } 100% { transform: translate3d(-60%, 25%, 0) scale(1.12); } }
+@keyframes fx-d3 { from { transform: translate3d(-7%, -5%, 0) scale(0.92); } to { transform: translate3d(7%, 6%, 0) scale(1.12); } }
+@keyframes fx-p4 { 0% { transform: translate3d(0, 0, 0) scale(0.9); } 30% { transform: translate3d(-55%, -45%, 0) scale(1.1); } 60% { transform: translate3d(45%, -55%, 0) scale(1); } 100% { transform: translate3d(30%, 50%, 0) scale(1.15); } }
+@keyframes fx-pl { from { opacity: 0.3; } to { opacity: 0.95; } }
+@keyframes fx-noise { 0.00% { transform: translate3d(-42px, -107px, 0); } 4.17% { transform: translate3d(-107px, -72px, 0); } 8.33% { transform: translate3d(-122px, -55px, 0); } 12.50% { transform: translate3d(-121px, -46px, 0); } 16.67% { transform: translate3d(-60px, 0px, 0); } 20.83% { transform: translate3d(-3px, -94px, 0); } 25.00% { transform: translate3d(-109px, -17px, 0); } 29.17% { transform: translate3d(-37px, -59px, 0); } 33.33% { transform: translate3d(-59px, -10px, 0); } 37.50% { transform: translate3d(-111px, -104px, 0); } 41.67% { transform: translate3d(-113px, -8px, 0); } 45.83% { transform: translate3d(-84px, -127px, 0); } 50.00% { transform: translate3d(-29px, -94px, 0); } 54.17% { transform: translate3d(-5px, -39px, 0); } 58.33% { transform: translate3d(-22px, -31px, 0); } 62.50% { transform: translate3d(-5px, -116px, 0); } 66.67% { transform: translate3d(-41px, -87px, 0); } 70.83% { transform: translate3d(-102px, -124px, 0); } 75.00% { transform: translate3d(-38px, -47px, 0); } 79.17% { transform: translate3d(-9px, -120px, 0); } 83.33% { transform: translate3d(-60px, -19px, 0); } 87.50% { transform: translate3d(-50px, -53px, 0); } 91.67% { transform: translate3d(-18px, -31px, 0); } 95.83% { transform: translate3d(-121px, -99px, 0); } }
+@keyframes fx-noise2 { 0.00% { transform: translate3d(-65px, -91px, 0) scale(-1, 1); } 4.00% { transform: translate3d(-7px, -119px, 0) scale(-1, 1); } 8.00% { transform: translate3d(-63px, -13px, 0) scale(-1, 1); } 12.00% { transform: translate3d(-40px, -28px, 0) scale(-1, 1); } 16.00% { transform: translate3d(-95px, -120px, 0) scale(-1, 1); } 20.00% { transform: translate3d(-63px, -97px, 0) scale(-1, 1); } 24.00% { transform: translate3d(-26px, -63px, 0) scale(-1, 1); } 28.00% { transform: translate3d(-3px, -55px, 0) scale(-1, 1); } 32.00% { transform: translate3d(-104px, -71px, 0) scale(-1, 1); } 36.00% { transform: translate3d(-46px, -99px, 0) scale(-1, 1); } 40.00% { transform: translate3d(-40px, -18px, 0) scale(-1, 1); } 44.00% { transform: translate3d(-35px, -113px, 0) scale(-1, 1); } 48.00% { transform: translate3d(-32px, -33px, 0) scale(-1, 1); } 52.00% { transform: translate3d(0px, -1px, 0) scale(-1, 1); } 56.00% { transform: translate3d(-53px, -55px, 0) scale(-1, 1); } 60.00% { transform: translate3d(-42px, -42px, 0) scale(-1, 1); } 64.00% { transform: translate3d(-74px, -80px, 0) scale(-1, 1); } 68.00% { transform: translate3d(-50px, -52px, 0) scale(-1, 1); } 72.00% { transform: translate3d(-46px, -50px, 0) scale(-1, 1); } 76.00% { transform: translate3d(-98px, -76px, 0) scale(-1, 1); } 80.00% { transform: translate3d(-5px, -92px, 0) scale(-1, 1); } 84.00% { transform: translate3d(-106px, -42px, 0) scale(-1, 1); } 88.00% { transform: translate3d(-37px, -67px, 0) scale(-1, 1); } 92.00% { transform: translate3d(-16px, -84px, 0) scale(-1, 1); } 96.00% { transform: translate3d(-77px, 0px, 0) scale(-1, 1); } }
+.cs-sec.fx-tour { display: grid; grid-template: 100% / 100%; height: calc(var(--n) * 100%); padding: 0; scroll-snap-align: none; --wp: #0e0c13; }
+.fx-tour[data-theme="l"] { --wp: #e8e6f0; }
+.fx-steps, .fx-stage { grid-area: 1 / 1; }
+.fx-steps { height: 100%; }
+.fx-stage { position: sticky; top: 0; align-self: start; height: calc(100% / var(--n)); z-index: 1; display: flex; align-items: center; justify-content: center; --ph: min(62svh, 540px); padding-bottom: 96px; }
+.fx-step { height: calc(100% / var(--n)); scroll-snap-align: start; }
+.fx-phone { height: var(--ph); cursor: pointer; } /* tap the phone to flip light and dark */
+.fx-shots { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; background: var(--wp); } /* the mask's screen opening, same as .screen-rec */
+.fx-shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s ease; }
+.fx-shot.on { opacity: 1; }
+.fx-shot img { display: block; width: 100%; height: 100%; }
+/* captions: over the bottom of the phone on a small screen, like the Lapse stickers */
+.fx-caps { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.fx-cap { position: absolute; inset: 0; color: #fff; opacity: 0; transition: opacity 0.3s ease; }
+.fx-cap.on { opacity: 1; }
+.fx-cap h3 { position: absolute; left: 14px; top: 58%; max-width: 230px; margin: 0; padding: 12px 16px; background: #9898ff; color: #44231f; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); font: var(--t-h3); letter-spacing: var(--ls-display); transform: rotate(-4deg); } /* a lilac sticker on the phone edge, like Lapse's */
+.fx-cap:nth-child(even) h3 { left: auto; right: 14px; top: 54%; transform: rotate(3deg); }
+.fx-cap p { position: absolute; left: 36px; right: 36px; bottom: 22px; margin: 0; text-align: center; font: var(--t-body); opacity: 0.85; }
+/* layouts and themes: the screen steps through its images on its own while the step is on */
+.fx-loop img { position: absolute; inset: 0; opacity: 0; }
+.fx-loop.on img { animation: fx-k3 6.6s linear infinite; }
+.fx-loop--7.on img { animation-name: fx-k7; animation-duration: 15.4s; }
+.fx-loop.on img:nth-child(2) { animation-delay: 2.2s; }
+.fx-loop.on img:nth-child(3) { animation-delay: 4.4s; }
+.fx-loop.on img:nth-child(4) { animation-delay: 6.6s; }
+.fx-loop.on img:nth-child(5) { animation-delay: 8.8s; }
+.fx-loop.on img:nth-child(6) { animation-delay: 11s; }
+.fx-loop.on img:nth-child(7) { animation-delay: 13.2s; }
+@keyframes fx-k3 { 0% { opacity: 0; z-index: 2; } 4% { opacity: 1; z-index: 2; } 4.01% { z-index: 1; } 37.3% { opacity: 1; } 37.31%, 100% { opacity: 0; z-index: 1; } }
+@keyframes fx-k7 { 0% { opacity: 0; z-index: 2; } 1.7% { opacity: 1; z-index: 2; } 1.71% { z-index: 1; } 16% { opacity: 1; } 16.01%, 100% { opacity: 0; z-index: 1; } }
+.fx-cap.on .fx-acc { animation: fx-as 15.4s infinite; } /* the headline takes each theme's accent */
+@keyframes fx-as { 0.0%, 12.8% { background: #9898ff; color: #16131d; } 15.8%, 27.1% { background: #4d4dff; color: #f8f7fc; } 30.1%, 41.4% { background: #ffb000; color: #000; } 44.4%, 55.6% { background: #ffc66b; color: #141008; } 58.6%, 69.9% { background: #7dff9b; color: #020602; } 72.9%, 84.2% { background: #9ee8e0; color: #03141a; } 87.2%, 98.5% { background: #ff5a4a; color: #0a0000; } 100% { background: #9898ff; color: #16131d; } }
+@media (prefers-reduced-motion: reduce) { .fx-loop.on img, .fx-cap.on .fx-acc { animation: none; } .fx-loop img:first-child { opacity: 1; } }
+/* last step: the phone dims and a button fades in over it */
+.fx-phone, .fx-caps { transition: opacity 0.5s ease, filter 0.5s ease; }
+.fx-tour.is-end .fx-phone { opacity: 0.2; filter: blur(4px); }
+.fx-more { position: absolute; z-index: 4; left: 50%; top: 50%; display: flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px; background: #9898ff; color: #44231f; font: var(--t-button); white-space: nowrap; opacity: 0; visibility: hidden; transform: translate(-50%, calc(-50% + 10px)); transition: opacity 0.5s ease, transform 0.5s var(--ease), background 0.15s ease, visibility 0s 0.5s; }
+.fx-more img { width: 1.5em; height: 1.5em; margin: -0.25em 0; border-radius: 22%; display: block; } /* the 48px app icon at 1.5x the text; the negative margin keeps the button's height */
+.fx-tour.is-end .fx-more { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition-delay: 0.15s, 0.15s, 0s, 0s; }
+.fx-more:hover { background: #44231f; color: #9898ff; } /* brand lilac and oxblood, swapped on hover */
+
 @media (min-width: 1024px) and (min-height: 520px) {
+  :root {
+    --t-h1: var(--w-sans) clamp(32px, 3.6vw, 52px) / 1.1 var(--font-sans);
+    --t-h2: var(--w-sans) 28px / 1.18 var(--font-sans);
+    --t-h3: var(--w-sans) 24px / 1.15 var(--font-sans);
+    --t-body: var(--w-sans) 16px / 1.4 var(--font-sans);
+    --t-body-strong: calc(var(--w-sans) + 60) 16px / 1.4 var(--font-sans);
+    --t-nav: 20px var(--font-mono);
+  }
   .app {
     display: grid;
     /* the rail never drops below 320px: the widest list row needs about 296px, so names never wrap */
@@ -333,7 +410,7 @@ body[data-route="about"] .stage { display: none; }
     padding: var(--pad);
   }
   .rail { display: flex; flex-direction: column; position: relative; min-height: 0; overflow: hidden; }
-  .topbar { font-size: 20px; margin-bottom: 12px; }
+  .topbar { margin-bottom: 12px; }
   .list-filter { height: 36px; align-items: center; padding: 0 var(--inset); }
   .list-filter.is-empty { display: flex; visibility: hidden; } /* keeps the list where it was */
   .topbar a { min-height: 0; padding: 6px var(--inset); }
@@ -344,7 +421,7 @@ body[data-route="about"] .stage { display: none; }
   .list a {
     display: flex; justify-content: space-between; align-items: center; gap: 12px;
     height: var(--row-h); padding: 0 var(--inset);
-    font-size: 14px; letter-spacing: 0.01em; color: var(--c-mute);
+    font: var(--t-label); letter-spacing: 0.01em; color: var(--c-mute);
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     transition: color 0.12s ease;
   }
@@ -352,7 +429,7 @@ body[data-route="about"] .stage { display: none; }
   .list a span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 20px; }
   .list a span:last-child { flex: none; white-space: nowrap; }
 
-  .rail-about { font-size: 28px; padding: 0 var(--inset) 56px; flex: 1; }
+  .rail-about { padding: 0 var(--inset) 56px; flex: 1; }
   body[data-route="about"] .rail-about { padding-top: 0; }
   body[data-route="about"] .stage { display: block; }
 
@@ -371,8 +448,6 @@ body[data-route="about"] .stage { display: none; }
     padding: var(--pad) var(--inset) 60px;
     gap: 12px;
   }
-  .info-title { font-size: 18px; }
-  .info-desc { font-size: 16px; line-height: 1.4; }
     .info-roles { font-size: var(--fs-meta); }
 
   .hint {
@@ -409,13 +484,23 @@ body[data-route="about"] .stage { display: none; }
   .stat-label { font-size: var(--fs-meta); }
   .sticker { width: 104px; height: 104px; padding: 13px; top: -22px; right: -34px; }
 
-  .statement { font-size: clamp(32px, 3.6vw, 52px); text-align: center; max-width: 900px; padding: 0 24px; }
+  .statement { text-align: center; max-width: 900px; padding: 0 24px; }
   .s3 .phone-frame { height: min(82svh, 760px); }
   .ba-stage { margin-top: 0; }
   .s4-pin { padding: 12px 0; }
   .s4-ui { justify-content: center; gap: 16px; }
   .wall { inset: 0; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 1fr); }
   .wall-cell:nth-child(n + 25) { display: block; }
+  .fx-stage { --ph: min(78svh, 720px); }
+  .fx-stage { padding-bottom: 0; }
+  /* a caption sits beside the phone with its sticker lapping --ov over the phone edge. Everything is left-aligned. On the left side the box is exactly as wide as the sticker, so the sticker edge lands on --ov and the line under it wraps to the sticker's width. */
+  .fx-cap { --ov: 36px; inset: auto; top: 50%; right: calc(50% + var(--ph) * 0.2445 - var(--ov)); width: max-content; max-width: calc(50% - var(--ph) * 0.2445 + var(--ov)); display: flex; flex-direction: column; align-items: flex-start; transform: translateY(calc(-50% + 10px)); transition: opacity 0.3s ease, transform 0.4s var(--ease); }
+  .fx-cap:nth-child(even) { right: auto; left: calc(50% + var(--ph) * 0.2445 - var(--ov)); } /* captions alternate sides */
+  .fx-cap.on { transform: translateY(-50%); }
+  .fx-cap h3, .fx-cap:nth-child(even) h3 { position: static; max-width: none; margin: 0 0 32px; padding: 12px 16px; display: inline-block; transform: rotate(-3deg); text-wrap: balance; }
+  .fx-cap:nth-child(even) h3 { transform: rotate(3deg); }
+  .fx-cap p { position: static; width: 0; min-width: calc(100% - var(--ov) - 24px); text-align: left; text-wrap: balance; } /* the line stops 24px short of the phone */
+  .fx-cap:nth-child(even) p { width: auto; min-width: 0; max-width: 240px; margin-left: calc(var(--ov) + 24px); } /* and starts 24px past it */
 }
 
 /* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */
@@ -424,3 +509,13 @@ body[data-route="about"] .stage { display: none; }
   .stat-num { font-size: 32px; }
   .sticker { width: 84px; height: 84px; padding: 12px; right: -26px; }
 }
+
+/* a desktop sticker stays on one line; on the narrowest desktop it laps further over the phone to fit */
+@media (min-width: 1024px) and (min-height: 520px) {
+  .fx-cap h3, .fx-cap:nth-child(even) h3 { white-space: nowrap; }
+}
+@media (min-width: 1024px) and (max-width: 1099px) and (min-height: 520px) {
+  .fx-cap { --ov: 72px; }
+}
+/* the font shorthand in the type tokens resets tabular numbers; this has to come after every rule that uses one */
+.info-tog, .info-title, .info-desc, .card-row, .rail-about, .statement, .fx-cap h3, .fx-cap p, .list a { font-variant-numeric: tabular-nums; }

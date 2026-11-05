@@ -21,7 +21,7 @@ Goal: sexy creative + technology, with a highly polished modern TUI feel. Keep t
 
 No build step, no framework, no bundler. Open `index.html` in a browser or use any static file server (`npx serve .` or `python3 -m http.server`). Routing is hash-based, so any static server works. No test suite or linter.
 
-All CSS is plain hand-written CSS in `site.css` (no Tailwind). Fonts: Inter Variable for text (SIL OFL, license in `assets/fonts/Inter-LICENSE.txt`), Xanh Mono for UI text. ABC Areal Variable is in `assets/fonts/` but unused and uncommitted: its license forbids public repos and public servers unless covered by a web license, so don't commit it.
+All CSS is plain hand-written CSS in `site.css` (no Tailwind). Text styles are tokens: `--t-h1`, `--t-h2`, `--t-h3`, `--t-body`, `--t-body-strong`, `--t-label`, `--t-nav` (a `font` shorthand each, desktop sizes overridden in the desktop media block), plus `--fs-ui` and `--fs-meta` for the small mono and caption text. Use a token for new text. The `font` shorthand resets tabular numbers, so add the selector to the last rule in `site.css` that restores them. Fonts: Inter Variable for text (SIL OFL, license in `assets/fonts/Inter-LICENSE.txt`), Xanh Mono for UI text. ABC Areal Variable is in `assets/fonts/` but unused and uncommitted: its license forbids public repos and public servers unless covered by a web license, so don't commit it.
 
 ## Deployment
 
@@ -36,7 +36,7 @@ DNS, domain registration, R2 and the Worker are all in the Cloudflare account. E
 Single-page static site, three files:
 
 - `index.html` all markup. A persistent left rail (`#rail`: nav, project list `#list`, project info `#info`, shortcut hint and Toronto clock) and a media stage (`#stage`) holding one `.view` per route (`#view-home`, `#view-about`, `#view-<slug>`).
-- `app.js` hash router (`#/`, `#/about`, `#/<slug>`, `#/tag/<tag>`), the rail (cursor, info, tag chips and filter), Home hover preview and mobile feed, keyboard (arrows, Enter, Esc), video controls and viewport autoplay, the stills galleries, and the Lapse case study (snap sections, before/after, image wall).
+- `app.js` hash router (`#/`, `#/about`, `#/<slug>`, `#/tag/<tag>`), the rail (cursor, info, tag chips and filter), Home hover preview and mobile feed, keyboard (arrows, Enter, Esc), video controls and viewport autoplay, the stills galleries, and the case studies (`initCase`: snap sections and pager for every case study, plus Lapse's before/after and image wall and Forexy's phone tour).
 - `site.css` mobile-first styles; the desktop layout is one `@media (min-width: 1024px) and (min-height: 520px)` block at the bottom. It is mirrored by `DESKTOP` in `app.js`; change both together.
 
 Other files: `lapse-images.js` (wall image list) and `lapse-wall-thumbs.js` (blurred 18x24 thumbnails for the wall) load on demand; `dither.js` is the dither engine, currently unused.
@@ -80,7 +80,9 @@ Gallery alt text is generated as "Still N". If you want real descriptions, that 
 
 ### A case study (like Lapse)
 
-These are built by hand, and `initCase` in `app.js` is written for the Lapse page only. A second case study means copying the Lapse section and generalizing `initCase`, so ask for that as its own piece of work.
+These are built by hand: copy the Lapse or Forexy `<section class="view" data-tpl="case">` in `index.html`, add a list row, and the shared parts work without JS changes. `initCase` in `app.js` runs once per case-study view, scoped to that view. The snap pages, pager and `view:enter` reset are generic. The parts that belong to one case study (Lapse's statement lines, before/after and image wall, Forexy's phone tour) are each guarded by a check for their markup, so a page without them just skips them. A new kind of page (another multi-step block) is a new guarded block in `initCase`, with its CSS in `site.css`.
+
+With two case studies this is fine. If a third needs its own special block, split `initCase` into one function per feature (statement, before/after, wall, tour) that `initCase` calls when its markup exists.
 
 ### Check before you ship
 
