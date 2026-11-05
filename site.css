@@ -33,11 +33,12 @@
   /* type styles, one token each (font shorthand). Desktop sizes are set in the desktop media block at the bottom. */
   --t-h1: var(--w-sans) 29px / 1.1 var(--font-sans);        /* case-study headline */
   --t-h2: var(--w-sans) 26px / 1.18 var(--font-sans);       /* About text in the rail */
-  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);       /* feature titles */
+  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);                 /* feature titles */
   --t-body: var(--w-sans) 14px / 1.35 var(--font-sans);     /* descriptions */
   --t-body-strong: calc(var(--w-sans) + 60) 14px / 1.35 var(--font-sans); /* the rail title */
   --t-label: var(--w-sans) 14px var(--font-sans);           /* list rows, feed rows, toggles */
   --t-nav: 18px var(--font-mono);                           /* top bar */
+  --t-button: 500 15px / 1 var(--font-sans);                /* buttons */
   --ls-display: -0.01em;
   --inset: 6px;          /* shared left/right inset for all rail text */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -333,16 +334,48 @@ body[data-route="about"] .stage { display: none; }
 
 /* ---------- desktop: persistent left rail | media stage ----------
    Must mirror DESKTOP in app.js. */
-/* ---------- case study: Forexy feature grid (phone: 2 columns, desktop: 4x3 bento) ---------- */
-.fx-logo { width: 96px; height: 96px; border-radius: 22px; display: block; }
-.cs-sec.fx-sec { display: block; height: 200%; padding: 0; scroll-snap-align: none; } /* two snap pages on a phone (.fx-page), like before/after */
-.fx-page { height: 50%; scroll-snap-align: start; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; align-content: center; padding: 48px 12px 16px; }
-.fx-cell { position: relative; display: flex; flex-direction: column; background: #0d0d0d; border: 0.5px solid rgba(255, 255, 255, 0.2); }
-.fx-cell p { margin: 0; min-height: 64px; padding: 12px 14px 0; font: var(--fs-ui) / 1.25 var(--font-mono); }
-.fx-shot { margin: 0 14px 14px; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 12px; } /* images are 3:2 landscape or 2:3 portrait, see references/forexy-grid */
-.fx-cell--tall .fx-shot { aspect-ratio: 2 / 3; }
-.fx-cell--hero { grid-column: 1 / -1; }
-.fx-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* ---------- case study: Forexy feature tour (a phone that stays put while the screen and caption change, one snap page per feature) ---------- */
+.fx-logo { position: relative; z-index: 1; width: 96px; height: 96px; border-radius: 22px; display: block; }
+.cs-sec.fx-tour { display: grid; grid-template: 100% / 100%; height: calc(var(--n) * 100%); padding: 0; scroll-snap-align: none; --wp: #0e0c13; }
+.fx-tour[data-theme="l"] { --wp: #e8e6f0; }
+.fx-steps, .fx-stage { grid-area: 1 / 1; }
+.fx-steps { height: 100%; }
+.fx-stage { position: sticky; top: 0; align-self: start; height: calc(100% / var(--n)); z-index: 1; display: flex; align-items: center; justify-content: center; --ph: min(62svh, 540px); padding-bottom: 96px; }
+.fx-step { height: calc(100% / var(--n)); scroll-snap-align: start; }
+.fx-phone { height: var(--ph); cursor: pointer; } /* tap the phone to flip light and dark */
+.fx-shots { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; background: var(--wp); } /* the mask's screen opening, same as .screen-rec */
+.fx-shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s ease; }
+.fx-shot.on { opacity: 1; }
+.fx-shot img { display: block; width: 100%; height: 100%; }
+/* captions: over the bottom of the phone on a small screen, like the Lapse stickers */
+.fx-caps { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.fx-cap { position: absolute; inset: 0; color: #fff; opacity: 0; transition: opacity 0.3s ease; }
+.fx-cap.on { opacity: 1; }
+.fx-cap h3 { position: absolute; left: 14px; top: 58%; max-width: 230px; margin: 0; padding: 12px 16px; background: #9898ff; color: #44231f; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); font: var(--t-h3); letter-spacing: var(--ls-display); transform: rotate(-4deg); } /* a lilac sticker on the phone edge, like Lapse's */
+.fx-cap:nth-child(even) h3 { left: auto; right: 14px; top: 54%; transform: rotate(3deg); }
+.fx-cap p { position: absolute; left: 36px; right: 36px; bottom: 22px; margin: 0; text-align: center; font: var(--t-body); opacity: 0.85; }
+/* layouts and themes: the screen steps through its images on its own while the step is on */
+.fx-loop img { position: absolute; inset: 0; opacity: 0; }
+.fx-loop.on img { animation: fx-k3 6.6s linear infinite; }
+.fx-loop--7.on img { animation-name: fx-k7; animation-duration: 15.4s; }
+.fx-loop.on img:nth-child(2) { animation-delay: 2.2s; }
+.fx-loop.on img:nth-child(3) { animation-delay: 4.4s; }
+.fx-loop.on img:nth-child(4) { animation-delay: 6.6s; }
+.fx-loop.on img:nth-child(5) { animation-delay: 8.8s; }
+.fx-loop.on img:nth-child(6) { animation-delay: 11s; }
+.fx-loop.on img:nth-child(7) { animation-delay: 13.2s; }
+@keyframes fx-k3 { 0% { opacity: 0; z-index: 2; } 4% { opacity: 1; z-index: 2; } 4.01% { z-index: 1; } 37.3% { opacity: 1; } 37.31%, 100% { opacity: 0; z-index: 1; } }
+@keyframes fx-k7 { 0% { opacity: 0; z-index: 2; } 1.7% { opacity: 1; z-index: 2; } 1.71% { z-index: 1; } 16% { opacity: 1; } 16.01%, 100% { opacity: 0; z-index: 1; } }
+.fx-cap.on .fx-acc { animation: fx-as 15.4s infinite; } /* the headline takes each theme's accent */
+@keyframes fx-as { 0.0%, 12.8% { background: #9898ff; color: #16131d; } 15.8%, 27.1% { background: #4d4dff; color: #f8f7fc; } 30.1%, 41.4% { background: #ffb000; color: #000; } 44.4%, 55.6% { background: #ffc66b; color: #141008; } 58.6%, 69.9% { background: #7dff9b; color: #020602; } 72.9%, 84.2% { background: #9ee8e0; color: #03141a; } 87.2%, 98.5% { background: #ff5a4a; color: #0a0000; } 100% { background: #9898ff; color: #16131d; } }
+@media (prefers-reduced-motion: reduce) { .fx-loop.on img, .fx-cap.on .fx-acc { animation: none; } .fx-loop img:first-child { opacity: 1; } }
+/* last step: the phone dims and a button fades in over it */
+.fx-phone, .fx-caps { transition: opacity 0.5s ease, filter 0.5s ease; }
+.fx-tour.is-end .fx-phone { opacity: 0.2; filter: blur(4px); }
+.fx-more { position: absolute; z-index: 4; left: 50%; top: 50%; display: flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px; background: #9898ff; color: #44231f; font: var(--t-button); white-space: nowrap; opacity: 0; visibility: hidden; transform: translate(-50%, calc(-50% + 10px)); transition: opacity 0.5s ease, transform 0.5s var(--ease), background 0.15s ease, visibility 0s 0.5s; }
+.fx-more img { width: 1.5em; height: 1.5em; margin: -0.25em 0; border-radius: 22%; display: block; } /* the 48px app icon at 1.5x the text; the negative margin keeps the button's height */
+.fx-tour.is-end .fx-more { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition-delay: 0.15s, 0.15s, 0s, 0s; }
+.fx-more:hover { background: #44231f; color: #9898ff; } /* brand lilac and oxblood, swapped on hover */
 
 @media (min-width: 1024px) and (min-height: 520px) {
   :root {
@@ -442,14 +475,16 @@ body[data-route="about"] .stage { display: none; }
   .s4-ui { justify-content: center; gap: 16px; }
   .wall { inset: 0; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 1fr); }
   .wall-cell:nth-child(n + 25) { display: block; }
-  .cs-sec.fx-sec { display: grid; height: 100%; padding: 32px; gap: 10px; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); scroll-snap-align: start; }
-  .fx-page { display: contents; }
-  .fx-cell { min-height: 0; }
-  .fx-cell p { position: absolute; top: 0; left: 0; right: 0; z-index: 1; }
-  .fx-shot { position: absolute; inset: 64px 16px 16px; margin: 0; aspect-ratio: auto; }
-  .fx-cell--tall .fx-shot { aspect-ratio: auto; }
-  .fx-cell--hero { grid-column: span 2; grid-row: span 2; }
-  .fx-cell--tall { grid-row: span 2; }
+  .fx-stage { --ph: min(78svh, 720px); }
+  .fx-stage { padding-bottom: 0; }
+  /* a caption sits beside the phone with its sticker lapping --ov over the phone edge. Everything is left-aligned. On the left side the box is exactly as wide as the sticker, so the sticker edge lands on --ov and the line under it wraps to the sticker's width. */
+  .fx-cap { --ov: 36px; inset: auto; top: 50%; right: calc(50% + var(--ph) * 0.2445 - var(--ov)); width: max-content; max-width: calc(50% - var(--ph) * 0.2445 + var(--ov)); display: flex; flex-direction: column; align-items: flex-start; transform: translateY(calc(-50% + 10px)); transition: opacity 0.3s ease, transform 0.4s var(--ease); }
+  .fx-cap:nth-child(even) { right: auto; left: calc(50% + var(--ph) * 0.2445 - var(--ov)); } /* captions alternate sides */
+  .fx-cap.on { transform: translateY(-50%); }
+  .fx-cap h3, .fx-cap:nth-child(even) h3 { position: static; max-width: none; margin: 0 0 32px; padding: 12px 16px; display: inline-block; transform: rotate(-3deg); text-wrap: balance; }
+  .fx-cap:nth-child(even) h3 { transform: rotate(3deg); }
+  .fx-cap p { position: static; width: 0; min-width: calc(100% - var(--ov) - 24px); text-align: left; text-wrap: balance; } /* the line stops 24px short of the phone */
+  .fx-cap:nth-child(even) p { width: auto; min-width: 0; max-width: 240px; margin-left: calc(var(--ov) + 24px); } /* and starts 24px past it */
 }
 
 /* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */
@@ -459,5 +494,12 @@ body[data-route="about"] .stage { display: none; }
   .sticker { width: 84px; height: 84px; padding: 12px; right: -26px; }
 }
 
+/* a desktop sticker stays on one line; on the narrowest desktop it laps further over the phone to fit */
+@media (min-width: 1024px) and (min-height: 520px) {
+  .fx-cap h3, .fx-cap:nth-child(even) h3 { white-space: nowrap; }
+}
+@media (min-width: 1024px) and (max-width: 1099px) and (min-height: 520px) {
+  .fx-cap { --ov: 72px; }
+}
 /* the font shorthand in the type tokens resets tabular numbers; this has to come after every rule that uses one */
-.info-tog, .info-title, .info-desc, .card-row, .rail-about, .statement, .list a { font-variant-numeric: tabular-nums; }
+.info-tog, .info-title, .info-desc, .card-row, .rail-about, .statement, .fx-cap h3, .fx-cap p, .list a { font-variant-numeric: tabular-nums; }

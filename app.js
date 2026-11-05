@@ -462,12 +462,10 @@ function initStills(view) {
 // --- Case study: snap sections, pager, per-section behaviour. Runs per case view; a part (statement, before/after, wall) is optional. ---
 function initCase(view) {
   const cs = $('.cs', view);
-  const secs = $$('.cs-sec, .pg, .fx-page', view).filter(el => !el.classList.contains('s4')); // before/after holds two snap pages (.pg); the Forexy grid holds two on a phone (.fx-page) and is one page on desktop
+  const secs = $$('.cs-sec, .pg, .fx-step', view).filter(el => !el.classList.contains('s4') && !el.classList.contains('fx-tour')); // before/after and the Forexy tour each hold several snap pages (.pg, .fx-step)
   // page marker: one segment per page, so the bar always spans the full height and adapts to the page count
   const pips = secs.map(() => document.createElement('i'));
   $('.pager', view).replaceChildren(...pips);
-  const syncPips = () => secs.forEach((s, k) => { pips[k].hidden = !s.getClientRects().length || (s.classList.contains('fx-sec') && !DESKTOP.matches); }); // the Forexy grid is two pages on a phone and one on desktop
-  window.addEventListener('resize', () => { if (!view.hidden) syncPips(); });
   const caps = $$('.cap', view);
   let active = -1;
 
@@ -593,6 +591,26 @@ function initCase(view) {
     imgs.forEach((img, n) => setTimeout(() => { img.src = img.dataset.src; }, REDUCE ? 0 : delay + Math.floor(n / (both ? 2 : 1)) * 30));
   }
 
+  // Forexy tour: the phone is pinned; each snap page swaps the screen and caption. The screens load as they are reached.
+  const tour = $('.fx-tour', view), steps = tour ? $$('.fx-step', tour) : [];
+  const shots = tour ? $$('.fx-shot', tour) : [], fxCaps = tour ? $$('.fx-cap', tour) : [];
+  let theme = matchMedia('(prefers-color-scheme: light)').matches ? 'l' : 'd'; // follows the visitor's setting; tap the phone to flip it
+  const loadShot = k => shots[k] && $$('img', shots[k]).forEach(im => { const s = im.dataset.src || im.dataset[theme]; if (s) im.src = s; }); // the loop steps (layouts, themes) have one fixed src per image
+  const showStep = k => {
+    const n = Math.min(k, shots.length - 1); // the last step has no screen of its own: the final one stays, dimmed, behind the button
+    tour.classList.toggle('is-end', k >= shots.length);
+    shots.forEach((s, j) => s.classList.toggle('on', j === n));
+    fxCaps.forEach((c, j) => c.classList.toggle('on', j === k));
+    loadShot(n); loadShot(n + 1);
+  };
+  const setTheme = t => { theme = t; tour.dataset.theme = t; $$('img', tour).forEach(im => im.getAttribute('src') && im.dataset[t] && (im.src = im.dataset[t])); };
+  if (tour) {
+    tour.dataset.theme = theme;
+    const phone = $('.fx-phone', tour), flip = () => setTheme(theme === 'd' ? 'l' : 'd');
+    phone.addEventListener('click', flip);
+    phone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+  }
+
   function setSection(i) {
     if (i === active) return;
     active = i;
@@ -611,6 +629,7 @@ function initCase(view) {
       loadTabThumbs();
       if (i === baAt || frame < 0 || !cycle) selectFrame(Math.max(frame, 0));
     } else { clearInterval(cycle); cycle = null; }
+    if (tour && steps.includes(secs[i])) showStep(steps.indexOf(secs[i]));
     if (statement && i === +statement.dataset.pg) layoutLines();
     if (wall && i >= 3) buildWall(wall); // same images as the page-1 layer, so mostly cached by now
   }
@@ -619,7 +638,7 @@ function initCase(view) {
     entries.forEach(e => { if (e.isIntersecting) setSection(secs.indexOf(e.target)); });
   }, { root: cs, threshold: 0.6 });
   secs.forEach(s => io.observe(s));
-  view.addEventListener('view:enter', () => { active = -1; cs.scrollTop = 0; syncPips(); setSection(0); showPager(); });
+  view.addEventListener('view:enter', () => { active = -1; cs.scrollTop = 0; setSection(0); showPager(); });
   view.addEventListener('view:leave', () => { clearInterval(cycle); cycle = null; });
 }
 
