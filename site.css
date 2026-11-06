@@ -1,6 +1,4 @@
-/* site.css – plain CSS, no build step. Mobile-first; the desktop layout is one
-   @media block near the bottom. That query is mirrored in app.js (DESKTOP) —
-   change both together. */
+/* Mobile-first. The desktop layout is one @media block near the bottom, mirrored by DESKTOP in app.js: change both together. */
 
 @font-face {
   font-family: "InterVariable";
@@ -21,26 +19,26 @@
   --c-fg: #fff;
   --c-mute: #8a8a8a;
   --c-line: rgba(255, 255, 255, 0.5);
-  --c-accent: #8a6bff;   /* hover + focus only */
+  --c-accent: #8a6bff;
   --c-select: #410dff;
-  --font-sans: "InterVariable", "Inter", sans-serif; /* to try ABC Areal again: put "ABCAreal" first (needs the license sorted, see CLAUDE.md) */
+  --font-sans: "InterVariable", "Inter", sans-serif;
   --font-mono: "XanhMono", monospace;
   --pad: 12px;
   --row-h: 32px;
-  --w-sans: 340;         /* body weight for the sans (variable font; Areal's wght axis only goes down to 400) */
-  --fs-ui: 12px;         /* mono UI text: controls, counters, hints, clock */
-  --fs-meta: 13px;       /* small sans text: roles, stat labels */
-  /* type styles, one token each (font shorthand). Desktop sizes are set in the desktop media block at the bottom. */
-  --t-h1: var(--w-sans) 29px / 1.1 var(--font-sans);        /* case-study headline */
-  --t-h2: var(--w-sans) 26px / 1.18 var(--font-sans);       /* About text in the rail */
-  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);                 /* feature titles */
-  --t-body: var(--w-sans) 14px / 1.35 var(--font-sans);     /* descriptions */
-  --t-body-strong: calc(var(--w-sans) + 60) 14px / 1.35 var(--font-sans); /* the rail title */
-  --t-label: var(--w-sans) 14px var(--font-sans);           /* list rows, feed rows, toggles */
-  --t-nav: 18px var(--font-mono);                           /* top bar */
-  --t-button: 500 15px / 1 var(--font-sans);                /* buttons */
+  --w-sans: 340;
+  --fs-ui: 12px;
+  --fs-meta: 13px;
+
+  --t-h1: var(--w-sans) 29px / 1.1 var(--font-sans);
+  --t-h2: var(--w-sans) 26px / 1.18 var(--font-sans);
+  --t-h3: var(--w-sans) 20px / 1.15 var(--font-sans);
+  --t-body: var(--w-sans) 14px / 1.35 var(--font-sans);
+  --t-body-strong: calc(var(--w-sans) + 60) 14px / 1.35 var(--font-sans);
+  --t-label: var(--w-sans) 14px var(--font-sans);
+  --t-nav: 18px var(--font-mono);
+  --t-button: 500 15px / 1 var(--font-sans);
   --ls-display: -0.01em;
-  --inset: 6px;          /* shared left/right inset for all rail text */
+  --inset: 6px;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -74,7 +72,7 @@ ul { list-style: none; }
   flex-direction: column;
   height: 100vh;
   height: 100svh;
-  height: var(--app-h, 100svh); /* set from the visual viewport on phones, so browser toolbars never sit on top of the layout */
+  height: var(--app-h, 100svh);
   padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) var(--pad) calc(var(--pad) + env(safe-area-inset-bottom, 0px));
 }
 .rail { display: contents; }
@@ -103,10 +101,8 @@ body.is-index[data-route="home"] #nav-index { text-decoration: underline; text-u
   border-top: 1px solid var(--c-fg);
   padding-top: var(--pad);
 }
-/* info tray (project pages): a title row that stays, and a body that slides away. On mobile it overlays the bottom of the
-   stage (which keeps a fixed 44px reserve), so opening and closing never resizes the media. */
-body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (44px row + 1px hairline); the pad above it matches the gap under the header */
-.rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: 0; z-index: 6; gap: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); background: #000; } /* the hairline lines up with the header margins */
+body[data-route="project"] .stage { margin-bottom: 45px; }
+.rail-info.is-tray { position: absolute; left: var(--pad); right: var(--pad); bottom: 0; z-index: 6; gap: 0; padding: 0 0 env(safe-area-inset-bottom, 0px); background: #000; }
 .info-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; text-align: left; }
 .info-head .info-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .info-client { color: var(--c-mute); font-weight: var(--w-sans); }
@@ -117,12 +113,11 @@ body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (4
 .info-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.45s var(--ease), opacity 0.35s ease; }
 .info-inner { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
 .rail-info.is-closed .info-body { grid-template-rows: 0fr; opacity: 0; }
-.rail-info.is-closed .info-inner { padding-bottom: 0; } /* a closed tray is exactly its title row */
+.rail-info.is-closed .info-inner { padding-bottom: 0; }
 .info-title { font: var(--t-body-strong); }
 .info-desc { font: var(--t-body); color: var(--c-fg); }
 .info-roles { display: flex; flex-wrap: wrap; gap: 6px; font-size: var(--fs-meta); color: var(--c-mute); }
 
-/* tag chips: role lists in the info panel; also the "clear filter" chip above the list */
 .chip { display: inline-flex; align-items: center; padding: 3px 10px; border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 999px; font-size: var(--fs-meta); line-height: 1.3; color: var(--c-mute); transition: color 0.12s ease, border-color 0.12s ease; }
 .chip:hover, .chip.is-on { color: var(--c-fg); border-color: rgba(255, 255, 255, 0.7); }
 @media (hover: none) { .chip { padding: 8px 12px; } }
@@ -132,7 +127,6 @@ body[data-route="project"] .stage { margin-bottom: 45px; } /* the closed tray (4
 /* ---------- views ---------- */
 .view { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
-/* home: mobile feed (one project per screen, snapping) */
 .home-preview { display: none; }
 .home-feed {
   flex: 1;
@@ -153,7 +147,7 @@ body.is-index .home-feed { scroll-snap-type: none; }
   transition: height 0.35s ease;
 }
 body.is-index .home-feed { border-top: 1px solid rgba(255, 255, 255, 0.1); }
-body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); } /* same hairline list as the desktop rail; 44px for touch */
+body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
 .card-media {
   max-height: 300px;
   overflow: hidden;
@@ -166,23 +160,20 @@ body.is-index .card-media { max-height: 0; opacity: 0; }
 .card-row span:last-child { flex: none; white-space: nowrap; }
 body.is-index #feed-pager { display: none; }
 
-/* video */
 .vwrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px 0; min-height: 0; }
 .vwrap .video-shell { max-width: min(100%, 880px); }
 .vwrap video { width: 100%; height: auto; max-height: calc(100svh - 220px); }
 
-/* stills: vertical snap scroll, one still per page, same dot marker as the case study */
 .sp { position: absolute; inset: 0; overflow-y: auto; scroll-snap-type: y mandatory; }
 .sp-page { height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; padding: 12px 20px; }
-.sp-page img { width: 100%; height: 100%; object-fit: contain; } /* low-res fills the same box as the full image, so nothing resizes on swap */
+.sp-page img { width: 100%; height: 100%; object-fit: contain; }
 .sp-page:not(.is-sharp) img { filter: blur(6px); }
 .sp-page.is-sharp img { filter: none; transition: filter 0.4s ease; }
 
-/* about */
 .about-box { display: none; }
 .rail-about { font: var(--t-h2); letter-spacing: var(--ls-display); min-height: 0; overflow-y: auto; }
 .rail-about a:not(.mail) { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
-.mail { display: inline-block; vertical-align: -0.35em; padding: 12px; margin: -12px -8px -12px -8px; } /* 44px tap area */
+.mail { display: inline-block; vertical-align: -0.35em; padding: 12px; margin: -12px -8px -12px -8px; }
 .mail svg { width: 0.85em; height: 0.85em; }
 body[data-route="about"] .rail-about { display: block; flex: 1; padding-top: 32px; }
 body[data-route="about"] .stage { display: none; }
@@ -200,11 +191,10 @@ body[data-route="about"] .stage { display: none; }
   gap: 24px;
 }
 .pager { position: absolute; right: 0; top: 24px; bottom: 44px; display: flex; flex-direction: column; justify-content: space-between; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
-.pager.is-live { opacity: 1; } /* shown while scrolling, fades out after a moment of stillness */
+.pager.is-live { opacity: 1; }
 .pager i { flex: none; width: 2px; height: 2px; border-radius: 50%; background: #555; transition: background 0.25s ease; }
 .pager i.on { background: var(--c-fg); }
 
-/* iPhone frame — screen mask clips the video, bezel PNG sits on top */
 .phone-wrap { position: relative; }
 .phone-frame { position: relative; height: min(52svh, 500px); aspect-ratio: 1350 / 2760; }
 .phone-frame-screen, .phone-frame-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -217,13 +207,10 @@ body[data-route="about"] .stage { display: none; }
 }
 .phone-frame-screen .video-shell { width: 100%; height: 100%; }
 .phone-frame-screen video { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
-/* The walkthrough recording has UI at its very edges; constrain it to the mask's
-   screen opening (89.333% x 95%) so it maps ~1:1 with no crop. */
 .phone-frame.screen-rec video { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; }
 .phone-frame-screen .video-play { left: 4%; bottom: 3%; }
 .phone-frame-screen .video-mute { right: 4%; bottom: 3%; }
 
-/* circle stickers: the Lapse logo and the four stats. They pop in one after another once the phone is up. */
 .s1 { display: flex; align-items: center; justify-content: center; --d: 84px; }
 .stk {
   position: absolute;
@@ -242,16 +229,15 @@ body[data-route="about"] .stage { display: none; }
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) calc(0.45s + var(--n, 0) * 0.14s), opacity 0.3s ease calc(0.45s + var(--n, 0) * 0.14s);
 }
 .s1:not(.is-active) .stk { opacity: 0; transform: translateY(-0.6em) rotate(var(--r, 0deg)) scale(0.3); transition: opacity 0.4s ease, transform 0.5s var(--ease); }
-.sticker { top: -12px; right: -22px; width: 68px; height: 68px; padding: 10px; } /* logo is 48px in the 68px circle */
+.sticker { top: -12px; right: -22px; width: 68px; height: 68px; padding: 10px; }
 .stat-stk { padding: 8px; text-align: center; }
 .stat-num { font: 600 24px/1 var(--font-sans); letter-spacing: -0.02em; }
 .stat-label { font-size: 10px; font-weight: 500; line-height: 1.1; margin-top: 3px; }
 .stat-stk--1 { left: calc(var(--d) * -0.62); top: 16%; --r: -8deg; }
 .stat-stk--2 { right: calc(var(--d) * -0.72); top: 50%; --r: 7deg; }
 .stat-stk--3 { left: calc(var(--d) * -0.3); bottom: 18%; --r: 5deg; }
-.stat-stk--4 { right: calc(var(--d) * -0.4); bottom: calc(var(--d) * -0.3); --r: -6deg; } /* straddles the bottom-right corner of the phone */
+.stat-stk--4 { right: calc(var(--d) * -0.4); bottom: calc(var(--d) * -0.3); --r: -6deg; }
 .sticker img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0); }
-
 
 .s3 .phone-frame { height: min(60svh, 560px); }
 .statement { font: var(--t-h1); letter-spacing: var(--ls-display); text-align: center; padding: 0 20px; }
@@ -273,13 +259,12 @@ body[data-route="about"] .stage { display: none; }
 .ba-hint .st-after, .ba-hint .st-before { color: var(--c-fg); }
 .s4:not(.is-orig) .st-before, .s4.is-orig .st-after { display: none; }
 
-/* role statement: lines fade up in turn when the page arrives */
 .statement .w { display: inline-block; opacity: 0; transform: translateY(0.4em); filter: blur(2px); transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease; }
 .cap-3.is-on .w { opacity: 1; transform: none; filter: none; transition: opacity 0.7s ease, transform 0.7s var(--ease), filter 0.7s ease; transition-delay: calc(var(--l, 0) * 110ms); }
-.s4 { display: block; height: 200%; padding: 0; scroll-snap-align: none; } /* two snap pages: caption over the dimmed comparison, then the comparison clear */
+.s4 { display: block; height: 200%; padding: 0; scroll-snap-align: none; }
 .pg { position: absolute; left: 0; right: 0; top: 0; height: 50%; scroll-snap-align: start; pointer-events: none; }
 .pg--b { top: 50%; }
-.s4-pin { position: sticky; top: 0; height: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 20px; } /* side room so the page marker never sits on the photo */
+.s4-pin { position: sticky; top: 0; height: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 20px; }
 .s4-ui { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; transition: opacity 0.6s ease; }
 .s4.is-capped .s4-ui { opacity: 0.28; }
 .s4-cap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; transition: opacity 0.5s ease, transform 0.5s var(--ease); }
@@ -291,13 +276,9 @@ body[data-route="about"] .stage { display: none; }
 .wall--main.is-dim { opacity: 0.28; }
 .wall--main.is-full { opacity: 1; }
 .s1 > * { position: relative; z-index: 1; }
-/* pages 1 and 2: the caption fades out as the phone page fades in */
-/* Pinned text (captions and the role statement): it sits in one layer above the scrolling pages, so it stays put and
-   fades out with a small drift up while the page scrolls under it. The before/after caption works the same way. */
 .cap-layer { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; }
 .cap { grid-area: 1 / 1; max-width: 900px; margin: 0; opacity: 0; transform: translateY(-0.6em); transition: opacity 0.5s ease, transform 0.5s var(--ease); }
 .cap.is-on { opacity: 1; transform: none; }
-/* the phone page: fades out while drifting up */
 .s1 .phone-wrap { transition: opacity 0.5s ease, transform 0.5s var(--ease); }
 .s1:not(.is-active) .phone-wrap { opacity: 0; transform: translateY(-0.6em); }
 .s-cap-text { max-width: 900px; padding: 0 20px; text-align: center; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.85); }
@@ -310,10 +291,9 @@ body[data-route="about"] .stage { display: none; }
 .wall-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; visibility: hidden; filter: blur(8px); transition: filter 0.5s ease; animation: wall-fade 16s ease-in-out infinite; }
 .wall-cell img.is-loaded { visibility: visible; filter: none; }
 .wall-cell img:first-child { z-index: 1; animation-delay: calc(var(--d) * -1.7s); }
-.wall-cell img:last-child { opacity: 1; animation: none; } /* always opaque underneath, so the top image fades to a photo, never to black */
+.wall-cell img:last-child { opacity: 1; animation: none; }
 @keyframes wall-fade { 0%, 40% { opacity: 1; } 50%, 90% { opacity: 0; } 100% { opacity: 1; } }
 
-/* custom video controls */
 .video-shell { position: relative; width: fit-content; margin-inline: auto; --video-ctrl-size: 44px; --video-ctrl-icon-size: 16px; }
 .video-shell button { position: absolute; bottom: 0; width: var(--video-ctrl-size); height: var(--video-ctrl-size); color: #fff; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.5)); transition: opacity 150ms ease; }
 .video-play { left: 0; }
@@ -332,18 +312,15 @@ body[data-route="about"] .stage { display: none; }
   .wall-cell img:first-child { opacity: 1; }
 }
 
-/* ---------- desktop: persistent left rail | media stage ----------
-   Must mirror DESKTOP in app.js. */
-/* ---------- case study: Forexy feature tour (a phone that stays put while the screen and caption change, one snap page per feature) ---------- */
+/* ---------- case study (Forexy) ---------- */
 .fx-logo { position: relative; z-index: 1; width: 96px; height: 96px; border-radius: 22px; display: block; }
-/* the Forexy background, behind every page of the case study: three large glow fields drift very slowly and a fourth pulses, on the site black. Transform and opacity only, no blur: the soft edges come from the eased stops, and the grain tile breaks up any banding. */
 .fx-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; isolation: isolate; }
 .fx-bg i { position: absolute; border-radius: 50%; will-change: transform, opacity; --c: 77, 77, 255; --a: 0.5; width: 58vmax; height: 58vmax; background: radial-gradient(circle closest-side, rgba(var(--c), calc(var(--a) * 1)) 0%, rgba(var(--c), calc(var(--a) * 0.8)) 16%, rgba(var(--c), calc(var(--a) * 0.54)) 36%, rgba(var(--c), calc(var(--a) * 0.28)) 56%, rgba(var(--c), calc(var(--a) * 0.1)) 76%, rgba(var(--c), calc(var(--a) * 0.02)) 90%, rgba(var(--c), 0) 100%); }
 .fx-bg i:nth-child(1) { left: -14%; top: -40%; animation: fx-d1 34s ease-in-out -8s infinite alternate; }
 .fx-bg i:nth-child(2) { --c: 152, 152, 255; --a: 0.36; width: 120vmax; height: 120vmax; right: -20%; bottom: -40%; animation: fx-p2 40s ease-in-out -12s infinite alternate; }
 .fx-bg i:nth-child(3) { --c: 55, 55, 190; --a: 0.42; width: 54vmax; height: 54vmax; left: 26%; top: 22%; animation: fx-d3 28s ease-in-out -4s infinite alternate; }
 .fx-bg i:nth-child(4) { --c: 152, 152, 255; --a: 0.36; width: 100vmax; height: 100vmax; left: 50%; top: 50%; margin: -50vmax 0 0 -50vmax; animation: fx-p4 52s ease-in-out -20s infinite alternate, fx-pl 22s ease-in-out -6s infinite alternate; }
-.fx-bg::before, .fx-bg::after { content: ""; position: absolute; inset: -128px; background: url(assets/projects/forexy/grain.png) 0 0 / 128px 128px; mix-blend-mode: overlay; opacity: 0.042; animation: fx-noise 1s step-end infinite; } /* colour noise; overlay leaves the pure black alone and only textures the glow. Two layers at different scales, mirrored, with different random frame orders and loop lengths, so the grain never reads as one sheet sliding. Each jumps 24 to 25 times a second (transform only, so it stays on the compositor). Together they come to about 6%. */
+.fx-bg::before, .fx-bg::after { content: ""; position: absolute; inset: -128px; background: url(assets/projects/forexy/grain.png) 0 0 / 128px 128px; mix-blend-mode: overlay; opacity: 0.042; animation: fx-noise 1s step-end infinite; }
 .fx-bg::before { background-size: 177px 177px; animation: fx-noise2 1.04s step-end infinite; }
 @keyframes fx-d1 { from { transform: translate3d(-5%, 3%, 0) scale(1); } to { transform: translate3d(9%, -6%, 0) scale(1.14); } }
 @keyframes fx-p2 { 0% { transform: translate3d(0, 0, 0) scale(1); } 30% { transform: translate3d(-45%, -60%, 0) scale(1.08); } 60% { transform: translate3d(-85%, -20%, 0) scale(0.95); } 100% { transform: translate3d(-60%, 25%, 0) scale(1.12); } }
@@ -358,20 +335,18 @@ body[data-route="about"] .stage { display: none; }
 .fx-steps { height: 100%; }
 .fx-stage { position: sticky; top: 0; align-self: start; height: calc(100% / var(--n)); z-index: 1; display: flex; align-items: center; justify-content: center; --ph: min(62svh, 540px); padding-bottom: 96px; }
 .fx-step { height: calc(100% / var(--n)); scroll-snap-align: start; }
-.fx-phone { height: var(--ph); cursor: pointer; } /* tap the phone to flip light and dark */
-.fx-shots { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; background: var(--wp); } /* the mask's screen opening, same as .screen-rec */
-.fx-phone .phone-frame-screen { -webkit-mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); } /* the Glacier frame's own outline: the 17 Pro mask's island cutout was bigger, which let the glow show around it */
+.fx-phone { height: var(--ph); cursor: pointer; }
+.fx-shots { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; background: var(--wp); }
+.fx-phone .phone-frame-screen { -webkit-mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); }
 .fx-shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s ease; }
 .fx-shot.on { opacity: 1; }
 .fx-shot img { display: block; width: 100%; height: 100%; }
-/* captions: over the bottom of the phone on a small screen, like the Lapse stickers */
 .fx-caps { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
 .fx-cap { position: absolute; inset: 0; color: #fff; opacity: 0; transition: opacity 0.3s ease; }
 .fx-cap.on { opacity: 1; }
-.fx-cap h3 { position: absolute; left: 14px; top: 58%; max-width: 230px; margin: 0; padding: 12px 16px; background: #9898ff; color: #44231f; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); font: var(--t-h3); letter-spacing: var(--ls-display); transform: rotate(-4deg); } /* a lilac sticker on the phone edge, like Lapse's */
+.fx-cap h3 { position: absolute; left: 14px; top: 58%; max-width: 230px; margin: 0; padding: 12px 16px; background: #9898ff; color: #44231f; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); font: var(--t-h3); letter-spacing: var(--ls-display); transform: rotate(-4deg); }
 .fx-cap:nth-child(even) h3 { left: auto; right: 14px; top: 54%; transform: rotate(3deg); }
 .fx-cap p { position: absolute; left: 36px; right: 36px; bottom: 22px; margin: 0; text-align: center; font: var(--t-body); opacity: 0.85; }
-/* layouts and themes: the screen steps through its images on its own while the step is on */
 .fx-loop img { position: absolute; inset: 0; opacity: 0; }
 .fx-loop.on img { animation: fx-k3 6.6s linear infinite; }
 .fx-loop--7.on img { animation-name: fx-k7; animation-duration: 15.4s; }
@@ -383,17 +358,17 @@ body[data-route="about"] .stage { display: none; }
 .fx-loop.on img:nth-child(7) { animation-delay: 13.2s; }
 @keyframes fx-k3 { 0% { opacity: 0; z-index: 2; } 4% { opacity: 1; z-index: 2; } 4.01% { z-index: 1; } 37.3% { opacity: 1; } 37.31%, 100% { opacity: 0; z-index: 1; } }
 @keyframes fx-k7 { 0% { opacity: 0; z-index: 2; } 1.7% { opacity: 1; z-index: 2; } 1.71% { z-index: 1; } 16% { opacity: 1; } 16.01%, 100% { opacity: 0; z-index: 1; } }
-.fx-cap.on .fx-acc { animation: fx-as 15.4s infinite; } /* the headline takes each theme's accent */
+.fx-cap.on .fx-acc { animation: fx-as 15.4s infinite; }
 @keyframes fx-as { 0.0%, 12.8% { background: #9898ff; color: #16131d; } 15.8%, 27.1% { background: #4d4dff; color: #f8f7fc; } 30.1%, 41.4% { background: #ffb000; color: #000; } 44.4%, 55.6% { background: #ffc66b; color: #141008; } 58.6%, 69.9% { background: #7dff9b; color: #020602; } 72.9%, 84.2% { background: #9ee8e0; color: #03141a; } 87.2%, 98.5% { background: #ff5a4a; color: #0a0000; } 100% { background: #9898ff; color: #16131d; } }
 @media (prefers-reduced-motion: reduce) { .fx-loop.on img, .fx-cap.on .fx-acc { animation: none; } .fx-loop img:first-child { opacity: 1; } }
-/* last step: the phone dims and a button fades in over it */
 .fx-phone, .fx-caps { transition: opacity 0.5s ease, filter 0.5s ease; }
 .fx-tour.is-end .fx-phone { opacity: 0.2; filter: blur(4px); }
 .fx-more { position: absolute; z-index: 4; left: 50%; top: 50%; display: flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 999px; background: #9898ff; color: #44231f; font: var(--t-button); white-space: nowrap; opacity: 0; visibility: hidden; transform: translate(-50%, calc(-50% + 10px)); transition: opacity 0.5s ease, transform 0.5s var(--ease), background 0.15s ease, visibility 0s 0.5s; }
-.fx-more img { width: 1.5em; height: 1.5em; margin: -0.25em 0; border-radius: 22%; display: block; } /* the 48px app icon at 1.5x the text; the negative margin keeps the button's height */
+.fx-more img { width: 1.5em; height: 1.5em; margin: -0.25em 0; border-radius: 22%; display: block; }
 .fx-tour.is-end .fx-more { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition-delay: 0.15s, 0.15s, 0s, 0s; }
-.fx-more:hover { background: #44231f; color: #9898ff; } /* brand lilac and oxblood, swapped on hover */
+.fx-more:hover { background: #44231f; color: #9898ff; }
 
+/* ---------- desktop: persistent left rail | media stage ---------- */
 @media (min-width: 1024px) and (min-height: 520px) {
   :root {
     --t-h1: var(--w-sans) clamp(32px, 3.6vw, 52px) / 1.1 var(--font-sans);
@@ -405,7 +380,7 @@ body[data-route="about"] .stage { display: none; }
   }
   .app {
     display: grid;
-    /* the rail never drops below 320px: the widest list row needs about 296px, so names never wrap */
+
     grid-template-columns: minmax(320px, 7fr) minmax(0, 17fr);
     column-gap: var(--pad);
     padding: var(--pad);
@@ -413,7 +388,7 @@ body[data-route="about"] .stage { display: none; }
   .rail { display: flex; flex-direction: column; position: relative; min-height: 0; overflow: hidden; }
   .topbar { margin-bottom: 12px; }
   .list-filter { height: 36px; align-items: center; padding: 0 var(--inset); }
-  .list-filter.is-empty { display: flex; visibility: hidden; } /* keeps the list where it was */
+  .list-filter.is-empty { display: flex; visibility: hidden; }
   .topbar a { min-height: 0; padding: 6px var(--inset); }
 
   .list-wrap { display: block; flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
@@ -438,10 +413,10 @@ body[data-route="about"] .stage { display: none; }
   .rail-info.is-tray { position: static; z-index: auto; background: none; padding: 0 var(--inset) 60px; }
   .rail-info.is-tray .info-inner { gap: 12px; padding-bottom: 0; }
   .info-head { cursor: default; }
-  .info-tog, .info-client { display: none; } /* nothing to toggle on desktop, and the list beside it already shows the client */
+  .info-tog, .info-client { display: none; }
   .rail-info {
     flex: 0 0 auto;
-    max-height: min(340px, 35svh); /* short windows: keep the list from shrinking under a hovering pointer */
+    max-height: min(340px, 35svh);
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -462,7 +437,6 @@ body[data-route="about"] .stage { display: none; }
     color: var(--c-mute);
   }
 
-  /* home: hover preview */
   .home-feed, #feed-pager { display: none; }
   .home-preview { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; }
   .hp-box { position: relative; width: min(100%, 880px); aspect-ratio: 16 / 9; transition: opacity 0.2s ease; }
@@ -473,9 +447,8 @@ body[data-route="about"] .stage { display: none; }
   .vwrap { padding: 0; }
   .vwrap video { max-height: 78svh; }
 
-
   #view-about { align-items: center; justify-content: center; }
-  .about-box { display: block; position: relative; width: min(100%, 880px); aspect-ratio: 1916 / 822; } /* the reel is wider than 16:9 */
+  .about-box { display: block; position: relative; width: min(100%, 880px); aspect-ratio: 1916 / 822; }
   .about-box .video-shell { width: 100%; height: 100%; }
   .about-box video { width: 100%; height: 100%; object-fit: contain; }
 
@@ -494,30 +467,27 @@ body[data-route="about"] .stage { display: none; }
   .wall-cell:nth-child(n + 25) { display: block; }
   .fx-stage { --ph: min(78svh, 720px); }
   .fx-stage { padding-bottom: 0; }
-  /* a caption sits beside the phone with its sticker lapping --ov over the phone edge. Everything is left-aligned. On the left side the box is exactly as wide as the sticker, so the sticker edge lands on --ov and the line under it wraps to the sticker's width. */
+
   .fx-cap { --ov: 36px; inset: auto; top: 50%; right: calc(50% + var(--ph) * 0.2445 - var(--ov)); width: max-content; max-width: calc(50% - var(--ph) * 0.2445 + var(--ov)); display: flex; flex-direction: column; align-items: flex-start; transform: translateY(calc(-50% + 10px)); transition: opacity 0.3s ease, transform 0.4s var(--ease); }
-  .fx-cap:nth-child(even) { right: auto; left: calc(50% + var(--ph) * 0.2445 - var(--ov)); } /* captions alternate sides */
+  .fx-cap:nth-child(even) { right: auto; left: calc(50% + var(--ph) * 0.2445 - var(--ov)); }
   .fx-cap.on { transform: translateY(-50%); }
   .fx-cap h3, .fx-cap:nth-child(even) h3 { position: static; max-width: none; margin: 0 0 32px; padding: 12px 16px; display: inline-block; transform: rotate(-3deg); text-wrap: balance; }
   .fx-cap:nth-child(even) h3 { transform: rotate(3deg); }
-  .fx-cap p { position: static; width: 0; min-width: calc(100% - var(--ov) - 24px); text-align: left; text-wrap: balance; } /* the line stops 24px short of the phone */
-  .fx-cap:nth-child(even) p { width: auto; min-width: 0; max-width: 240px; margin-left: calc(var(--ov) + 24px); } /* and starts 24px past it */
-  .fx-cap:nth-child(6) p { max-width: 200px; } /* "Light, dark, or / something louder." likewise */
+  .fx-cap p { position: static; width: 0; min-width: calc(100% - var(--ov) - 24px); text-align: left; text-wrap: balance; }
+  .fx-cap:nth-child(even) p { width: auto; min-width: 0; max-width: 240px; margin-left: calc(var(--ov) + 24px); }
+  .fx-cap:nth-child(6) p { max-width: 200px; }
 }
 
-/* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */
 @media (min-width: 1024px) and (max-width: 1279px) and (min-height: 520px) {
   .s1 { --d: 120px; }
   .stat-num { font-size: 32px; }
   .sticker { width: 84px; height: 84px; padding: 12px; right: -26px; }
 }
 
-/* a desktop sticker stays on one line; on the narrowest desktop it laps further over the phone to fit */
 @media (min-width: 1024px) and (min-height: 520px) {
   .fx-cap h3, .fx-cap:nth-child(even) h3 { white-space: nowrap; }
 }
 @media (min-width: 1024px) and (max-width: 1099px) and (min-height: 520px) {
   .fx-cap { --ov: 72px; }
 }
-/* the font shorthand in the type tokens resets tabular numbers; this has to come after every rule that uses one */
 .info-tog, .info-title, .info-desc, .card-row, .rail-about, .statement, .fx-cap h3, .fx-cap p, .list a { font-variant-numeric: tabular-nums; }

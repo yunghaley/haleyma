@@ -1,10 +1,8 @@
-// app.js – hash-routed shell: one persistent left rail (nav, project list, project
-// info) and a media stage that swaps views. Plain JS, no dependencies.
 
 // Desktop layout query. Must mirror the @media block at the bottom of site.css.
 const DESKTOP = window.matchMedia('(min-width: 1024px) and (min-height: 520px)');
 const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const V = (document.currentScript && new URL(document.currentScript.src).search) || ''; // the ?v= on app.js, reused for the files it loads
+const V = (document.currentScript && new URL(document.currentScript.src).search) || '';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -13,21 +11,18 @@ const body = document.body;
 const links = $$('#list a');
 const info = $('#info');
 
-// Plays on Home when nothing is hovered or selected.
-const REEL = 'https://cdn.haleyma.com/haley-ma-reel-3mbps-hevc.mp4'; // HEVC, index up front so it starts without downloading the whole file
-const REEL_ALT = 'https://cdn.haleyma.com/haley-ma-reel-2Mbps-faststart.mp4'; // H.264 for browsers that cannot play HEVC
+const REEL = 'https://cdn.haleyma.com/haley-ma-reel-3mbps-hevc.mp4';
+const REEL_ALT = 'https://cdn.haleyma.com/haley-ma-reel-2Mbps-faststart.mp4';
 
-// HEVC plays natively on Safari/iOS and most recent Chrome/Edge; elsewhere a data-alt H.264 file is used.
 const HEVC = !!document.createElement('video').canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"');
 const reelSrc = () => (HEVC ? REEL : REEL_ALT);
 const srcOf = el => (el.dataset.alt && !HEVC ? el.dataset.alt : el.dataset.src);
 
 let current = 'home';
 let cursor = -1;
-let tag = null; // active tag filter (slug), set by the #/tag/<slug> route
+let tag = null;
 
 // --- Media helpers ---
-// Videos start with data-src so nothing downloads until their view is opened.
 function setSrc(video) {
   if (!video.dataset.src) return;
   video.src = srcOf(video);
@@ -66,7 +61,7 @@ function applyFilter(next) {
     chip.setAttribute('aria-label', `Clear filter: ${label}`);
     bar.append(chip);
   }
-  $('#feed').dispatchEvent(new Event('feed:refresh')); // re-count the feed dots
+  $('#feed').dispatchEvent(new Event('feed:refresh'));
 }
 
 // --- Rail: project info (title, description, roles). Static per project. ---
@@ -79,17 +74,16 @@ function renderInfo(view, { tray = false } = {}) {
   const link = links.find(a => a.dataset.slug === view.id.slice(5));
   const el = (tag, cls, text) => { const n = document.createElement(tag); n.className = cls; if (text) n.textContent = text; return n; };
   const title = link ? link.firstElementChild.textContent : '';
-  // On project pages the info is a tray: a title row that stays, with the description and tags in a body that slides away.
   const body = tray ? el('div', 'info-inner') : info;
   if (tray) {
     const head = el('button', 'info-head');
     head.type = 'button';
     head.setAttribute('aria-controls', 'info-body');
     const name = el('span', 'info-title', title);
-    if (link) name.append(el('span', 'info-client', link.lastElementChild.textContent)); // truncates first when the pair is too long
+    if (link) name.append(el('span', 'info-client', link.lastElementChild.textContent));
     head.append(name);
     head.append(el('span', 'info-tog', 'info'));
-    head.disabled = DESKTOP.matches; // a plain title on desktop, a toggle on mobile
+    head.disabled = DESKTOP.matches;
     head.addEventListener('click', toggleTray);
     const wrap = el('div', 'info-body');
     wrap.id = 'info-body';
@@ -99,7 +93,7 @@ function renderInfo(view, { tray = false } = {}) {
     info.append(el('h2', 'info-title', title));
   }
   body.append(el('p', 'info-desc', $('.desc', meta).textContent));
-  const roles = el('ul', 'info-roles'); // each role is a tag chip that filters the project list
+  const roles = el('ul', 'info-roles');
   $$('li', meta).forEach(li => {
     const chip = el('a', 'chip', li.textContent);
     chip.href = '#/tag/' + slugify(li.textContent);
@@ -111,7 +105,7 @@ function renderInfo(view, { tray = false } = {}) {
 
 // --- Info tray (mobile): a docked row that starts closed on every page and opens only when the visitor taps it ---
 function setTray(open) {
-  if (DESKTOP.matches) open = true; // desktop has the room: the description stays open
+  if (DESKTOP.matches) open = true;
   info.classList.toggle('is-closed', !open);
   const head = $('.info-head', info);
   if (head) head.setAttribute('aria-expanded', String(open));
@@ -130,11 +124,11 @@ function homeInfo(i) {
 const hv = $('#hv'), hi = $('#hi'), hr = $('#hr');
 let hoverTimer = null;
 function preview(i) {
-  if (!DESKTOP.matches) { hr.pause(); hv.pause(); return; } // the hover preview is desktop only
+  if (!DESKTOP.matches) { hr.pause(); hv.pause(); return; }
   if (current !== 'home' || !DESKTOP.matches || body.classList.contains('is-index')) return;
   const a = links[i];
-  if (!a) { // no row selected: the reel, which keeps its place while a project previews
-    if (!hr.src) { hr.src = reelSrc() + '#t=0.001'; hr.preload = 'auto'; } // the fragment paints the first frame straight away
+  if (!a) {
+    if (!hr.src) { hr.src = reelSrc() + '#t=0.001'; hr.preload = 'auto'; }
     hv.pause();
     if (!REDUCE) hr.play().catch(() => {});
     hr.classList.add('on'); hv.classList.remove('on'); hi.classList.remove('on');
@@ -168,7 +162,7 @@ function buildFeed() {
     if (a.dataset.kind === 'video') {
       m = document.createElement('video');
       m.muted = true; m.loop = true; m.playsInline = true; m.preload = 'none';
-      m.dataset.src = srcOf(a) + '#t=0.1'; // #t shows a frame without playing
+      m.dataset.src = srcOf(a) + '#t=0.1';
       m.dataset.card = '';
     } else {
       m = document.createElement('img');
@@ -185,7 +179,6 @@ function buildFeed() {
     feed.append(card);
   });
 
-  // a card's video gets its source only when the card is within a screen of the viewport
   const near = new IntersectionObserver(es => es.forEach(e => {
     const v = e.isIntersecting && $('video[data-src]', e.target);
     if (v && !DESKTOP.matches) setSrc(v);
@@ -193,7 +186,6 @@ function buildFeed() {
   $$('.card', feed).forEach(c => near.observe(c));
   const size = () => feed.style.setProperty('--feed-h', feed.clientHeight + 'px');
   new ResizeObserver(size).observe(feed);
-  // dot marker, one dot per visible card; shown while scrolling, then fades out
   const pager = $('#feed-pager');
   let pips = [], hide = null;
   const mark = () => {
@@ -220,14 +212,14 @@ function buildFeed() {
 let currentView = null;
 function go({ keep = false } = {}) {
   let slug = '';
-  try { slug = decodeURIComponent(location.hash.replace(/^#\/?/, '')); } catch (e) { /* malformed hash: fall back to home */ }
+  try { slug = decodeURIComponent(location.hash.replace(/^#\/?/, '')); } catch (e) {}
   clearTimeout(hoverTimer);
   const tagRoute = slug.match(/^tag\/(.+)$/);
   applyFilter(tagRoute ? tagRoute[1] : null);
   const view = document.getElementById('view-' + (tagRoute ? '' : slug)) || $('#view-home');
   if (!keep && currentView && currentView !== view) currentView.dispatchEvent(new CustomEvent('view:leave'));
   currentView = view;
-  const reelOf = r => r === 'home' ? hr : r === 'about' ? $('#about-reel') : null; // Home and About show the same reel in two elements
+  const reelOf = r => r === 'home' ? hr : r === 'about' ? $('#about-reel') : null;
   const reelFrom = reelOf(current), reelAt = reelFrom ? reelFrom.currentTime : 0;
   current = view.id.slice(5);
 
@@ -237,13 +229,13 @@ function go({ keep = false } = {}) {
 
   $$('video').forEach(v => { if (!view.contains(v)) v.pause(); });
   $$('video[data-src]', view).forEach(v => {
-    if (v.hasAttribute('data-card')) return; // feed videos load as their card nears the screen (see buildFeed)
-    if (v.id === 'about-reel' && !DESKTOP.matches) return; // the About stage is hidden on mobile
+    if (v.hasAttribute('data-card')) return;
+    if (v.id === 'about-reel' && !DESKTOP.matches) return;
     setSrc(v);
   });
 
   const reelTo = reelOf(current);
-  if (reelTo && reelFrom && reelTo !== reelFrom && reelAt) reelTo.currentTime = reelAt; // carry the playhead over so the reel does not restart
+  if (reelTo && reelFrom && reelTo !== reelFrom && reelAt) reelTo.currentTime = reelAt;
 
   const i = links.findIndex(a => a.dataset.slug === current);
   if (current === 'home') {
@@ -256,7 +248,7 @@ function go({ keep = false } = {}) {
 
   if (current === 'home') { if (!DESKTOP.matches) info.hidden = true; }
   else renderInfo(view, { tray: true });
-  const nav = $('#nav-index'); // INDEX is a toggle only while on Home
+  const nav = $('#nav-index');
   if (current === 'home') { nav.setAttribute('role', 'button'); nav.setAttribute('aria-pressed', String(body.classList.contains('is-index'))); }
   else { nav.removeAttribute('role'); nav.removeAttribute('aria-pressed'); }
   const link = links[i];
@@ -275,11 +267,10 @@ function initIndexToggle() {
     btn.setAttribute('aria-pressed', String(on));
     if (on) hv.pause(); else preview(cursor);
   });
-  // HALEY MA always goes to the index page, with the full list and previews back on
   $('.brand').addEventListener('click', e => {
     body.classList.remove('is-index');
     $('#nav-index').setAttribute('aria-pressed', 'false');
-    if (location.hash === '' || location.hash === '#/') { // already there: no hashchange will fire, so reset by hand
+    if (location.hash === '' || location.hash === '#/') {
       e.preventDefault();
       go();
       $('#feed').scrollTo({ top: 0 });
@@ -288,7 +279,6 @@ function initIndexToggle() {
 }
 
 // --- Keyboard: ↑↓ move through the list, ⏎ opens, esc goes to the index ---
-// ↑↓ on the case study and the stills gallery move one page, as a swipe would
 function pageScroll(dir) {
   if (body.dataset.tpl !== 'case' && body.dataset.tpl !== 'stills') return false;
   const sc = $('#view-' + current + ' .cs, #view-' + current + ' .sp');
@@ -303,13 +293,13 @@ function initKeys() {
     if (e.target.closest('input, textarea, [contenteditable], .rail-info')) return;
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       if (e.target.closest('button')) return;
-      if (pageScroll(e.key === 'ArrowDown' ? 1 : -1)) { e.preventDefault(); return; } // the case study and stills page by page
+      if (pageScroll(e.key === 'ArrowDown' ? 1 : -1)) { e.preventDefault(); return; }
       if (!DESKTOP.matches) return;
       e.preventDefault();
       const dir = e.key === 'ArrowDown' ? 1 : -1;
       let next = cursor < 0 ? (dir > 0 ? -1 : links.length) : cursor;
       do { next += dir; } while (next >= 0 && next < links.length && links[next].hidden);
-      if (next < 0 || next >= links.length) next = cursor < 0 ? links.findIndex(a => !a.hidden) : cursor; // clamp at the ends
+      if (next < 0 || next >= links.length) next = cursor < 0 ? links.findIndex(a => !a.hidden) : cursor;
       setCursor(next);
       if (current === 'home') { preview(next); homeInfo(next); }
     } else if (e.key === 'Enter') {
@@ -320,7 +310,7 @@ function initKeys() {
       else { clearTimeout(hoverTimer); setCursor(-1); preview(-1); homeInfo(-1); }
     }
   });
-  $('#rail').addEventListener('mouseleave', () => { // leaving the whole rail (not just the list) returns to the reel, so the info chips stay clickable
+  $('#rail').addEventListener('mouseleave', () => {
     if (current !== 'home' || !DESKTOP.matches) return;
     clearTimeout(hoverTimer);
     setCursor(-1); preview(-1); homeInfo(-1);
@@ -329,7 +319,7 @@ function initKeys() {
     if (current !== 'home' || !DESKTOP.matches) return;
     setCursor(i);
     homeInfo(i);
-    clearTimeout(hoverTimer); // swap the preview only once the pointer settles, so a sweep down the list doesn't start a download per row
+    clearTimeout(hoverTimer);
     hoverTimer = setTimeout(() => preview(i), 150);
   };
   links.forEach((a, i) => { a.addEventListener('mouseenter', () => enter(i)); a.addEventListener('focus', () => enter(i)); });
@@ -380,7 +370,7 @@ function initVideoControls() {
     });
     ['play', 'pause', 'volumechange'].forEach(ev => video.addEventListener(ev, sync));
 
-    if (window.matchMedia('(hover: none)').matches) { // touch: controls auto-hide, tap to reveal
+    if (window.matchMedia('(hover: none)').matches) {
       let t = null;
       const show = () => { shell.classList.add('controls-visible'); clearTimeout(t); t = setTimeout(() => shell.classList.remove('controls-visible'), 2000); };
       shell.addEventListener('click', show);
@@ -393,14 +383,14 @@ function initVideoControls() {
 // --- Viewport autoplay: the most-visible video (min 50% of itself) plays, the rest pause ---
 function initAutoplay() {
   if (REDUCE) return;
-  const videos = $$('video:not(.hp-box video)'); // the Home preview videos are driven by preview()
+  const videos = $$('video:not(.hp-box video)');
   const area = new Map();
   let playing = null;
   videos.forEach(v => v.addEventListener('play', () => videos.forEach(o => { if (o !== v && !o.paused) o.pause(); })));
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       const r = e.intersectionRect;
-      const hidden = e.target === hv && body.classList.contains('is-index'); // collapsed previews never play
+      const hidden = e.target === hv && body.classList.contains('is-index');
       area.set(e.target, !hidden && e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
     });
     let best = null, bestArea = 0;
@@ -417,10 +407,9 @@ function initAutoplay() {
 function initStills(view) {
   const sp = $('.sp', view), pager = $('.pager', view);
   const { folder, prefix } = view.dataset;
-  const stills = view.dataset.stills.split(',').map(s => s.trim()); // file numbers, in display order
+  const stills = view.dataset.stills.split(',').map(s => s.trim());
   const link = links.find(a => a.dataset.slug === view.id.slice(5));
   const title = link ? link.firstElementChild.textContent : 'Photo gallery';
-  // one still per page: vertical snap scroll, with the same dot marker as the Lapse case study
   const pages = stills.map(n => {
     const page = document.createElement('div');
     page.className = 'sp-page';
@@ -438,12 +427,11 @@ function initStills(view) {
   const load = page => {
     const img = page.firstElementChild;
     if (img.src) return;
-    img.src = img.dataset.lo; // low-res first, blurred, then swapped for the full image
+    img.src = img.dataset.lo;
     const full = new Image();
     full.onload = () => { img.src = full.src; page.classList.add('is-sharp'); };
     full.src = img.dataset.full;
   };
-  // pages load a screen ahead of the one you are on
   const loader = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) load(e.target); }), { root: sp, rootMargin: '100% 0px' });
   const current = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
@@ -452,7 +440,6 @@ function initStills(view) {
   }), { root: sp, threshold: 0.6 });
   pages.forEach(p => { loader.observe(p); current.observe(p); });
 
-  // marker: visible while scrolling, then fades out
   let hide = null;
   const live = () => { pager.classList.add('is-live'); clearTimeout(hide); hide = setTimeout(() => pager.classList.remove('is-live'), 1200); };
   sp.addEventListener('scroll', live, { passive: true });
@@ -462,14 +449,12 @@ function initStills(view) {
 // --- Case study: snap sections, pager, per-section behaviour. Runs per case view; a part (statement, before/after, wall) is optional. ---
 function initCase(view) {
   const cs = $('.cs', view);
-  const secs = $$('.cs-sec, .pg, .fx-step', view).filter(el => !el.classList.contains('s4') && !el.classList.contains('fx-tour')); // before/after and the Forexy tour each hold several snap pages (.pg, .fx-step)
-  // page marker: one segment per page, so the bar always spans the full height and adapts to the page count
+  const secs = $$('.cs-sec, .pg, .fx-step', view).filter(el => !el.classList.contains('s4') && !el.classList.contains('fx-tour'));
   const pips = secs.map(() => document.createElement('i'));
   $('.pager', view).replaceChildren(...pips);
   const caps = $$('.cap', view);
   let active = -1;
 
-  // page marker: visible while scrolling (and briefly on arrival), then fades out
   const pager = $('.pager', view);
   let hideTimer = null;
   const showPager = () => {
@@ -479,7 +464,6 @@ function initCase(view) {
   };
   cs.addEventListener('scroll', showPager, { passive: true });
 
-  // Role statement: each line fades up in turn. Words are wrapped so lines can be measured.
   const statement = $('.cap-3', view);
   if (statement) {
     statement.setAttribute('aria-label', statement.textContent);
@@ -500,18 +484,17 @@ function initCase(view) {
   }
   window.addEventListener('resize', () => { if (statement && !view.hidden) layoutLines(); });
 
-  // before / after
   const ba = $('.s4', view), stage = $('#ba-stage', view), tabs = $('#ba-tabs', view);
-  const baAt = ba ? secs.indexOf($('.pg', ba)) : -1; // the caption page; the comparison page is the next one
+  const baAt = ba ? secs.indexOf($('.pg', ba)) : -1;
   const frames = stage ? $$('.ba-frame', stage) : [];
   let frame = -1, cycle = null;
   frames.forEach((f, i) => {
-    const b = document.createElement('button'); // a small photo of the frame, not a word
+    const b = document.createElement('button');
     b.type = 'button';
     b.setAttribute('aria-label', f.dataset.name);
     const t = document.createElement('img');
     t.alt = '';
-    t.dataset.src = f.dataset.thumb || $('img.after', f).dataset.src; // the small crop if there is one, else the photo; loads when the page arrives
+    t.dataset.src = f.dataset.thumb || $('img.after', f).dataset.src;
     b.append(t);
     b.addEventListener('click', () => selectFrame(i));
     tabs.append(b);
@@ -533,7 +516,6 @@ function initCase(view) {
       cycle = setInterval(() => { afters[k].classList.remove('is-on'); k = (k + 1) % afters.length; afters[k].classList.add('is-on'); }, 3000);
     }
   }
-  // hold to see the original
   const hold = on => { stage.classList.toggle('is-orig', on); ba.classList.toggle('is-orig', on); };
   if (stage) {
   stage.tabIndex = 0;
@@ -544,9 +526,6 @@ function initCase(view) {
   stage.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') hold(false); });
   }
 
-  // Shot-on-Lapse wall. It appears twice: dimmed behind the phone on page 1, and full on
-  // page 5. Each tile shows a blurred 18x24 thumbnail (lapse-wall-thumbs.js) straight away, then
-  // its two real images load in tile by tile and sharpen in over it.
   let assets = null;
   const loadAssets = () => assets || (assets = Promise.all(['lapse-images.js', 'lapse-wall-thumbs.js'].map(src => new Promise(done => {
     const s = document.createElement('script');
@@ -563,7 +542,7 @@ function initCase(view) {
     const all = window.LAPSE_IMAGES || [];
     if (!all.length) return;
     const thumb = window.LAPSE_THUMBS || [];
-    const cells = DESKTOP.matches ? 48 : 24; // mobile shows 24 tiles, so don't fetch for 48
+    const cells = DESKTOP.matches ? 48 : 24;
     const imgs = [];
     for (let k = 0; k < cells; k++) {
       const cell = document.createElement('div');
@@ -571,7 +550,7 @@ function initCase(view) {
       cell.style.setProperty('--d', k);
       const t = thumb[k % all.length];
       if (t) cell.style.setProperty('--thumb', `url(${t})`);
-      const want = both ? [k, k + 48] : [k]; // the dimmed page-1 layer is static: one image per tile
+      const want = both ? [k, k + 48] : [k];
       let ready = 0;
       want.forEach(j => {
         const img = document.createElement('img');
@@ -579,7 +558,7 @@ function initCase(view) {
         img.decoding = 'async';
         img.addEventListener('load', () => {
           img.classList.add('is-loaded');
-          if (++ready === want.length) cell.classList.add('is-ready'); // all in: drop the thumbnail so it never shows through a crossfade
+          if (++ready === want.length) cell.classList.add('is-ready');
         }, { once: true });
         img.dataset.src = all[j % all.length];
         cell.append(img);
@@ -587,17 +566,15 @@ function initCase(view) {
       });
       wall.append(cell);
     }
-    // stagger the real loads so the grid fills in progressively
     imgs.forEach((img, n) => setTimeout(() => { img.src = img.dataset.src; }, REDUCE ? 0 : delay + Math.floor(n / (both ? 2 : 1)) * 30));
   }
 
-  // Forexy tour: the phone is pinned; each snap page swaps the screen and caption. The screens load as they are reached.
   const tour = $('.fx-tour', view), steps = tour ? $$('.fx-step', tour) : [];
   const shots = tour ? $$('.fx-shot', tour) : [], fxCaps = tour ? $$('.fx-cap', tour) : [];
-  let theme = matchMedia('(prefers-color-scheme: light)').matches ? 'l' : 'd'; // follows the visitor's setting; tap the phone to flip it
-  const loadShot = k => shots[k] && $$('img', shots[k]).forEach(im => { const s = im.dataset.src || im.dataset[theme]; if (s) im.src = s; }); // the loop steps (layouts, themes) have one fixed src per image
+  let theme = matchMedia('(prefers-color-scheme: light)').matches ? 'l' : 'd';
+  const loadShot = k => shots[k] && $$('img', shots[k]).forEach(im => { const s = im.dataset.src || im.dataset[theme]; if (s) im.src = s; });
   const showStep = k => {
-    const n = Math.min(k, shots.length - 1); // the last step has no screen of its own: the final one stays, dimmed, behind the button
+    const n = Math.min(k, shots.length - 1);
     tour.classList.toggle('is-end', k >= shots.length);
     shots.forEach((s, j) => s.classList.toggle('on', j === n));
     fxCaps.forEach((c, j) => c.classList.toggle('on', j === k));
@@ -615,23 +592,23 @@ function initCase(view) {
     if (i === active) return;
     active = i;
     pips.forEach((p, k) => p.classList.toggle('on', k <= i));
-    secs.forEach((x, k) => x.classList.toggle('is-active', k === i)); // drives the fade of the phone page
-    caps.forEach(c => c.classList.toggle('is-on', +c.dataset.pg === i)); // pinned text: it stays put and fades while the page scrolls under it
-    if (wallBg) wallBg.classList.toggle('is-off', i > 1); // the dimmed wall sits behind pages 1 and 2 only
-    if (wall) { // Lapse only
-      wall.classList.toggle('is-dim', i === 6); // the full wall: dimmed behind its caption, then clear
+    secs.forEach((x, k) => x.classList.toggle('is-active', k === i));
+    caps.forEach(c => c.classList.toggle('is-on', +c.dataset.pg === i));
+    if (wallBg) wallBg.classList.toggle('is-off', i > 1);
+    if (wall) {
+      wall.classList.toggle('is-dim', i === 6);
       wall.classList.toggle('is-full', i === 7);
     }
-    if (ba) ba.classList.toggle('is-capped', i === baAt); // before/after: caption over the dimmed comparison, then clear
+    if (ba) ba.classList.toggle('is-capped', i === baAt);
     const s = secs[i];
-    if (wallBg && i === 0) setTimeout(() => buildWall(wallBg, { both: false }), 800); // after the phone video has a head start
-    if (ba && (i === baAt || i === baAt + 1)) { // caption page and comparison page share the frames; also works when a visitor jumps straight to page 6
+    if (wallBg && i === 0) setTimeout(() => buildWall(wallBg, { both: false }), 800);
+    if (ba && (i === baAt || i === baAt + 1)) {
       loadTabThumbs();
       if (i === baAt || frame < 0 || !cycle) selectFrame(Math.max(frame, 0));
     } else { clearInterval(cycle); cycle = null; }
     if (tour && steps.includes(secs[i])) showStep(steps.indexOf(secs[i]));
     if (statement && i === +statement.dataset.pg) layoutLines();
-    if (wall && i >= 3) buildWall(wall); // same images as the page-1 layer, so mostly cached by now
+    if (wall && i >= 3) buildWall(wall);
   }
 
   const io = new IntersectionObserver(entries => {
@@ -660,7 +637,7 @@ function initViewportHeight() {
 
 // --- Boot ---
 document.addEventListener('DOMContentLoaded', () => {
-  $('#about-reel').dataset.src = reelSrc(); // About shows the reel for now
+  $('#about-reel').dataset.src = reelSrc();
   const syncFeed = buildFeed();
   initVideoControls();
   initAutoplay();
@@ -671,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initKeys();
   initClock();
   window.addEventListener('hashchange', go);
-  DESKTOP.addEventListener('change', () => go({ keep: true })); // re-sync media only; keep slide/scroll state
+  DESKTOP.addEventListener('change', () => go({ keep: true }));
   go();
   syncFeed();
 });
