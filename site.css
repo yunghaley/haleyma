@@ -360,6 +360,7 @@ body[data-route="about"] .stage { display: none; }
 .fx-step { height: calc(100% / var(--n)); scroll-snap-align: start; }
 .fx-phone { height: var(--ph); cursor: pointer; } /* tap the phone to flip light and dark */
 .fx-shots { position: absolute; inset: 0; margin: auto; width: 89.333%; height: 95%; background: var(--wp); } /* the mask's screen opening, same as .screen-rec */
+.fx-phone .phone-frame-screen { -webkit-mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); mask-image: url("assets/misc/iphone18pro-glacier-silhouette.png"); } /* the Glacier frame's own outline: the 17 Pro mask's island cutout was bigger, which let the glow show around it */
 .fx-shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.35s ease; }
 .fx-shot.on { opacity: 1; }
 .fx-shot img { display: block; width: 100%; height: 100%; }
