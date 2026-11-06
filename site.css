@@ -501,7 +501,8 @@ body[data-route="about"] .stage { display: none; }
   .fx-cap:nth-child(even) h3 { transform: rotate(3deg); }
   .fx-cap p { position: static; width: 0; min-width: calc(100% - var(--ov) - 24px); text-align: left; text-wrap: balance; } /* the line stops 24px short of the phone */
   .fx-cap:nth-child(even) p { width: auto; min-width: 0; max-width: 240px; margin-left: calc(var(--ov) + 24px); } /* and starts 24px past it */
-  .fx-cap:nth-child(6) p { max-width: 200px; } /* "Light, dark, or / something louder." keeps clear of the right edge */
+  .fx-cap:nth-child(2) p { max-width: 200px; } /* the longest line wraps to 3 and stays clear of the right edge */
+  .fx-cap:nth-child(6) p { max-width: 200px; } /* "Light, dark, or / something louder." likewise */
 }
 
 /* Narrow desktop (stage under ~760px): tighter stat annotations beside the phone */
