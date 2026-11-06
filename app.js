@@ -41,6 +41,8 @@ function setCursor(i) {
   cursor = i;
   links.forEach((a, k) => a.classList.toggle('is-cursor', k === i));
   $('#list').classList.toggle('has-cursor', i >= 0);
+  $$('#feed .card').forEach((c, k) => c.classList.toggle('is-cursor', k === i));
+  $('#feed').classList.toggle('has-cursor', i >= 0);
 }
 
 // --- Tags: the role lists double as filters ---
@@ -126,34 +128,21 @@ function homeInfo(i) {
   renderInfo($('#view-' + links[i].dataset.slug));
 }
 
-// --- Home: hover preview (desktop) ---
-const hv = $('#hv'), hi = $('#hi'), hr = $('#hr');
-let hoverTimer = null;
-function resetHome() { clearTimeout(hoverTimer); setCursor(-1); preview(-1); homeInfo(-1); }
-function preview(i) {
-  if (!DESKTOP.matches) { hr.pause(); hv.pause(); return; }
-  if (current !== 'home' || body.classList.contains('is-index')) return;
-  const a = links[i];
-  if (!a) {
-    if (!hr.src) { hr.src = reelSrc() + '#t=0.001'; hr.preload = 'auto'; }
-    hv.pause();
-    if (!REDUCE) hr.play().catch(() => {});
-    hr.classList.add('on'); hv.classList.remove('on'); hi.classList.remove('on');
-    return;
-  }
-  hr.pause();
-  hr.classList.remove('on');
-  if (a.dataset.kind === 'video') {
-    const src = srcOf(a);
-    if (hv.dataset.cur !== src) { hv.dataset.cur = src; hv.src = src; hv.preload = 'metadata'; }
-    hv.currentTime = 0;
-    if (!REDUCE) hv.play().catch(() => {});
-    hv.classList.add('on'); hi.classList.remove('on');
-  } else {
-    hi.src = a.dataset.src;
-    hv.pause();
-    hi.classList.add('on'); hv.classList.remove('on');
-  }
+// --- Home: reset hover state ---
+function resetHome() { setCursor(-1); homeInfo(-1); }
+
+// --- Home: a gallery card flips through its stills while on screen ---
+function flipStills(img, { folder, prefix, stills }) {
+  const files = stills.split(',').map(n => `${folder}/${prefix}-${n.trim()}.jpg`);
+  const next = k => (k + 1) % files.length;
+  let k = 0, timer;
+  const preload = i => { new Image().src = files[i]; };
+  new IntersectionObserver(([e]) => {
+    clearInterval(timer);
+    if (!e.isIntersecting) return;
+    preload(next(k));
+    timer = setInterval(() => { k = next(k); img.src = files[k]; preload(next(k)); }, 500);
+  }).observe(img);
 }
 
 // --- Home: mobile feed (cards built from the rail list) ---
@@ -175,6 +164,8 @@ function buildFeed() {
       m = document.createElement('img');
       m.loading = 'lazy'; m.alt = '';
       m.src = a.dataset.src;
+      const gallery = $('#view-' + a.dataset.slug).dataset;
+      if (gallery.stills && !REDUCE) flipStills(m, gallery);
     }
     media.append(m);
     const row = document.createElement('div');
@@ -188,7 +179,7 @@ function buildFeed() {
 
   const near = new IntersectionObserver(es => es.forEach(e => {
     const v = e.isIntersecting && $('video[data-src]', e.target);
-    if (v && !DESKTOP.matches) setSrc(v);
+    if (v) setSrc(v);
   }), { root: feed, rootMargin: '100% 0px' });
   $$('.card', feed).forEach(c => near.observe(c));
   const size = () => feed.style.setProperty('--feed-h', feed.clientHeight + 'px');
@@ -218,14 +209,11 @@ let currentView = null;
 function go({ keep = false } = {}) {
   let slug = '';
   try { slug = decodeURIComponent(location.hash.replace(/^#\/?/, '')); } catch (e) {}
-  clearTimeout(hoverTimer);
   const tagRoute = slug.match(/^tag\/(.+)$/);
   applyFilter(tagRoute ? tagRoute[1] : null);
   const view = document.getElementById('view-' + (tagRoute ? '' : slug)) || $('#view-home');
   if (!keep && currentView && currentView !== view) currentView.dispatchEvent(new CustomEvent('view:leave'));
   currentView = view;
-  const reelOf = r => r === 'home' ? hr : r === 'about' ? $('#about-reel') : null;
-  const reelFrom = reelOf(current), reelAt = reelFrom ? reelFrom.currentTime : 0;
   current = view.id.slice(5);
 
   $$('.view').forEach(v => { v.hidden = v !== view; });
@@ -239,13 +227,9 @@ function go({ keep = false } = {}) {
     setSrc(v);
   });
 
-  const reelTo = reelOf(current);
-  if (reelTo && reelFrom && reelTo !== reelFrom && reelAt) reelTo.currentTime = reelAt;
-
   const i = links.findIndex(a => a.dataset.slug === current);
   if (current === 'home') {
     setCursor(-1);
-    preview(-1);
     info.hidden = true;
   } else {
     setCursor(i);
@@ -267,7 +251,6 @@ function initIndexToggle() {
     e.preventDefault();
     const on = body.classList.toggle('is-index');
     btn.setAttribute('aria-pressed', String(on));
-    if (on) hv.pause(); else preview(cursor);
   });
   $('.brand').addEventListener('click', e => {
     body.classList.remove('is-index');
@@ -303,7 +286,7 @@ function initKeys() {
       do { next += dir; } while (next >= 0 && next < links.length && links[next].hidden);
       if (next < 0 || next >= links.length) next = cursor < 0 ? links.findIndex(a => !a.hidden) : cursor;
       setCursor(next);
-      if (current === 'home') { preview(next); homeInfo(next); }
+      if (current === 'home') homeInfo(next);
     } else if (e.key === 'Enter') {
       if (e.target.closest('a, button') || cursor < 0) return;
       location.hash = links[cursor].getAttribute('href');
@@ -320,10 +303,11 @@ function initKeys() {
     if (current !== 'home' || !DESKTOP.matches) return;
     setCursor(i);
     homeInfo(i);
-    clearTimeout(hoverTimer);
-    hoverTimer = setTimeout(() => preview(i), 150);
   };
   links.forEach((a, i) => { a.addEventListener('mouseenter', () => enter(i)); a.addEventListener('focus', () => enter(i)); });
+  $$('#feed .card').forEach((c, i) => c.addEventListener('mouseenter', () => enter(i)));
+  $('#feed').addEventListener('mouseover', e => { if (current === 'home' && DESKTOP.matches && !e.target.closest('.card')) resetHome(); });
+  $('#feed').addEventListener('mouseleave', () => { if (current === 'home' && DESKTOP.matches) resetHome(); });
 }
 
 // --- Rail clock ---
@@ -343,7 +327,7 @@ function initVideoControls() {
     sound: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/></svg>',
     soundOff: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9.2v5.6c0 .6.4 1 1 1h2.6l4.6 4c.6.6 1.6.1 1.6-.7V4.9c0-.8-1-1.3-1.6-.7l-4.6 4H5c-.6 0-1 .4-1 1z"/><path d="M4.5 4.5l15 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>',
   };
-  $$('.stage video:not(.hp-box video):not([data-card])').forEach(video => {
+  $$('.stage video:not([data-card])').forEach(video => {
     const shell = document.createElement('div');
     shell.className = 'video-shell';
     video.parentNode.insertBefore(shell, video);
@@ -384,12 +368,14 @@ function initVideoControls() {
 // --- Viewport autoplay: the most-visible video (min 50% of itself) plays, the rest pause ---
 function initAutoplay() {
   if (REDUCE) return;
-  const videos = $$('video:not(.hp-box video)');
+  const videos = $$('video');
+  const grid = v => DESKTOP.matches && v.hasAttribute('data-card');
   const area = new Map();
   let playing = null;
-  videos.forEach(v => v.addEventListener('play', () => videos.forEach(o => { if (o !== v && !o.paused) o.pause(); })));
+  videos.forEach(v => v.addEventListener('play', () => videos.forEach(o => { if (o !== v && !o.paused && !grid(o) && !grid(v)) o.pause(); })));
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
+      if (grid(e.target)) { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause(); return; }
       const r = e.intersectionRect;
       area.set(e.target, e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
     });

@@ -36,7 +36,7 @@ DNS, domain registration, R2 and the Worker are all in the Cloudflare account. E
 Single-page static site, three files:
 
 - `index.html` all markup. A persistent left rail (`#rail`: nav, project list `#list`, project info `#info`, shortcut hint and Toronto clock) and a media stage (`#stage`) holding one `.view` per route (`#view-home`, `#view-about`, `#view-<slug>`).
-- `app.js` hash router (`#/`, `#/about`, `#/<slug>`, `#/tag/<tag>`), the rail (cursor, info, tag chips and filter), Home hover preview and mobile feed, keyboard (arrows, Enter, Esc), video controls and viewport autoplay, the stills galleries, and the case studies (`initCase`: snap sections and pager for every case study, plus Lapse's before/after and image wall and Forexy's phone tour).
+- `app.js` hash router (`#/`, `#/about`, `#/<slug>`, `#/tag/<tag>`), the rail (cursor, info, tag chips and filter), the Home grid (cards from the project list, dimmed on hover), keyboard (arrows, Enter, Esc), video controls and viewport autoplay, the stills galleries, and the case studies (`initCase`: snap sections and pager for every case study, plus Lapse's before/after and image wall and Forexy's phone tour).
 - `site.css` mobile-first styles; the desktop layout is one `@media (min-width: 1024px) and (min-height: 520px)` block at the bottom. It is mirrored by `DESKTOP` in `app.js`; change both together.
 
 Other files: `lapse-images.js` (wall image list) and `lapse-wall-thumbs.js` (blurred 18x24 thumbnails for the wall) load on demand.
@@ -55,7 +55,7 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
    Videos are not in git. Upload the file to the R2 bucket root (it is served at `https://cdn.haleyma.com/{file}.mp4`), and keep your local master in `assets/projects/{slug}/` (git-ignored). File names must be unique across all projects.
 2. **Add a row** to `<nav id="list">`, anywhere in the order you want:
    `<a href="#/{slug}" data-slug="{slug}" data-kind="video" data-src="https://cdn.haleyma.com/{file}.mp4"><span>Project title</span><span>Client</span></a>`
-   `data-src` is also the hover preview on Home and the card on the mobile feed.
+   `data-src` is also the video card on the Home grid and mobile feed.
 3. **Add a page** inside `<main id="stage">`, next to the other video pages (copy one):
    ```
    <section class="view" id="view-{slug}" data-tpl="video" hidden>
@@ -71,7 +71,7 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
 ### A photo gallery
 
 1. **Prepare the images.** Full size in `assets/{folder}/`, named `{Prefix}-{n}.jpg`. A small version of each (about 20 KB) in `assets/{folder}/lazyload/`, named `{Prefix}-LowRes-{n}.jpg`. The small one shows blurred while the full one loads.
-2. **Add a row** to the list: same as a video, but `data-kind="image"` and `data-src` pointing at one full image (the Home hover preview).
+2. **Add a row** to the list: same as a video, but `data-kind="image"` and `data-src` pointing at one full image (the Home card; a gallery card flips through its `data-stills`).
 3. **Add a page**: copy the Stills Portfolio `<section>` and change the `id`, the `.meta` text and these attributes:
    `data-folder="assets/{folder}" data-prefix="{Prefix}" data-stills="0,1,2,3"` (the file numbers, in display order).
    Leave the `<div class="sp"></div>` and `<div class="pager" aria-hidden="true"></div>` inside it as they are.
@@ -89,7 +89,7 @@ With two case studies this is fine. If a third needs its own special block, spli
 - `git add` the new files by name. Untracked files are not deployed, and `git commit -a` skips them.
 - If you changed `site.css` or `app.js`, bump the `?v=` on their `<script>` and `<link>` tags in `index.html`, so visitors do not keep the old copy.
 
-- Open `#/{slug}` directly, then click through from the list and the Home hover.
+- Open `#/{slug}` directly, then click through from the list and the Home grid.
 - Narrow the window below 1024px and check the mobile feed.
 - Names must not wrap: keep titles under about 25 characters.
 - Do not commit fonts you are not licensed to host publicly (see Development).

@@ -18,7 +18,6 @@
   --c-bg: #000;
   --c-fg: #fff;
   --c-mute: #8a8a8a;
-  --c-line: rgba(255, 255, 255, 0.5);
   --c-accent: #8a6bff;
   --c-select: #410dff;
   --font-sans: "InterVariable", "Inter", sans-serif;
@@ -127,7 +126,6 @@ body[data-route="project"] .stage { margin-bottom: 45px; }
 /* ---------- views ---------- */
 .view { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
-.home-preview { display: none; }
 .home-feed {
   flex: 1;
   min-height: 0;
@@ -154,7 +152,7 @@ body.is-index .card { height: 44px; gap: 0; border-bottom: 1px solid rgba(255, 2
   transition: max-height 0.35s ease, opacity 0.25s ease;
 }
 body.is-index .card-media { max-height: 0; opacity: 0; }
-.card-media > * { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--c-line); background: #111; }
+.card-media > * { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #111; }
 .card-row { display: flex; justify-content: space-between; gap: 12px; font: var(--t-label); letter-spacing: 0.01em; }
 .card-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-row span:last-child { flex: none; white-space: nowrap; }
@@ -429,12 +427,19 @@ body[data-route="about"] .stage { display: none; }
     color: var(--c-mute);
   }
 
-  .home-feed, #feed-pager { display: none; }
-  .home-preview { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; }
-  .hp-box { position: relative; width: min(100%, 880px); aspect-ratio: 16 / 9; transition: opacity 0.2s ease; }
-  body.is-index .hp-box { opacity: 0; }
-  .hp-box > * { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.2s ease; }
-  .hp-box > .on { opacity: 1; }
+  #feed-pager,   .home-feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-content: start;
+    gap: 16px;
+    padding-bottom: 56px;
+    scroll-snap-type: none;
+  }
+  body.is-index .home-feed { display: none; }
+  .card { height: auto; justify-content: flex-start; transition: opacity 0.2s ease; }
+  .card-media { max-height: none; }
+  .card-row { display: none; }
+  .home-feed.has-cursor .card:not(.is-cursor) { opacity: 0.35; }
 
   .vwrap { padding: 0; }
   .vwrap video { max-height: 78svh; }
