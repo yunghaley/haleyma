@@ -158,7 +158,8 @@ function buildFeed() {
     if (a.dataset.kind === 'video') {
       m = document.createElement('video');
       m.muted = true; m.loop = true; m.playsInline = true; m.preload = 'none';
-      m.dataset.src = srcOf(a) + '#t=0.1';
+      m.dataset.src = srcOf(a) + '#t=' + (a.dataset.still || 0.1);
+      m.poster = 'assets/posters/' + a.dataset.slug + '.jpg';
       m.dataset.card = '';
     } else {
       m = document.createElement('img');

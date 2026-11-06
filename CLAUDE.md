@@ -52,6 +52,7 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
 1. **Prepare the video** (`ffmpeg`). H.264, capped at 1080 tall, with the index up front so it starts fast. A capped bitrate keeps it to roughly 4 to 6 Mbps:
    `ffmpeg -i in.mov -vf "scale=-2:'min(1080,ih)'" -c:v libx264 -crf 23 -maxrate 6M -bufsize 12M -preset slow -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart out.mp4`
    Note the real pixel size (`ffprobe`), you need it in step 3.
+   Also save a poster, the first non-black frame at 640px on the long side, as `assets/posters/{slug}.jpg` (`ffmpeg -ss 0.1 -i in.mp4 -frames:v 1 -vf "scale='if(gt(iw,ih),640,-2)':'if(gt(iw,ih),-2,640)'" -q:v 4 assets/posters/{slug}.jpg`). It shows on the Home grid until the video loads. If the opening is black, take the frame at a later second and put that second in `data-still="2"` on the list row so the card starts there.
    Videos are not in git. Upload the file to the R2 bucket root (it is served at `https://cdn.haleyma.com/{file}.mp4`), and keep your local master in `assets/projects/{slug}/` (git-ignored). File names must be unique across all projects.
 2. **Add a row** to `<nav id="list">`, anywhere in the order you want:
    `<a href="#/{slug}" data-slug="{slug}" data-kind="video" data-src="https://cdn.haleyma.com/{file}.mp4"><span>Project title</span><span>Client</span></a>`
