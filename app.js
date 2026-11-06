@@ -370,12 +370,19 @@ function initAutoplay() {
   if (REDUCE) return;
   const videos = $$('video');
   const grid = v => DESKTOP.matches && v.hasAttribute('data-card');
+  const visible = new Set();
+  videos.forEach(v => v.addEventListener('loadedmetadata', () => { if (grid(v) && visible.has(v)) v.play().catch(() => {}); }));
   const area = new Map();
   let playing = null;
   videos.forEach(v => v.addEventListener('play', () => videos.forEach(o => { if (o !== v && !o.paused && !grid(o) && !grid(v)) o.pause(); })));
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (grid(e.target)) { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause(); return; }
+      if (grid(e.target)) {
+        const v = e.target;
+        e.isIntersecting ? visible.add(v) : visible.delete(v);
+        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+        return;
+      }
       const r = e.intersectionRect;
       area.set(e.target, e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
     });
