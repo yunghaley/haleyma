@@ -457,7 +457,7 @@ function initCase(view) {
   const showPager = livePager($('.pager', view));
   cs.addEventListener('scroll', showPager, { passive: true });
 
-  const statement = $('.cap-3', view);
+  const statement = $('.cap-role', view);
   if (statement) {
     statement.setAttribute('aria-label', statement.textContent);
     statement.replaceChildren(...statement.textContent.split(' ').flatMap((w, k) => {
