@@ -39,7 +39,7 @@ Single-page static site, three files:
 - `app.js` hash router (`#/`, `#/about`, `#/<slug>`, `#/tag/<tag>`), the rail (cursor, info, tag chips and filter), Home hover preview and mobile feed, keyboard (arrows, Enter, Esc), video controls and viewport autoplay, the stills galleries, and the case studies (`initCase`: snap sections and pager for every case study, plus Lapse's before/after and image wall and Forexy's phone tour).
 - `site.css` mobile-first styles; the desktop layout is one `@media (min-width: 1024px) and (min-height: 520px)` block at the bottom. It is mirrored by `DESKTOP` in `app.js`; change both together.
 
-Other files: `lapse-images.js` (wall image list) and `lapse-wall-thumbs.js` (blurred 18x24 thumbnails for the wall) load on demand; `dither.js` is the dither engine, currently unused.
+Other files: `lapse-images.js` (wall image list) and `lapse-wall-thumbs.js` (blurred 18x24 thumbnails for the wall) load on demand.
 
 Videos load from `data-src` (nothing downloads until a view opens). `data-alt` holds an H.264 fallback used where HEVC cannot play. Video files should have their index at the front (`ffmpeg -c copy -movflags +faststart`).
 
@@ -76,7 +76,7 @@ Everything lives in `index.html`. Each project is two pieces: a row in the proje
    `data-folder="assets/{folder}" data-prefix="{Prefix}" data-stills="0,1,2,3"` (the file numbers, in display order).
    Leave the `<div class="sp"></div>` and `<div class="pager" aria-hidden="true"></div>` inside it as they are.
 
-Gallery alt text is generated as "Still N". If you want real descriptions, that needs a small code change, so ask for it.
+Gallery alt text is generated as "{title}, photo N of M". Real descriptions per photo need a small code change, so ask for it.
 
 ### A case study (like Lapse)
 
