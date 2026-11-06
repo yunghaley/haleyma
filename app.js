@@ -182,7 +182,19 @@ function buildFeed() {
     if (v) setSrc(v);
   }), { root: feed, rootMargin: '100% 0px' });
   $$('.card', feed).forEach(c => near.observe(c));
-  const size = () => feed.style.setProperty('--feed-h', feed.clientHeight + 'px');
+  const GAP = 16;
+  const fitGrid = () => {
+    const n = $$('.card', feed).filter(c => !c.hidden).length;
+    let cell = 0, cols = 1;
+    for (let c = 1; c <= n; c++) {
+      const r = Math.ceil(n / c);
+      const s = Math.min((feed.clientWidth - (c - 1) * GAP) / c, (feed.clientHeight - GAP - (r - 1) * GAP) / r);
+      if (s > cell) { cell = s; cols = c; }
+    }
+    feed.style.setProperty('--cell', Math.floor(cell) + 'px');
+    feed.style.setProperty('--cols', cols);
+  };
+  const size = () => { feed.style.setProperty('--feed-h', feed.clientHeight + 'px'); fitGrid(); };
   new ResizeObserver(size).observe(feed);
   const pager = $('#feed-pager');
   let pips = [];
@@ -200,7 +212,7 @@ function buildFeed() {
     mark();
     live();
   }, { passive: true });
-  feed.addEventListener('feed:refresh', rebuild);
+  feed.addEventListener('feed:refresh', () => { rebuild(); fitGrid(); });
   rebuild();
 }
 
