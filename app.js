@@ -1,4 +1,3 @@
-
 // Desktop layout query. Must mirror the @media block at the bottom of site.css.
 const DESKTOP = window.matchMedia('(min-width: 1024px) and (min-height: 520px)');
 const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -21,8 +20,15 @@ const srcOf = el => (el.dataset.alt && !HEVC ? el.dataset.alt : el.dataset.src);
 let current = 'home';
 let cursor = -1;
 let tag = null;
+let tagLabel = '';
 
 // --- Media helpers ---
+const takeSrc = el => { el.src = el.dataset.src; el.removeAttribute('data-src'); };
+function livePager(pager) {
+  let hide = null;
+  return () => { pager.classList.add('is-live'); clearTimeout(hide); hide = setTimeout(() => pager.classList.remove('is-live'), 1200); };
+}
+
 function setSrc(video) {
   if (!video.dataset.src) return;
   video.src = srcOf(video);
@@ -41,7 +47,7 @@ function setCursor(i) {
 const slugify = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const tagsOf = a => $$('#view-' + a.dataset.slug + ' .roles li').map(li => li.textContent);
 function applyFilter(next) {
-  if (next === tag && !next) return;
+  if (!next && !tag) return;
   tag = next;
   const cards = $$('#feed .card');
   links.forEach((a, i) => {
@@ -52,13 +58,13 @@ function applyFilter(next) {
   const bar = $('#filter');
   bar.replaceChildren();
   bar.classList.toggle('is-empty', !tag);
+  tagLabel = tag ? links.flatMap(tagsOf).find(t => slugify(t) === tag) || tag : '';
   if (tag) {
-    const label = links.flatMap(tagsOf).find(t => slugify(t) === tag) || tag;
     const chip = document.createElement('a');
     chip.className = 'chip is-on';
     chip.href = '#/';
-    chip.textContent = `${label} ×`;
-    chip.setAttribute('aria-label', `Clear filter: ${label}`);
+    chip.textContent = `${tagLabel} ×`;
+    chip.setAttribute('aria-label', `Clear filter: ${tagLabel}`);
     bar.append(chip);
   }
   $('#feed').dispatchEvent(new Event('feed:refresh'));
@@ -72,9 +78,9 @@ function renderInfo(view, { tray = false } = {}) {
   if (!meta) { info.hidden = true; return; }
   info.hidden = false;
   const link = links.find(a => a.dataset.slug === view.id.slice(5));
-  const el = (tag, cls, text) => { const n = document.createElement(tag); n.className = cls; if (text) n.textContent = text; return n; };
+  const el = (kind, cls, text) => { const n = document.createElement(kind); n.className = cls; if (text) n.textContent = text; return n; };
   const title = link ? link.firstElementChild.textContent : '';
-  const body = tray ? el('div', 'info-inner') : info;
+  const box = tray ? el('div', 'info-inner') : info;
   if (tray) {
     const head = el('button', 'info-head');
     head.type = 'button';
@@ -87,19 +93,19 @@ function renderInfo(view, { tray = false } = {}) {
     head.addEventListener('click', toggleTray);
     const wrap = el('div', 'info-body');
     wrap.id = 'info-body';
-    wrap.append(body);
+    wrap.append(box);
     info.append(head, wrap);
   } else {
     info.append(el('h2', 'info-title', title));
   }
-  body.append(el('p', 'info-desc', $('.desc', meta).textContent));
+  box.append(el('p', 'info-desc', $('.desc', meta).textContent));
   const roles = el('ul', 'info-roles');
   $$('li', meta).forEach(li => {
     const chip = el('a', 'chip', li.textContent);
     chip.href = '#/tag/' + slugify(li.textContent);
     roles.append(el('li', '')); roles.lastChild.append(chip);
   });
-  body.append(roles);
+  box.append(roles);
   if (tray) startTray();
 }
 
@@ -123,9 +129,10 @@ function homeInfo(i) {
 // --- Home: hover preview (desktop) ---
 const hv = $('#hv'), hi = $('#hi'), hr = $('#hr');
 let hoverTimer = null;
+function resetHome() { clearTimeout(hoverTimer); setCursor(-1); preview(-1); homeInfo(-1); }
 function preview(i) {
   if (!DESKTOP.matches) { hr.pause(); hv.pause(); return; }
-  if (current !== 'home' || !DESKTOP.matches || body.classList.contains('is-index')) return;
+  if (current !== 'home' || body.classList.contains('is-index')) return;
   const a = links[i];
   if (!a) {
     if (!hr.src) { hr.src = reelSrc() + '#t=0.001'; hr.preload = 'auto'; }
@@ -187,7 +194,8 @@ function buildFeed() {
   const size = () => feed.style.setProperty('--feed-h', feed.clientHeight + 'px');
   new ResizeObserver(size).observe(feed);
   const pager = $('#feed-pager');
-  let pips = [], hide = null;
+  let pips = [];
+  const live = livePager(pager);
   const mark = () => {
     const i = Math.round(feed.scrollTop / (feed.clientHeight || 1));
     pips.forEach((p, k) => p.classList.toggle('on', k <= i));
@@ -199,13 +207,10 @@ function buildFeed() {
   };
   feed.addEventListener('scroll', () => {
     mark();
-    pager.classList.add('is-live');
-    clearTimeout(hide);
-    hide = setTimeout(() => pager.classList.remove('is-live'), 1200);
+    live();
   }, { passive: true });
   feed.addEventListener('feed:refresh', rebuild);
   rebuild();
-  return rebuild;
 }
 
 // --- Router ---
@@ -241,18 +246,15 @@ function go({ keep = false } = {}) {
   if (current === 'home') {
     setCursor(-1);
     preview(-1);
-    homeInfo(-1);
+    info.hidden = true;
   } else {
     setCursor(i);
+    renderInfo(view, { tray: true });
   }
-
-  if (current === 'home') { if (!DESKTOP.matches) info.hidden = true; }
-  else renderInfo(view, { tray: true });
   const nav = $('#nav-index');
   if (current === 'home') { nav.setAttribute('role', 'button'); nav.setAttribute('aria-pressed', String(body.classList.contains('is-index'))); }
   else { nav.removeAttribute('role'); nav.removeAttribute('aria-pressed'); }
   const link = links[i];
-  const tagLabel = tag && $('#filter .chip') ? $('#filter .chip').textContent.replace(/ ×$/, '') : '';
   document.title = link ? `${link.firstElementChild.textContent} — Haley Ma` : current === 'about' ? 'About — Haley Ma' : tagLabel ? `${tagLabel} — Haley Ma` : 'Haley Ma';
   if (!keep) view.dispatchEvent(new CustomEvent('view:enter'));
 }
@@ -283,7 +285,7 @@ function pageScroll(dir) {
   if (body.dataset.tpl !== 'case' && body.dataset.tpl !== 'stills') return false;
   const sc = $('#view-' + current + ' .cs, #view-' + current + ' .sp');
   if (!sc) return false;
-  sc.scrollBy({ top: dir * sc.clientHeight, behavior: 'smooth' });
+  sc.scrollBy({ top: dir * sc.clientHeight, behavior: REDUCE ? 'auto' : 'smooth' });
   return true;
 }
 
@@ -307,13 +309,12 @@ function initKeys() {
       location.hash = links[cursor].getAttribute('href');
     } else if (e.key === 'Escape') {
       if (current !== 'home') location.hash = '#/';
-      else { clearTimeout(hoverTimer); setCursor(-1); preview(-1); homeInfo(-1); }
+      else resetHome();
     }
   });
   $('#rail').addEventListener('mouseleave', () => {
     if (current !== 'home' || !DESKTOP.matches) return;
-    clearTimeout(hoverTimer);
-    setCursor(-1); preview(-1); homeInfo(-1);
+    resetHome();
   });
   const enter = i => {
     if (current !== 'home' || !DESKTOP.matches) return;
@@ -350,7 +351,6 @@ function initVideoControls() {
     const playBtn = document.createElement('button');
     playBtn.type = 'button';
     playBtn.className = 'video-play';
-    playBtn.setAttribute('aria-label', 'Play or pause video');
     const muteBtn = document.createElement('button');
     muteBtn.type = 'button';
     muteBtn.className = 'video-mute';
@@ -358,6 +358,7 @@ function initVideoControls() {
 
     const sync = () => {
       playBtn.innerHTML = video.paused ? ICONS.play : ICONS.pause;
+      playBtn.setAttribute('aria-label', video.paused ? 'Play video' : 'Pause video');
       shell.classList.toggle('is-playing', !video.paused);
       muteBtn.innerHTML = video.muted ? ICONS.soundOff : ICONS.sound;
       muteBtn.setAttribute('aria-label', video.muted ? 'Unmute video' : 'Mute video');
@@ -390,8 +391,7 @@ function initAutoplay() {
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       const r = e.intersectionRect;
-      const hidden = e.target === hv && body.classList.contains('is-index');
-      area.set(e.target, !hidden && e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
+      area.set(e.target, e.intersectionRatio >= 0.5 ? r.width * r.height : 0);
     });
     let best = null, bestArea = 0;
     area.forEach((a, v) => { if (a > bestArea) { best = v; bestArea = a; } });
@@ -440,8 +440,7 @@ function initStills(view) {
   }), { root: sp, threshold: 0.6 });
   pages.forEach(p => { loader.observe(p); current.observe(p); });
 
-  let hide = null;
-  const live = () => { pager.classList.add('is-live'); clearTimeout(hide); hide = setTimeout(() => pager.classList.remove('is-live'), 1200); };
+  const live = livePager(pager);
   sp.addEventListener('scroll', live, { passive: true });
   view.addEventListener('view:enter', () => { sp.scrollTop = 0; pips.forEach((p, k) => p.classList.toggle('on', k === 0)); live(); });
 }
@@ -455,13 +454,7 @@ function initCase(view) {
   const caps = $$('.cap', view);
   let active = -1;
 
-  const pager = $('.pager', view);
-  let hideTimer = null;
-  const showPager = () => {
-    pager.classList.add('is-live');
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => pager.classList.remove('is-live'), 1200);
-  };
+  const showPager = livePager($('.pager', view));
   cs.addEventListener('scroll', showPager, { passive: true });
 
   const statement = $('.cap-3', view);
@@ -476,13 +469,18 @@ function initCase(view) {
     }));
   }
   function layoutLines() {
+    const words = $$('.w', statement), tops = words.map(w => w.offsetTop);
     let line = -1, top = null;
-    $$('.w', statement).forEach(w => {
-      if (top === null || Math.abs(w.offsetTop - top) > 4) { line++; top = w.offsetTop; }
+    words.forEach((w, k) => {
+      if (top === null || Math.abs(tops[k] - top) > 4) { line++; top = tops[k]; }
       w.style.setProperty('--l', line);
     });
   }
-  window.addEventListener('resize', () => { if (statement && !view.hidden) layoutLines(); });
+  let relayout = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(relayout);
+    relayout = requestAnimationFrame(() => { if (statement && !view.hidden) layoutLines(); });
+  });
 
   const ba = $('.s4', view), stage = $('#ba-stage', view), tabs = $('#ba-tabs', view);
   const baAt = ba ? secs.indexOf($('.pg', ba)) : -1;
@@ -499,7 +497,7 @@ function initCase(view) {
     b.addEventListener('click', () => selectFrame(i));
     tabs.append(b);
   });
-  const loadTabThumbs = () => $$('img[data-src]', tabs).forEach(t => { t.src = t.dataset.src; t.removeAttribute('data-src'); });
+  const loadTabThumbs = () => $$('img[data-src]', tabs).forEach(takeSrc);
   function selectFrame(i) {
     clearInterval(cycle);
     frame = i;
@@ -507,7 +505,7 @@ function initCase(view) {
     $$('button', tabs).forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
     const f = frames[i];
     const imgs = $$('img', f);
-    imgs.forEach(img => { if (img.dataset.src) { img.src = img.dataset.src; img.removeAttribute('data-src'); } });
+    imgs.forEach(img => { if (img.dataset.src) takeSrc(img); });
     const afters = imgs.filter(img => img.classList.contains('after'));
     imgs.forEach(img => img.classList.remove('is-on'));
     let k = 0;
@@ -518,12 +516,12 @@ function initCase(view) {
   }
   const hold = on => { stage.classList.toggle('is-orig', on); ba.classList.toggle('is-orig', on); };
   if (stage) {
-  stage.tabIndex = 0;
-  stage.setAttribute('role', 'button');
-  stage.addEventListener('pointerdown', () => hold(true));
-  ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach(ev => stage.addEventListener(ev, () => hold(false)));
-  stage.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); hold(true); } });
-  stage.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') hold(false); });
+    stage.tabIndex = 0;
+    stage.setAttribute('role', 'button');
+    stage.addEventListener('pointerdown', () => hold(true));
+    ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach(ev => stage.addEventListener(ev, () => hold(false)));
+    stage.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); hold(true); } });
+    stage.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') hold(false); });
   }
 
   let assets = null;
@@ -534,6 +532,7 @@ function initCase(view) {
     document.head.append(s);
   }))));
   const wallBg = $('#wall-bg', view), wall = $('#wall', view);
+  const wallLoadAt = secs.findIndex(x => x.dataset.wall === 'load');
   const built = new Set();
   async function buildWall(wall, { delay = 0, both = true } = {}) {
     if (built.has(wall)) return;
@@ -548,7 +547,7 @@ function initCase(view) {
       const cell = document.createElement('div');
       cell.className = 'wall-cell';
       cell.style.setProperty('--d', k);
-      const t = thumb[k % all.length];
+      const t = thumb[k];
       if (t) cell.style.setProperty('--thumb', `url(${t})`);
       const want = both ? [k, k + 48] : [k];
       let ready = 0;
@@ -580,9 +579,9 @@ function initCase(view) {
     fxCaps.forEach((c, j) => c.classList.toggle('on', j === k));
     loadShot(n); loadShot(n + 1);
   };
-  const setTheme = t => { theme = t; tour.dataset.theme = t; $$('img', tour).forEach(im => im.getAttribute('src') && im.dataset[t] && (im.src = im.dataset[t])); };
+  const setTheme = t => { theme = t; tour.dataset.theme = t; $('.fx-phone', tour).setAttribute('aria-pressed', String(t === 'l')); $$('img', tour).forEach(im => im.getAttribute('src') && im.dataset[t] && (im.src = im.dataset[t])); };
   if (tour) {
-    tour.dataset.theme = theme;
+    setTheme(theme);
     const phone = $('.fx-phone', tour), flip = () => setTheme(theme === 'd' ? 'l' : 'd');
     phone.addEventListener('click', flip);
     phone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
@@ -594,13 +593,13 @@ function initCase(view) {
     pips.forEach((p, k) => p.classList.toggle('on', k <= i));
     secs.forEach((x, k) => x.classList.toggle('is-active', k === i));
     caps.forEach(c => c.classList.toggle('is-on', +c.dataset.pg === i));
-    if (wallBg) wallBg.classList.toggle('is-off', i > 1);
+    const wallMode = secs[i].dataset.wall;
+    if (wallBg) wallBg.classList.toggle('is-off', wallMode !== 'bg');
     if (wall) {
-      wall.classList.toggle('is-dim', i === 6);
-      wall.classList.toggle('is-full', i === 7);
+      wall.classList.toggle('is-dim', wallMode === 'dim');
+      wall.classList.toggle('is-full', wallMode === 'full');
     }
     if (ba) ba.classList.toggle('is-capped', i === baAt);
-    const s = secs[i];
     if (wallBg && i === 0) setTimeout(() => buildWall(wallBg, { both: false }), 800);
     if (ba && (i === baAt || i === baAt + 1)) {
       loadTabThumbs();
@@ -608,7 +607,7 @@ function initCase(view) {
     } else { clearInterval(cycle); cycle = null; }
     if (tour && steps.includes(secs[i])) showStep(steps.indexOf(secs[i]));
     if (statement && i === +statement.dataset.pg) layoutLines();
-    if (wall && i >= 3) buildWall(wall);
+    if (wall && i >= wallLoadAt) buildWall(wall);
   }
 
   const io = new IntersectionObserver(entries => {
@@ -638,7 +637,7 @@ function initViewportHeight() {
 // --- Boot ---
 document.addEventListener('DOMContentLoaded', () => {
   $('#about-reel').dataset.src = reelSrc();
-  const syncFeed = buildFeed();
+  buildFeed();
   initVideoControls();
   initAutoplay();
   $$('.view[data-tpl="stills"]').forEach(initStills);
@@ -650,5 +649,4 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('hashchange', go);
   DESKTOP.addEventListener('change', () => go({ keep: true }));
   go();
-  syncFeed();
 });
