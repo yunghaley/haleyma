@@ -463,29 +463,31 @@ function initCase(view) {
   const showPager = livePager($('.pager', view));
   cs.addEventListener('scroll', showPager, { passive: true });
 
-  const statement = $('.cap-role', view);
-  if (statement) {
-    statement.setAttribute('aria-label', statement.textContent);
-    statement.replaceChildren(...statement.textContent.split(' ').flatMap((w, k) => {
+  // Text that reveals line by line: Lapse's role line, Forexy's intro and end text.
+  const lineBlocks = $$('.cap-role, .fx-intro, .fx-end', view);
+  lineBlocks.forEach(block => (block.matches('.cap-role') ? [block] : $$('p', block)).forEach(el => {
+    el.replaceChildren(...el.textContent.split(' ').flatMap((w, k) => {
       const s = document.createElement('span');
       s.className = 'w';
-      s.setAttribute('aria-hidden', 'true');
       s.textContent = w;
       return k ? [document.createTextNode(' '), s] : [s];
     }));
-  }
+  }));
+  // Number the lines across a whole block, so a second paragraph follows the first.
   function layoutLines() {
-    const words = $$('.w', statement), tops = words.map(w => w.offsetTop);
-    let line = -1, top = null;
-    words.forEach((w, k) => {
-      if (top === null || Math.abs(tops[k] - top) > 4) { line++; top = tops[k]; }
-      w.style.setProperty('--l', line);
+    lineBlocks.forEach(block => {
+      const words = $$('.w', block), tops = words.map(w => w.offsetTop);
+      let line = -1, top = null;
+      words.forEach((w, k) => {
+        if (top === null || Math.abs(tops[k] - top) > 4) { line++; top = tops[k]; }
+        w.style.setProperty('--l', line);
+      });
     });
   }
   let relayout = 0;
   window.addEventListener('resize', () => {
     cancelAnimationFrame(relayout);
-    relayout = requestAnimationFrame(() => { if (statement && !view.hidden) layoutLines(); });
+    relayout = requestAnimationFrame(() => { if (!view.hidden) layoutLines(); });
   });
 
   const ba = $('.s4', view), stage = $('#ba-stage', view), tabs = $('#ba-tabs', view);
@@ -579,7 +581,9 @@ function initCase(view) {
   let theme = matchMedia('(prefers-color-scheme: light)').matches ? 'l' : 'd';
   const loadShot = k => shots[k] && $$('img', shots[k]).forEach(im => { const s = im.dataset.src || im.dataset[theme]; if (s) im.src = s; });
   const showStep = k => {
-    const n = Math.min(k, shots.length - 1);
+    k -= 1; // step 0 is the intro text over the first screen
+    const n = Math.min(Math.max(k, 0), shots.length - 1);
+    tour.classList.toggle('is-start', k < 0);
     tour.classList.toggle('is-end', k >= shots.length);
     shots.forEach((s, j) => s.classList.toggle('on', j === n));
     fxCaps.forEach((c, j) => c.classList.toggle('on', j === k));
@@ -587,6 +591,7 @@ function initCase(view) {
   };
   const setTheme = t => { theme = t; tour.dataset.theme = t; $('.fx-phone', tour).setAttribute('aria-pressed', String(t === 'l')); $$('img', tour).forEach(im => im.getAttribute('src') && im.dataset[t] && (im.src = im.dataset[t])); };
   if (tour) {
+    tour.classList.add('is-start'); // phone starts dimmed under the intro
     setTheme(theme);
     const phone = $('.fx-phone', tour), flip = () => setTheme(theme === 'd' ? 'l' : 'd');
     phone.addEventListener('click', flip);
@@ -612,7 +617,7 @@ function initCase(view) {
       if (i === baAt || frame < 0 || !cycle) selectFrame(Math.max(frame, 0));
     } else { clearInterval(cycle); cycle = null; }
     if (tour && steps.includes(secs[i])) showStep(steps.indexOf(secs[i]));
-    if (statement && i === +statement.dataset.pg) layoutLines();
+    layoutLines();
     if (wall && i >= wallLoadAt) buildWall(wall);
   }
 
